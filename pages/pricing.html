@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connects — RemoteProJobs</title>
+  <link rel="stylesheet" href="../styles/pricing.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+
+<body>
+  <main class="connects-card" role="main" aria-labelledby="connects-title">
+    <div class="connects-brand">
+      <div class="logo">RP</div>
+      <h1>Remote Pro Jobs</h1>
+    </div>
+
+    <h2 id="connects-title">RemotePro Connects</h2>
+    <p class="subtitle">Boost your chances and reach clients faster.</p>
+
+    <div class="connects-content">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/747/747310.png"
+        alt="Connects Icon"
+        class="connects-icon"
+      />
+
+      <h3>Premium Connect</h3>
+      <p class="price"><strong>Ksh 1,270</strong> / per Connect</p>
+
+      <ul class="benefits">
+        <li><i class="fas fa-check-circle"></i> Get prioritized job listings</li>
+        <li><i class="fas fa-check-circle"></i> Stand out to top employers</li>
+        <li><i class="fas fa-check-circle"></i> Apply instantly to jobs</li>
+        <li><i class="fas fa-check-circle"></i> Access premium client support</li>
+        <li><i class="fas fa-check-circle"></i> Higher visibility on searches</li>
+      </ul>
+
+      <div class="button-group">
+        <button id="proceedConnects" class="btn btn-primary">
+          <i class="fab fa-whatsapp"></i> Buy Connect
+        </button>
+        <button id="backHome" class="btn btn-outline">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+      </div>
+    </div>
+
+    <footer class="connects-footer">
+      <p>© 2025 RemoteProJobs — Empowering freelancers globally.</p>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("proceedConnects").addEventListener("click", () => {
+      const phone = "+19155032586";
+      const message = encodeURIComponent(
+        "Hello, I’d like to buy a RemotePro Connect (Ksh 1270)."
+      );
+      window.location.href = `https://wa.me/${phone}?text=${message}`;
+    });
+
+    document.getElementById("backHome").addEventListener("click", () => {
+      window.location.href = "../pages/work.html";
+    });
+  </script>
+</body>
+</html>

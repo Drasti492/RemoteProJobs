@@ -1025,30 +1025,62 @@ const initRangeSlider = () => {
 };
 
 // Search jobs
-const searchJobs = () => {
-    const searchTerm = DOM.jobSearch.value.toLowerCase().trim();
-    const locationTerm = DOM.locationSearch.value.toLowerCase().trim();
+document.addEventListener("DOMContentLoaded", () => {
+  const jobSearchInput = document.getElementById("job-search");
+  const locationSearchInput = document.getElementById("location-search");
+  const jobCountElement = document.getElementById("job-count");
+
+  // Prevent errors if DOM or jobsData missing
+  if (!jobSearchInput || !locationSearchInput || typeof jobsData === "undefined") {
+    console.error("Search inputs or jobs data not found.");
+    return;
+  }
+
+  let currentPage = 1;
+
+  const searchJobs = () => {
+    const searchTerm = jobSearchInput.value.toLowerCase().trim();
+    const locationTerm = locationSearchInput.value.toLowerCase().trim();
 
     const filteredJobs = jobsData.filter(job => {
-        const matchesSearch =
-            searchTerm === '' ||
-            job.title.toLowerCase().includes(searchTerm) ||
-            job.company.toLowerCase().includes(searchTerm) ||
-            job.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+      const title = job.title?.toLowerCase() || "";
+      const company = job.company?.toLowerCase() || "";
+      const tags = job.tags?.map(tag => tag.toLowerCase()) || [];
+      const location = job.location?.toLowerCase() || "";
+      const remote = job.remote?.toLowerCase() || "";
 
-        const matchesLocation =
-            locationTerm === '' ||
-            job.location.toLowerCase().includes(locationTerm) ||
-            (locationTerm.includes('remote') && job.remote.toLowerCase() === 'remote');
+      const matchesSearch =
+        !searchTerm ||
+        title.includes(searchTerm) ||
+        company.includes(searchTerm) ||
+        tags.some(tag => tag.includes(searchTerm));
 
-        return matchesSearch && matchesLocation;
+      const matchesLocation =
+        !locationTerm ||
+        location.includes(locationTerm) ||
+        (locationTerm.includes("remote") && remote === "remote");
+
+      return matchesSearch && matchesLocation;
     });
 
     currentPage = 1;
     renderJobs(getPaginatedJobs(filteredJobs));
     renderPagination(filteredJobs);
-    document.getElementById('job-count').textContent = `(${filteredJobs.length})`;
-};
+    if (jobCountElement) jobCountElement.textContent = `(${filteredJobs.length})`;
+  };
+
+  // Make it live with debounce
+  let searchTimeout;
+  const handleLiveSearch = () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(searchJobs, 250);
+  };
+
+  // Live search events
+  jobSearchInput.addEventListener("input", handleLiveSearch);
+  locationSearchInput.addEventListener("input", handleLiveSearch);
+});
+
 
 // Filter jobs
 const filterJobs = () => {
@@ -1117,80 +1149,96 @@ const sortJobs = () => {
 
 // Open job modal
 const openJobModal = (job) => {
-    if (!DOM.modalJobContent) {
-        console.error('Modal content element not found');
-        return;
-    }
+  if (!DOM.modalJobContent) {
+    console.error('Modal content element not found');
+    return;
+  }
 
-    DOM.modalJobContent.innerHTML = `
-        <div class="job-modal-header">
-            <img src="${job.logo || '/api/placeholder/60/60'}" alt="${job.company}" class="job-modal-logo">
-            <div class="job-modal-title">
-                <h2>${job.title}</h2>
-                <div class="job-modal-company">${job.company}</div>
-                <div class="job-meta">
-                    <div class="job-meta-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>${job.location}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-briefcase"></i>
-                        <span>${job.type}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-signal"></i>
-                        <span>${job.experience}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-laptop-house"></i>
-                        <span>${job.remote}</span>
-                    </div>
-                </div>
-            </div>
+  // Inject modal HTML
+  DOM.modalJobContent.innerHTML = `
+    <div class="job-modal-header">
+      <img src="${job.logo || '/api/placeholder/60/60'}" alt="${job.company}" class="job-modal-logo">
+      <div class="job-modal-title">
+        <h2>${job.title}</h2>
+        <div class="job-modal-company">${job.company}</div>
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>${job.location}</span>
+          </div>
+          <div class="job-meta-item">
+            <i class="fas fa-briefcase"></i>
+            <span>${job.type}</span>
+          </div>
+          <div class="job-meta-item">
+            <i class="fas fa-signal"></i>
+            <span>${job.experience}</span>
+          </div>
+          <div class="job-meta-item">
+            <i class="fas fa-laptop-house"></i>
+            <span>${job.remote}</span>
+          </div>
         </div>
-        <div class="job-stats">
-            <div class="job-stat-item">
-                <h4>Salary Range</h4>
-                <p>${job.salary}</p>
-            </div>
-            <div class="job-stat-item">
-                <h4>Job Type</h4>
-                <p>${job.type}</p>
-            </div>
-            <div class="job-stat-item">
-                <h4>Experience Level</h4>
-                <p>${job.experience}</p>
-            </div>
-            <div class="job-stat-item">
-                <h4>Work Setting</h4>
-                <p>${job.remote}</p>
-            </div>
-        </div>
-        <div class="job-description">
-            <h3>Job Description</h3>
-            <p>${job.description}</p>
-            <h3>Responsibilities</h3>
-            <ul>
-                ${job.responsibilities.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-            <h3>Requirements</h3>
-            <ul>
-                ${job.requirements.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-            <h3>Benefits</h3>
-            <ul>
-                ${job.benefits.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-        </div>
-        <div class="job-modal-actions">
-            <button class="btn btn-primary btn-lg">Apply Now</button>
-            <button class="btn btn-outline">Save Job</button>
-            <button class="btn btn-outline">Share</button>
-        </div>
-    `;
+      </div>
+    </div>
 
-    DOM.jobModal.style.display = 'block';
+    <div class="job-stats">
+      <div class="job-stat-item">
+        <h4>Salary Range</h4>
+        <p>${job.salary}</p>
+      </div>
+      <div class="job-stat-item">
+        <h4>Job Type</h4>
+        <p>${job.type}</p>
+      </div>
+      <div class="job-stat-item">
+        <h4>Experience Level</h4>
+        <p>${job.experience}</p>
+      </div>
+      <div class="job-stat-item">
+        <h4>Work Setting</h4>
+        <p>${job.remote}</p>
+      </div>
+    </div>
+
+    <div class="job-description">
+      <h3>Job Description</h3>
+      <p>${job.description}</p>
+      <h3>Responsibilities</h3>
+      <ul>
+        ${job.responsibilities.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+      <h3>Requirements</h3>
+      <ul>
+        ${job.requirements.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+      <h3>Benefits</h3>
+      <ul>
+        ${job.benefits.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="job-modal-actions">
+      <button class="btn btn-primary apply-now">Apply Now</button>
+      <button class="btn btn-outline">Save Job</button>
+      <button class="btn btn-outline">Share</button>
+    </div>
+  `;
+
+  // Show modal
+  DOM.jobModal.style.display = 'block';
+
+  // ✅ Add listener AFTER inserting modal content
+  const applyButton = DOM.modalJobContent.querySelector('.apply-now');
+  if (applyButton) {
+    applyButton.addEventListener('click', () => {
+      window.location.href = '../pages/pricing.html';
+    });
+  } else {
+    console.error('Apply button not found');
+  }
 };
+
 
 // Clear filters
 const clearFilters = () => {

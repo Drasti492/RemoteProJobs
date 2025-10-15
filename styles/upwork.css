@@ -121,82 +121,91 @@ img {
 }
 
 /* Header Styles */
+/* ===== HEADER BASE ===== */
 header {
-    background-color: white;
-    box-shadow: var(--box-shadow);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
 }
 
 header .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    flex-wrap: nowrap;
-    max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+/* ===== LOGO ===== */
 .logo h1 {
-    font-size: 24px;
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 700;
-    white-space: nowrap;
+  font-size: 20px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
 }
 
 .logo i {
-    font-size: 24px;
+  color: #007bff;
+  font-size: 20px;
 }
 
-nav {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    justify-content: center;
-}
-
+/* ===== NAVIGATION ===== */
 nav ul {
-    display: flex;
-    gap: 24px;
-    flex-wrap: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
 }
 
 nav a {
-    color: var(--dark-color);
-    font-size: 16px;
-    font-weight: 500;
-    padding: 8px 12px;
-    display: block;
-    transition: var(--transition);
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 nav a:hover,
 nav a.active {
-    color: var(--primary-color);
-    background-color: var(--primary-light);
-    border-radius: var(--border-radius);
+  color: #007bff;
 }
 
+/* ===== AUTH BUTTONS ===== */
 .auth-buttons {
-    display: flex;
-    gap: 12px;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
+.profile-icon {
+  color: #333;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.profile-icon:hover {
+  color: #007bff;
+}
+
+.btn.btn-sm {
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+/* ===== NAV TOGGLE ===== */
 .nav-toggle {
-    display: none;
-    font-size: 24px;
-    color: var(--primary-color);
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 8px;
-    transition: var(--transition);
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
 }
 
 .nav-toggle:hover {
@@ -1171,7 +1180,6 @@ footer {
 /* Laptops (1024px and below) */
 @media (max-width: 1024px) {
     header .container {
-        padding: 10px 12px;
         flex-wrap: wrap;
     }
 
@@ -1190,7 +1198,9 @@ footer {
     nav {
         display: none;
         width: 100%;
-        margin-top: 12px;
+        background: #fff;
+        border-top: 1px solid #eee;
+        margin-top: 10px;
     }
 
     nav.active {
@@ -1199,16 +1209,20 @@ footer {
 
     nav ul {
         flex-direction: column;
-        gap: 12px;
+        align-items: flex-start;
+        padding: 12px 0;
+         gap: 10px;
     }
 
     nav a {
+        display: block;
+        width: 100%;
+        padding: 8px 16px;
         font-size: 14px;
-        padding: 8px;
     }
 
     .auth-buttons {
-        gap: 8px;
+        gap: 10px;
     }
 
     .auth-buttons .btn {
@@ -1438,32 +1452,168 @@ footer {
 
 /* Small Devices (Android Phones, 480px and below) */
 @media (max-width: 480px) {
-    header .container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 8px 12px;
-    }
+ /* ===== HEADER BASE ===== */
+header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+}
 
-    .logo h1 {
-        font-size: 16px;
-    }
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-    .logo i {
-        font-size: 16px;
-    }
+/* ===== LOGO ===== */
+.logo h1 {
+  font-size: 20px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
 
-    .auth-buttons {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 8px;
-    }
+.logo i {
+  color: #007bff;
+  font-size: 20px;
+}
 
-    .auth-buttons .btn {
-        flex: 1;
-        padding: 6px;
-        font-size: 12px;
-    }
+/* ===== NAVIGATION ===== */
+nav ul {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+nav a:hover,
+nav a.active {
+  color: #007bff;
+}
+
+/* ===== AUTH BUTTONS ===== */
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-icon {
+  color: #333;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.profile-icon:hover {
+  color: #007bff;
+}
+
+.btn.btn-sm {
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+/* ===== NAV TOGGLE ===== */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablets & smaller */
+@media (max-width: 1024px) {
+  header .container {
+    flex-wrap: wrap;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+  }
+
+  nav.active {
+    display: block;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 0;
+    gap: 10px;
+  }
+
+  nav a {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .auth-buttons {
+    margin-top: 10px;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  header .container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 16px;
+    gap: 10px;
+  }
+
+  .logo h1 {
+    font-size: 16px;
+  }
+
+  .nav-toggle {
+    align-self: flex-end;
+  }
+
+  nav ul {
+    width: 100%;
+  }
+
+  .auth-buttons {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .auth-buttons .btn {
+    flex: 1;
+  }
+}
+
 
     .hero {
         height: 100vh;
