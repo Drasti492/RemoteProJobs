@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Profile — Remote Pro Jobs</title>
+    <link rel="stylesheet" href="../styles/signup.css" />
+    <link rel="stylesheet" href="../styles/profile.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <main class="auth-card" role="main" aria-labelledby="profile-title">
+        <div class="auth-brand">
+            <div class="logo">RP</div>
+            <h1>Remote Pro Jobs</h1>
+        </div>
+
+        <h2 id="profile-title">Your Profile</h2>
+
+        <div class="profile-info">
+            <div class="profile-field">
+                <i class="fas fa-user"></i>
+                <span><strong>Username:</strong> <span id="profile-username">Loading...</span></span>
+            </div>
+            <div class="profile-field">
+                <i class="fas fa-phone"></i>
+                <span><strong>Phone (M-Pesa):</strong> <span id="profile-phone">Loading...</span></span>
+            </div>
+            <div class="profile-field">
+                <i class="fas fa-envelope"></i>
+                <span><strong>Email:</strong> <span id="profile-email">Loading...</span></span>
+            </div>
+            <div class="profile-field">
+                <i class="fas fa-wallet"></i>
+                <span><strong>Account Balance:</strong> 0 KSH</span>
+            </div>
+            <p class="disclaimer">Minimum withdrawal is 500 KSH.</p>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-outline btn-sm back-btn">Back</button>
+            <button class="btn btn-primary" id="logoutBtn">Log Out</button>
+        </div>
+
+        <p class="message" id="profileMessage" aria-live="polite"></p>
+    </main>
+
+    <script src="../scripts/profile.js"></script>
+</body>
+</html>
