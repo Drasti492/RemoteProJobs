@@ -1,13 +1,13 @@
-/* signup.css */
+/* styles/signup.css */
 :root {
-    --primary-color: #007bff;
-    --primary-dark: #0056b3;
+    --primary-color: #2563eb; /* Changed to match profile.css */
+    --primary-dark: #1d4ed8; /* Changed to match profile.css */
     --dark-color: #333;
     --gray-color: #6c757d;
     --light-color: #f8f9fa;
     --white-color: #fff;
-    --error-color: #dc3545;
-    --success-color: #28a745;
+    --error-color: #dc3545; /* Matches profile.css */
+    --success-color: #10b981; /* Changed to match profile.css */
     --transition: all 0.3s ease;
 }
 
@@ -18,7 +18,7 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Arial', sans-serif; /* Kept Arial as in original */
     background-color: var(--light-color);
     display: flex;
     justify-content: center;
@@ -93,7 +93,7 @@ h2 {
 
 .form-group input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.3); /* Updated to match primary-color */
 }
 
 .password-container {
@@ -179,14 +179,20 @@ h2 {
 .message {
     margin-top: 16px;
     font-size: 13px;
+    padding: 10px; /* Added to match profile.css */
+    border-radius: 5px; /* Added to match profile.css */
+    text-align: center;
+    display: none; /* Kept as default */
 }
 
 .message.error {
     color: var(--error-color);
+    background: rgba(220, 38, 38, 0.1); /* Added to match profile.css */
 }
 
 .message.success {
     color: var(--success-color);
+    background: rgba(16, 185, 129, 0.1); /* Added to match profile.css */
 }
 
 @media (max-width: 480px) {
@@ -242,5 +248,6 @@ h2 {
 
     .message {
         font-size: 12px;
+        padding: 8px; /* Adjusted for responsiveness */
     }
 }

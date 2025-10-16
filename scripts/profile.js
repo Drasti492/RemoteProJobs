@@ -1,107 +1,101 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const usernameEl = document.getElementById("profile-username");
-    const phoneEl = document.getElementById("profile-phone");
-    const emailEl = document.getElementById("profile-email");
-    const balanceEl = document.getElementById("profile-balance");
-    const messageEl = document.getElementById("profileMessage");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const withdrawBtn = document.getElementById("withdrawBtn");
-    const backBtn = document.querySelector(".back-btn");
-    const navToggle = document.querySelector(".nav-toggle");
-    const nav = document.querySelector("nav");
-    const apiBase = "https://remj82.onrender.com/api/auth";
-    const token = localStorage.getItem("authToken");
+// scripts/profile.js
+document.addEventListener('DOMContentLoaded', async () => {
+  // Select DOM elements
+  const usernameElement = document.getElementById('profile-username');
+  const phoneElement = document.getElementById('profile-phone');
+  const emailElement = document.getElementById('profile-email');
+  const balanceElement = document.getElementById('profile-balance');
+  const messageElement = document.getElementById('profileMessage');
+  const withdrawBtn = document.getElementById('withdrawBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const backBtn = document.querySelector('.back-btn');
 
-    function showMessage(text, type = "error") {
-        messageEl.textContent = text;
-        messageEl.className = `message ${type === "success" ? "success" : "error"}`;
-        messageEl.style.display = "block";
-        setTimeout(() => {
-            messageEl.style.display = "none";
-        }, 3000);
+  // Function to display messages
+  const showMessage = (text, type) => {
+    messageElement.textContent = text;
+    messageElement.className = `message ${type}`;
+    messageElement.style.display = 'block';
+    setTimeout(() => {
+      messageElement.style.display = 'none';
+    }, 3000);
+  };
+
+  // Fetch user profile data
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      showMessage('Please log in to view your profile.', 'error');
+      setTimeout(() => (window.location.href = '../index.html'), 2000);
+      return;
     }
 
-    async function loadProfile() {
-        if (!token) {
-            showMessage("Please log in to view your profile.");
-            setTimeout(() => {
-                window.location.href = "login.html";
-            }, 1000);
-            return;
-        }
-
-        emailEl.textContent = localStorage.getItem("userEmail") || localStorage.getItem("verifyEmail") || "N/A";
-
-        try {
-            const res = await fetch(`${apiBase}/user`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                credentials: "include"
-            });
-
-            const data = await res.json();
-            if (res.ok && data.user) {
-                usernameEl.textContent = data.user.name || "N/A";
-                phoneEl.textContent = data.user.phone || "N/A";
-                emailEl.textContent = data.user.email || emailEl.textContent;
-                balanceEl.textContent = "0 KSH";
-            } else {
-                showMessage(data.message || "Unable to fetch profile data.");
-                usernameEl.textContent = "Jane Doe";
-                phoneEl.textContent = "+254712345678";
-                balanceEl.textContent = "0 KSH";
-            }
-        } catch (err) {
-            console.error("Profile fetch error:", err);
-            showMessage("Network error. Please try again.");
-            usernameEl.textContent = "Jane Doe";
-            phoneEl.textContent = "+254712345678";
-            balanceEl.textContent = "0 KSH";
-        }
-    }
-
-    logoutBtn.addEventListener("click", async () => {
-        try {
-            await fetch(`${apiBase}/logout`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include"
-            });
-        } catch (err) {
-            console.error("Logout error:", err);
-        }
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("userEmail");
-        showMessage("Logged out successfully.", "success");
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 700);
+    const response = await fetch('/api/auth/getUser', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     });
 
-    if (withdrawBtn) {
-        withdrawBtn.addEventListener("click", () => {
-            const balanceText = balanceEl.textContent.replace(" KSH", "");
-            const balance = parseFloat(balanceText) || 0;
-            if (balance < 500) {
-                showMessage("Your account balance is below the minimum withdrawal amount of KES 500.", "error");
-            }
-        });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to fetch profile data');
     }
 
-    if (backBtn) {
-        backBtn.addEventListener("click", () => {
-            window.location.href = "work.html";
-        });
+    const data = await response.json();
+    console.log('API response:', data); // Debug log
+
+    if (!data.success || !data.user) {
+      throw new Error('Invalid response format');
     }
 
-    if (navToggle && nav) {
-        navToggle.addEventListener("click", () => {
-            nav.classList.toggle("active");
-        });
-    }
+    const user = data.user;
 
-    loadProfile();
+    // Update DOM with user data
+    usernameElement.textContent = user.name || 'Unknown';
+    phoneElement.textContent = user.phone || 'Not provided';
+    emailElement.textContent = user.email || 'Not provided';
+    balanceElement.textContent = `${user.balance || 0} KSH`;
+  } catch (error) {
+    console.error('Error fetching profile:', error.message);
+    showMessage(error.message || 'Unable to load profile data. Please try again.', 'error');
+    usernameElement.textContent = 'Unknown';
+    phoneElement.textContent = 'Not provided';
+    emailElement.textContent = 'Not provided';
+    balanceElement.textContent = '0 KSH';
+  }
+
+  // Withdraw button handler
+  withdrawBtn.addEventListener('click', async () => {
+    try {
+      const response = await fetch('/api/orders/withdraw', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Withdrawal failed');
+      }
+
+      const result = await response.json();
+      showMessage(result.message || 'Withdrawal successful!', 'success');
+      balanceElement.textContent = `${result.balance || 0} KSH`;
+    } catch (error) {
+      showMessage('Withdrawal failed. Please try again.', 'error');
+    }
+  });
+
+  // Logout button handler
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    window.location.href = '../index.html';
+  });
+
+  // Back button handler
+  backBtn.addEventListener('click', () => {
+    window.location.href = '../index.html';
+  });
 });

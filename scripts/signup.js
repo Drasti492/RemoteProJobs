@@ -1,3 +1,4 @@
+// scripts/signup.js
 document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signupForm");
   const signupMessage = document.getElementById("signupMessage");
@@ -7,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function showMessage(text, type = "error") {
     signupMessage.textContent = text;
     signupMessage.className = `message ${type}`;
+    signupMessage.style.display = "block";
   }
 
   togglePassword.forEach((toggle) => {
@@ -28,13 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(signupForm);
-    
-    // Log all form data entries
+
     const formDataEntries = {};
     for (const [key, value] of formData.entries()) {
       formDataEntries[key] = value;
     }
-    console.log("Raw FormData:", formDataEntries); // Debugging
+    console.log("Raw FormData:", formDataEntries);
 
     const name = formData.get("name").trim();
     const phone = formData.get("phone").trim();
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = formData.get("password").trim();
     const confirmPassword = formData.get("confirm-password").trim();
 
-    console.log("Processed form data:", { name, phone, email, password, confirmPassword }); // Debugging
+    console.log("Processed form data:", { name, phone, email, password, confirmPassword });
 
     if (!name || !phone || !email || !password || !confirmPassword) {
       showMessage("Please fill in all fields, including phone number.");
@@ -54,6 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    showMessage("Signing up...", "success");
+
     try {
       const res = await fetch("https://remj82.onrender.com/api/auth/register", {
         method: "POST",
@@ -63,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-      console.log("Register API response:", data); // Debugging
+      console.log("Register API response:", data);
 
       if (res.ok) {
         showMessage(data.message, "success");
