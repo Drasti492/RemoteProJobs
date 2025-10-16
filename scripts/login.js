@@ -8,10 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function showMessage(text, type = "error") {
     loginMessage.textContent = text;
     loginMessage.className = `message ${type}`;
-    loginMessage.style.display = "block"; // Ensure visibility
+    loginMessage.style.display = "block";
   }
 
-  // Password toggle
   if (togglePassword) {
     togglePassword.addEventListener("click", () => {
       const input = togglePassword.previousElementSibling;
@@ -22,28 +21,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Back to Home
   if (backHomeBtn) {
     backHomeBtn.addEventListener("click", () => {
       window.location.href = "../index.html";
     });
   }
 
-  // Login form submission
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(loginForm);
     const email = formData.get("email").trim();
     const password = formData.get("password").trim();
 
-    console.log("Processed form data:", { email, password }); // Debugging
+    console.log("Processed form data:", { email, password });
 
     if (!email || !password) {
       showMessage("Please fill in both email and password.");
       return;
     }
 
-    // Show "Logging in..." notification
     showMessage("Logging in...", "success");
 
     try {
@@ -55,15 +51,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-      console.log("Login API response:", data); // Debugging
+      console.log("Login API response:", data);
 
       if (res.ok) {
         showMessage(data.message, "success");
-        localStorage.setItem("token", data.token); // Changed from authToken to token
+        localStorage.setItem("token", data.token);
         localStorage.setItem("userEmail", email);
         loginForm.reset();
         setTimeout(() => {
-          window.location.href = "work.html"; // Kept as work.html
+          window.location.href = "work.html";
         }, 1500);
       } else {
         showMessage(data.message || "Login failed. Please try again.");

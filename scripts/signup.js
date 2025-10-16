@@ -71,6 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (res.ok) {
         showMessage(data.message, "success");
         localStorage.setItem("verifyEmail", email);
+        if (data.token) {
+          localStorage.setItem("token", data.token); // Store token if provided
+        }
         signupForm.reset();
         setTimeout(() => {
           window.location.href = "verify.html";
