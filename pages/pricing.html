@@ -1,71 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connects — RemoteProJobs</title>
-  <link rel="stylesheet" href="../styles/pricing.css" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing — RemoteProJobs</title>
+    <link rel="stylesheet" href="../styles/pricing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
-  <main class="connects-card" role="main" aria-labelledby="connects-title">
-    <div class="connects-brand">
-      <div class="logo">RP</div>
-      <h1>Remote Pro Jobs</h1>
-    </div>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="./work.html">Home</a></li>
+                    <li><a href="./companies.html">Companies</a></li>
+                    <li><a href="./resources.html">Resources</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="./profile.html" class="profile-icon" aria-label="User Profile">
+                    <i class="fas fa-user"></i>
+                </a>
+                <button class="btn btn-outline btn-sm logout-btn">Logout</button>
+            </div>
+        </div>
+    </header>
 
-    <h2 id="connects-title">RemotePro Connects</h2>
-    <p class="subtitle">Boost your chances and reach clients faster.</p>
+    <section class="pricing-section">
+        <div class="container">
+            <h1>Purchase Connects to Apply</h1>
+            <p>Unlock premium job opportunities with our Connects token, payable via M-Pesa.</p>
+            <ul class="pricing p-yel">
+                <li><h3>Get connects tokens</h3></li>
+                <li><big>KES 1,270</big></li>
+                 <li>Get Your Account Verified For Tasks</li>
+                <li>Get Access to clients</li>
+                <li>M-Pesa compatible payments</li>
+                <li>Priority job applications</li>
+                <li>Connect with top Kenyan employers</li>
+                <li class="notification">M-Pesa payments are currently unavailable due to high traffic demand and we are working to resolve it. Contact our support team at <a href="tel:+1-915-503-2586">+1-915-503-2586</a> to get your Connects!</li>
+                <li><button onclick="window.location.href='https://wa.me/254796485418?text=I%20want%20to%20purchase%20the%20RemoteProJobs%20Connects%20token%20for%20KES%201270'">Proceed to Connects</button></li>
+            </ul>
+        </div>
+    </section>
 
-    <div class="connects-content">
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/747/747310.png"
-        alt="Connects Icon"
-        class="connects-icon"
-      />
-
-      <h3>Premium Connect</h3>
-      <p class="price"><strong>Ksh 1,270</strong> / per Connect</p>
-
-      <ul class="benefits">
-        <li><i class="fas fa-check-circle"></i> Get prioritized job listings</li>
-        <li><i class="fas fa-check-circle"></i> Stand out to top employers</li>
-        <li><i class="fas fa-check-circle"></i> Apply instantly to jobs</li>
-        <li><i class="fas fa-check-circle"></i> Access premium client support</li>
-        <li><i class="fas fa-check-circle"></i> Higher visibility on searches</li>
-      </ul>
-
-      <div class="button-group">
-        <button id="proceedConnects" class="btn btn-primary">
-          <i class="fab fa-whatsapp"></i> Buy Connect
-        </button>
-        <button id="backHome" class="btn btn-outline">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-      </div>
-    </div>
-
-    <footer class="connects-footer">
-      <p>© 2025 RemoteProJobs — Empowering freelancers globally.</p>
+    <footer>
+        <div class="container">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h3><i class="fas fa-briefcase"></i> RemoteProJobs</h3>
+                    <p>Connecting talent with opportunity. Find your dream job or the perfect candidate.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>For Job Seekers</h4>
+                    <ul>
+                        <li><a href="#">Browse Jobs</a></li>
+                        <li><a href="#">Create Resume</a></li>
+                        <li><a href="#">Job Alerts</a></li>
+                        <li><a href="#">Career Advice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>For Employers</h4>
+                    <ul>
+                        <li><a href="#">Post a Job</a></li>
+                        <li><a href="#">Search Resumes</a></li>
+                        <li><a href="#">Recruitment Solutions</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 201 E Main St, Suite 500, El Paso, TX 79901.</li>
+                        <li><i class="fas fa-phone"></i>+1-915-503-2586</li>
+                        <li><i class="fas fa-envelope"></i>remoteprojobs@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
     </footer>
-  </main>
 
-  <script>
-    document.getElementById("proceedConnects").addEventListener("click", () => {
-      const phone = "+19155032586";
-      const message = encodeURIComponent(
-        "Hello, I’d like to buy a RemotePro Connect (Ksh 1270)."
-      );
-      window.location.href = `https://wa.me/${phone}?text=${message}`;
-    });
-
-    document.getElementById("backHome").addEventListener("click", () => {
-      window.location.href = "../pages/work.html";
-    });
-  </script>
+    <script src="../scripts/remoteprojobs.js"></script>
 </body>
 </html>

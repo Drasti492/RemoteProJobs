@@ -1826,6 +1826,70 @@ nav a.active {
     }
 }
 
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  background: #fff;
+  border: 1px solid #007bff;
+  color: #007bff;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #007bff;
+  color: #fff;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 6px;
+}
+
+.page-number {
+  border: 1px solid #007bff;
+  color: #007bff;
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-number.active,
+.page-number:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+
+
+/* Small devices */
+@media (max-width: 480px) {
+  .pagination-container {
+    gap: 6px;
+  }
+  .pagination-btn, .page-number {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+
 /* Very Small Devices (360px and below) */
 @media (max-width: 360px) {
     .container {

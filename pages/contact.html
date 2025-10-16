@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — RemoteProJobs</title>
+    <link rel="stylesheet" href="../styles/navs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="../pages/work.html" >Home</a></li>  
+                    <li><a href="./companies.html" >Companies</a></li>
+                    <li><a href="./resources.html">Resources</a></li>
+                    <li><a href="./contact.html"class="active">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="./profile.html" class="profile-icon" aria-label="User Profile">
+                    <i class="fas fa-user"></i>
+                </a>
+                <button class="btn btn-outline btn-sm logout-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Get in Touch with Us</h1>
+                <p>Have questions or need support? Contact our team to start your remote work journey.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-form">
+                    <h2>Contact Us</h2>
+                    <p>Fill out the form below, and we'll respond within 24 hours.</p>
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                    </form>
+                    <p class="message" id="contact-message" aria-live="polite"></p>
+                </div>
+                <div class="contact-info">
+                    <h3>Reach Us Directly</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 201 E Main St #500, El Paso, TX 79901</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+19155032586" class="phone-number">+1-915-503-2586</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:remoteprojobs@gmail.com">remoteprojobs@gmail.com</a></li>
+                        <li><i class="fab fa-whatsapp"></i> <a href="https://wa.me/+254-796-485-418" class="phone-number">+1-915-503-2586</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Join RemoteProJobs Today</h2>
+                <p>Whether you're seeking talent or your next career move, we're here to help.</p>
+                <a href="./work.html" class="btn btn-primary btn-lg">Get Started</a>
+            </div>
+          
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h3><i class="fas fa-briefcase"></i> RemoteProJobs</h3>
+                    <p>Connecting talent with opportunity. Find your dream job or the perfect candidate.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>For Job Seekers</h4>
+                    <ul>
+                        <li><a href="jobs.html">Browse Jobs</a></li>
+                        <li><a href="resources.html">Career Resources</a></li>
+                        <li><a href="#">Job Alerts</a></li>
+                        <li><a href="resources.html">Career Advice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>For Employers</h4>
+                    <ul>
+                        <li><a href="contact.html">Post a Job</a></li>
+                        <li><a href="#">Search Resumes</a></li>
+                        <li><a href="#">Recruitment Solutions</a></li>
+                        <li><a href="./pricing.html">Get Connects</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 201 E Main St #500, El Paso, TX 79901</li>
+                        <li><i class="fas fa-phone"></i> +1-915-503-2586</li>
+                        <li><i class="fas fa-envelope"></i> remoteprojobs@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../scripts/contact.js"></script>
+</body>
+</html>
