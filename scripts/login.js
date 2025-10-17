@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-        credentials: "include",
       });
 
       const data = await res.json();
@@ -59,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("userEmail", email);
         loginForm.reset();
         setTimeout(() => {
-          window.location.href = "work.html";
+          window.location.href = "work.html"; // Change to "profile.html" if preferred
         }, 1500);
       } else {
         showMessage(data.message || "Login failed. Please try again.");

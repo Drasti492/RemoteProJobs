@@ -1,8 +1,9 @@
+// scripts/verify.js
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("verifyForm");
   const msgEl = document.getElementById("verifyMessage");
   const resendLink = document.getElementById("resendLink");
-  const backHomeBtn = document.querySelector(".back-home-btn"); // Added
+  const backHomeBtn = document.querySelector(".back-home-btn");
   const apiBase = "https://remj82.onrender.com/api/auth";
 
   // Pre-fill email if stored
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function showMessage(text, type = "error") {
     msgEl.textContent = text;
     msgEl.className = `message ${type}`;
+    msgEl.style.display = "block"; // Ensure visibility
   }
 
   // Verify form submission
@@ -38,11 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
+      console.log("Verify API response:", data); // Debug log
 
       if (res.ok) {
         showMessage("Email verified! Redirecting...", "success");
         localStorage.setItem("userEmail", email);
-        setTimeout(() => window.location.href = "work.html", 900); // Redirect to work.html
+        localStorage.removeItem("verifyEmail"); // Clean up
+        setTimeout(() => window.location.href = "login.html", 900); // Changed to login.html
       } else {
         showMessage(data.message || "Verification failed.");
       }
@@ -63,12 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       resendLink.textContent = "Sending...";
-      const res = await fetch(`${apiBase}/register`, { // Changed to /register
+      const res = await fetch(`${apiBase}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }), // Minimal payload to trigger code resend
+        body: JSON.stringify({ email }),
       });
       const data = await res.json();
+      console.log("Resend API response:", data); // Debug log
       if (res.ok) {
         showMessage("Verification code resent.", "success");
       } else {

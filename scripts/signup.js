@@ -62,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, phone, email, password }),
-        credentials: "include",
       });
 
       const data = await res.json();
@@ -71,9 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (res.ok) {
         showMessage(data.message, "success");
         localStorage.setItem("verifyEmail", email);
-        if (data.token) {
-          localStorage.setItem("token", data.token); // Store token if provided
-        }
         signupForm.reset();
         setTimeout(() => {
           window.location.href = "verify.html";

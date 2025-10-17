@@ -9,18 +9,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const logoutBtn = document.getElementById('logoutBtn');
   const backBtn = document.querySelector('.back-btn');
 
-  function showMessage(text, type) {
+  const showMessage = (text, type) => {
     messageElement.textContent = text;
     messageElement.className = `message ${type}`;
     messageElement.style.display = 'block';
     setTimeout(() => {
       messageElement.style.display = 'none';
     }, 3000);
-  }
+  };
 
-  // Fetch user profile data
   try {
     const token = localStorage.getItem('token');
+    console.log('Token from localStorage:', token ? 'Present' : 'Missing'); // Debug
     if (!token) {
       showMessage('Please log in to view your profile.', 'error');
       console.error('No token found in localStorage');
@@ -32,14 +32,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('API error response:', errorData);
+      console.error('API error response:', errorData, 'Status:', response.status);
       throw new Error(errorData.message || 'Failed to fetch profile data');
     }
 
@@ -64,7 +63,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     balanceElement.textContent = '0 KSH';
   }
 
-  // Withdraw button handler
   withdrawBtn.addEventListener('click', async () => {
     try {
       const token = localStorage.getItem('token');
@@ -77,13 +75,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+          'Content-Type': 'application/json'
+        }
       });
 
-      const result = await response.json();
       if (!response.ok) {
+        const result = await response.json();
+        console.error('Withdraw API error:', result);
         if (result.message.includes('insufficient')) {
           showMessage('Insufficient funds in your account. Please ensure your balance is at least 500 KSH to withdraw.', 'error');
         } else {
@@ -92,6 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
+      const result = await response.json();
       showMessage(result.message || 'Withdrawal successful!', 'success');
       balanceElement.textContent = `${result.balance || 0} KSH`;
     } catch (error) {
@@ -100,14 +99,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Logout button handler
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userEmail');
     window.location.href = '../index.html';
   });
 
-  // Back button handler
   backBtn.addEventListener('click', () => {
     window.location.href = '../index.html';
   });
