@@ -1,5 +1,6 @@
 // scripts/profile.js
 document.addEventListener('DOMContentLoaded', async () => {
+  // Select DOM elements
   const usernameElement = document.getElementById('profile-username');
   const phoneElement = document.getElementById('profile-phone');
   const emailElement = document.getElementById('profile-email');
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const logoutBtn = document.getElementById('logoutBtn');
   const backBtn = document.querySelector('.back-btn');
 
+  // Function to display messages
   const showMessage = (text, type) => {
     messageElement.textContent = text;
     messageElement.className = `message ${type}`;
@@ -18,9 +20,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 3000);
   };
 
+  // Fetch user profile data
   try {
     const token = localStorage.getItem('token');
-    console.log('Token from localStorage:', token ? 'Present' : 'Missing'); // Debug
+    console.log('Token from localStorage:', token); // Debug token
     if (!token) {
       showMessage('Please log in to view your profile.', 'error');
       console.error('No token found in localStorage');
@@ -38,12 +41,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('API error response:', errorData, 'Status:', response.status);
+      console.error('API error response:', errorData, 'Status:', response.status); // Debug API error
       throw new Error(errorData.message || 'Failed to fetch profile data');
     }
 
     const data = await response.json();
-    console.log('API response:', data);
+    console.log('API response:', data); // Debug API response
 
     if (!data.success || !data.user) {
       throw new Error('Invalid response format');
@@ -55,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     emailElement.textContent = user.email || 'Not provided';
     balanceElement.textContent = `${user.balance || 0} KSH`;
   } catch (error) {
-    console.error('Error fetching profile:', error.message);
+    console.error('Error fetching profile:', error.message); // Debug error
     showMessage(error.message || 'Unable to load profile data. Please try again.', 'error');
     usernameElement.textContent = 'Unknown';
     phoneElement.textContent = 'Not provided';
@@ -63,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     balanceElement.textContent = '0 KSH';
   }
 
+  // Withdraw button handler
   withdrawBtn.addEventListener('click', async () => {
     try {
       const token = localStorage.getItem('token');
@@ -81,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (!response.ok) {
         const result = await response.json();
-        console.error('Withdraw API error:', result);
+        console.error('Withdraw API error:', result); // Debug withdraw error
         if (result.message.includes('insufficient')) {
           showMessage('Insufficient funds in your account. Please ensure your balance is at least 500 KSH to withdraw.', 'error');
         } else {
@@ -99,12 +103,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // Logout button handler
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userEmail');
     window.location.href = '../index.html';
   });
 
+  // Back button handler
   backBtn.addEventListener('click', () => {
     window.location.href = '../index.html';
   });

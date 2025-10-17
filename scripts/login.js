@@ -5,12 +5,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const togglePassword = document.querySelector(".toggle-password");
   const backHomeBtn = document.querySelector(".back-home-btn");
 
+  // Display message
   function showMessage(text, type = "error") {
     loginMessage.textContent = text;
     loginMessage.className = `message ${type}`;
     loginMessage.style.display = "block";
   }
 
+  // Toggle password visibility
   if (togglePassword) {
     togglePassword.addEventListener("click", () => {
       const input = togglePassword.previousElementSibling;
@@ -21,19 +23,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Back home
   if (backHomeBtn) {
     backHomeBtn.addEventListener("click", () => {
       window.location.href = "../index.html";
     });
   }
 
+  // Login form submit
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(loginForm);
     const email = formData.get("email").trim();
     const password = formData.get("password").trim();
-
-    console.log("Processed form data:", { email, password });
 
     if (!email || !password) {
       showMessage("Please fill in both email and password.");
@@ -52,16 +54,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       console.log("Login API response:", data);
 
-      if (res.ok) {
-        showMessage(data.message, "success");
+      if (res.ok && data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userEmail", email);
+        showMessage("Login successful! Redirecting...", "success");
+
         loginForm.reset();
         setTimeout(() => {
-          window.location.href = "work.html"; // Change to "profile.html" if preferred
+          window.location.href = "profile.html"; // ✅ redirect to profile
         }, 1500);
       } else {
-        showMessage(data.message || "Login failed. Please try again.");
+        showMessage(data.message || "Login failed. Please check your credentials.");
       }
     } catch (err) {
       console.error("Login error:", err.message);
