@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    const response = await fetch('https://remj82.onrender.com/api/auth/getUser', {
+    const response = await fetch('https://remj82.onrender.com/api/auth/user', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
