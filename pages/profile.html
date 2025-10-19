@@ -11,8 +11,7 @@
     <header>
         <div class="container">
             <div class="logo">
-                <i class="fas fa-briefcase"></i>
-                <h1>RemoteProJobs</h1>
+                <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
             </div>
             <button class="nav-toggle" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
@@ -23,9 +22,14 @@
                     <li><a href="./companies.html">Companies</a></li>
                     <li><a href="./resources.html">Resources</a></li>
                     <li><a href="./contact.html">Contact</a></li>
-                    <li><a href="./profile.html" class="active">Profile</a></li>
                 </ul>
             </nav>
+            <div class="auth-buttons">
+                <a href="profile.html" class="profile-icon" aria-label="User Profile">
+                    <i class="fas fa-user"></i>
+                </a>
+                <button class="btn btn-outline btn-sm logout-btn">Logout</button>
+            </div>
         </div>
     </header>
 
@@ -80,5 +84,6 @@
     </footer>
 
     <script src="../scripts/profile.js"></script>
+    <script src="../scripts/nav.js"></script>
 </body>
 </html>

@@ -1178,13 +1178,13 @@ footer {
 }
 
 /* Laptops (1024px and below) */
-@media (max-width: 1024px) {
+@media (max-width: 690px) {
     header .container {
         flex-wrap: wrap;
     }
 
     .logo h1 {
-        font-size: 18px;
+        font-size: 14px;
     }
 
     .logo i {
@@ -1317,7 +1317,7 @@ footer {
 }
 
 /* Tablets (768px and below) */
-@media (max-width: 768px) {
+@media (max-width: 400px) {
     header .container {
         padding: 10px 12px;
     }
@@ -1451,7 +1451,7 @@ footer {
 }
 
 /* Small Devices (Android Phones, 480px and below) */
-@media (max-width: 480px) {
+@media (max-width: 250px) {
  /* ===== HEADER BASE ===== */
 header {
   background: #fff;
@@ -1896,21 +1896,27 @@ nav a.active {
         padding: 0 8px;
     }
 
+
     .logo h1 {
-        font-size: 14px;
+        font-size: 10px;
     }
 
     .logo i {
-        font-size: 14px;
+        font-size: 12px;
+    }
+    .profile-icon i{
+      font-size: 18px;
     }
 
     .auth-buttons .btn {
-        padding: 5px;
+        padding: 2px;
         font-size: 11px;
+        
     }
 
     .hero .container {
         padding: 0 8px;
+        min-height: 30vh;
     }
 
     .hero-content {
@@ -1918,7 +1924,7 @@ nav a.active {
     }
 
     .hero h1 {
-        font-size: 20px;
+        font-size: 15px;
     }
 
     .hero p {
@@ -1967,3 +1973,6 @@ nav a.active {
         max-width: 100%;
     }
 }
+
+
+

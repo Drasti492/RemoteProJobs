@@ -68,67 +68,128 @@ body {
     font-size: 14px;
 }
 
-/* Header */
+/* Header Styles */
+/* ===== HEADER BASE ===== */
 header {
-    background: var(--white);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
 }
 
 header .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* ===== LOGO ===== */
+.logo h1 {
+  font-size: 20px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
 }
 
 .logo i {
-    font-size: 24px;
-    color: var(--primary-color);
+  color: #007bff;
+  font-size: 20px;
 }
 
-.logo h1 {
-    font-size: 24px;
-    margin: 0;
-    color: var(--dark-color);
-}
-
-.nav-toggle {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: var(--dark-color);
-    cursor: pointer;
-}
-
+/* ===== NAVIGATION ===== */
 nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
 }
 
-nav ul li a {
-    text-decoration: none;
-    color: var(--dark-color);
-    font-weight: 500;
-    font-size: 16px;
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-nav ul li a.active,
-nav ul li a:hover {
+nav a:hover,
+nav a.active {
+  color: #007bff;
+}
+
+/* ===== AUTH BUTTONS ===== */
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-icon {
+  color: #333;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.profile-icon:hover {
+  color: #007bff;
+}
+
+.btn.btn-sm {
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+/* ===== NAV TOGGLE ===== */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+.nav-toggle:hover {
+    color: var(--primary-dark);
+}
+
+/*profile icon*/
+.profile-icon {
+    font-size: 24px;
     color: var(--primary-color);
+    padding: 8px;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-icon:hover {
+    color: var(--primary-dark);
+}
+
+.logout-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .profile-icon {
+        font-size: 20px;
+        padding: 6px;
+    }
+
+    .logout-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
 }
 
 /* Main Content */
@@ -315,35 +376,142 @@ footer p {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-    .nav-toggle {
-        display: block;
+
+@media (min-width: 1024px) {
+        header .container {
+        justify-content: space-around;
+        padding: 16px 24px;
     }
-    nav {
-        display: none;
-        width: 100%;
+
+    .logo h1 {
+        font-size: 26px;
     }
-    nav.active {
-        display: block;
+
+    .logo i {
+        font-size: 26px;
     }
+
     nav ul {
-        flex-direction: column;
-        padding: 20px 0;
-        gap: 10px;
+        gap: 32px;
     }
-    nav ul li a {
-        font-size: 14px;
+
+    nav a {
+        font-size: 16px;
+        padding: 10px 16px;
+    }
+
+    .auth-buttons {
+        gap: 16px;
+    }
+
+    .auth-buttons .btn {
+        padding: 10px 20px;
+        font-size: 16px;
     }
 }
 
-@media (max-width: 480px) {
+
+@media (max-width: 690px) {
+    header .container {
+        flex-wrap: wrap;
+    }
+
+    .logo h1 {
+        font-size: 14px;
+    }
+
+    .logo i {
+        font-size: 18px;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+
+    nav {
+        display: none;
+        width: 100%;
+        background: #fff;
+        border-top: 1px solid #eee;
+        margin-top: 10px;
+    }
+
+    nav.active {
+        display: block;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 0;
+         gap: 10px;
+    }
+
+    nav a {
+        display: block;
+        width: 100%;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .auth-buttons {
+        gap: 10px;
+    }
+
+    .auth-buttons .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }}
+
+@media (max-width: 400px) {
+        header .container {
+        padding: 10px 12px;
+    }
+
+    .logo h1 {
+        font-size: 18px;
+    }
+
+    .logo i {
+        font-size: 18px;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+
+    nav {
+        display: none;
+        width: 100%;
+        margin-top: 12px;
+    }
+
+    nav.active {
+        display: block;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    .auth-buttons {
+        gap: 6px;
+    }
+
+    .auth-buttons .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
     .auth-card {
         margin: 20px;
         padding: 20px;
     }
 
     .auth-brand h1 {
-        font-size: 24px;
+        font-size: 17px;
+    }
+    #profile-title {
+        font-size: 12;
     }
 
     .verify-notice {
@@ -352,7 +520,7 @@ footer p {
     }
 
     .profile-field {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .profile-field i {
@@ -375,5 +543,260 @@ footer p {
     .btn-sm {
         padding: 7px 14px;
         font-size: 13px;
+    }
+
+}
+
+
+
+/* Small Devices (480px and below) */
+@media (max-width: 250px) {
+header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+}
+
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== LOGO ===== */
+.logo h1 {
+  font-size: 20px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.logo i {
+  color: #007bff;
+  font-size: 20px;
+}
+
+/* ===== NAVIGATION ===== */
+nav ul {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+nav a:hover,
+nav a.active {
+  color: #007bff;
+}
+
+/* ===== AUTH BUTTONS ===== */
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-icon {
+  color: #333;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.profile-icon:hover {
+  color: #007bff;
+}
+
+.btn.btn-sm {
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+/* ===== NAV TOGGLE ===== */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+    .hero {
+        padding: 40px 0;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        padding: 12px;
+    }
+
+    .hero h1 {
+        font-size: 24px;
+        line-height: 1.3;
+    }
+
+    .hero p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .companies-grid,
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .company-card,
+    .resource-card {
+        max-width: 100%;
+    }
+
+    .contact-form h2 {
+        font-size: 16px;
+    }
+
+    .form-group label {
+        font-size: 12px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .cta-image {
+        max-width: 200px;
+    }
+
+    .footer-column h3 {
+        font-size: 15px;
+    }
+
+    .footer-column p,
+    .footer-column ul li a,
+    .contact-info li {
+        font-size: 12px;
+    }
+
+    .social-icons a {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .footer-bottom {
+        font-size: 12px;
+    }
+}
+
+/* Very Small Devices (360px and below) */
+@media (max-width: 360px) {
+    .container {
+        padding: 0 8px;
+    }
+
+    .logo h1 {
+        font-size: 14px;
+    }
+
+    .logo i {
+        font-size: 14px;
+    }
+
+    .nav-toggle {
+        font-size: 18px;
+    }
+
+    nav a {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+
+    .auth-buttons .btn {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    .hero-content {
+        padding: 10px;
+    }
+
+    .hero h1 {
+        font-size: 20px;
+    }
+
+    .hero p {
+        font-size: 13px;
+    }
+
+    .featured-companies h2,
+    .resources h2,
+    .contact-form h2,
+    .cta h2 {
+        font-size: 16px;
+    }
+
+    .company-card h3,
+    .resource-card h3 {
+        font-size: 14px;
+    }
+
+    .company-card p,
+    .resource-card p {
+        font-size: 12px;
+    }
+}
+
+
+/* Small devices */
+@media (max-width: 480px) {
+  .pagination-container {
+    gap: 6px;
+  }
+  .pagination-btn, .page-number {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+
+/* Very Small Devices (360px and below) */
+@media (max-width: 360px) {
+    .container {
+        padding: 0 8px;
+    }
+
+
+    .logo h1 {
+        font-size: 10px;
+    }
+
+    .logo i {
+        font-size: 12px;
+    }
+    .profile-icon i{
+      font-size: 18px;
+    }
+
+    .auth-buttons .btn {
+        padding: 2px;
+        font-size: 11px;
+        
     }
 }
