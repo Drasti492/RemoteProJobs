@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       balanceElement.textContent = `${result.balance || 0} KSH`;
     } catch (error) {
       console.error('Withdraw error:', error.message);
-      showMessage('Withdrawal failed. Please try again.', 'error');
+      showMessage('You Have Insufficient Balance In Your Account.', 'error');
     }
   });
 
@@ -112,6 +112,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Back button handler
   backBtn.addEventListener('click', () => {
-    window.location.href = '../index.html';
+    window.location.href = '../pages/work.html';
   });
 });

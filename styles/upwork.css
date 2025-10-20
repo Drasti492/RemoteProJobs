@@ -1649,30 +1649,11 @@ nav a.active {
   color: #333;
   cursor: pointer;
 }
- .pagination-container {
-        gap: 3px;
-        margin: 10px 0;
-    }
-    .pagination-btn,
-    .page-number {
-        width: 28px;
-        height: 28px;
-        font-size: 10px;
-    }
-    .pagination-btn i {
-        font-size: 10px;
-    }
-    .pagination-ellipsis {
-        width: 28px;
-        height: 28px;
-        font-size: 10px;
-    }
-
 }
 /* ===== RESPONSIVE ===== */
 
 /* Tablets & smaller */
-@media (max-width: 1024px) {
+@media (max-width: 600px) {
   header .container {
     flex-wrap: wrap;
   }
@@ -1713,7 +1694,7 @@ nav a.active {
 }
 
 /* Phones */
-@media (max-width: 480px) {
+@media (max-width: 200px) {
   header .container {
     flex-direction: column;
     align-items: flex-start;
@@ -1734,9 +1715,9 @@ nav a.active {
   }
 
   .auth-buttons {
-    width: 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    width: 10px;
+  
+   
   }
 
   .auth-buttons .btn {
@@ -1960,6 +1941,7 @@ nav a.active {
         margin: 16px 0;
     }
 
+
     .pagination-btn,
     .page-number {
         width: 32px;
@@ -2004,12 +1986,12 @@ nav a.active {
         font-size: 12px;
     }
     .profile-icon i{
-      font-size: 18px;
+      font-size: 19px;
     }
 
     .auth-buttons .btn {
         padding: 2px;
-        font-size: 11px;
+        font-size: 13px;
         
     }
 
@@ -2070,24 +2052,6 @@ nav a.active {
 
     .cta-content {
         max-width: 100%;
-    }
-        .pagination-container {
-        gap: 4px;
-        margin: 12px 0;
-    }
-    .pagination-btn,
-    .page-number {
-        width: 30px;
-        height: 30px;
-        font-size: 11px;
-    }
-    .pagination-btn i {
-        font-size: 11px;
-    }
-    .pagination-ellipsis {
-        width: 30px;
-        height: 30px;
-        font-size: 11px;
     }
 }
 
