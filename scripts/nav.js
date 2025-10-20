@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (contactForm && messageEl) {
         contactForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            messageEl.textContent = "Thank you! Your message has been sent.";
+            messageEl.textContent = "Thank you! Your message has been sent..";
             messageEl.className = "message success";
             messageEl.style.display = "block";
             setTimeout(() => {
