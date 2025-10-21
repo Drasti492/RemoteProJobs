@@ -2787,3 +2787,9 @@ function setupEventListeners() {
         }
     });
 }
+ // Logout button handler
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userEmail');
+    window.location.href = '../index.html';
+  });

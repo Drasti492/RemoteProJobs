@@ -26,3 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+ // Logout button handler
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userEmail');
+    window.location.href = '../index.html';
+  });
