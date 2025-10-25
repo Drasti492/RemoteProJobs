@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     usernameElement.textContent = 'Unknown';
     phoneElement.textContent = 'Not provided';
     emailElement.textContent = 'Not provided';
-    balanceElement.textContent = '0 KSH';
+    balanceElement.textContent = '0 $';
   }
 
 
