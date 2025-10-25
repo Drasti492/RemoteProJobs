@@ -156,6 +156,10 @@ nav a:hover,
 nav a.active {
   color: #007bff;
 }
+.cta-content a:hover
+ {
+  color: #a5f1f1;
+}
 
 /* ===== AUTH BUTTONS ===== */
 .auth-buttons {
@@ -243,6 +247,9 @@ nav a.active {
     background: rgba(0, 0, 0, 0.3);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+}
+.hero-content a:hover {
+    color: #fffffe;
 }
 
 .hero h1 {

@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     usernameElement.textContent = user.name || 'Unknown';
     phoneElement.textContent = user.phone || 'Not provided';
     emailElement.textContent = user.email || 'Not provided';
-    balanceElement.textContent = `${user.balance || 0} KSH`;
+    balanceElement.textContent = `${user.balance || 0} $`;
   } catch (error) {
     console.error('Error fetching profile:', error.message); // Debug error
     showMessage(error.message || 'Unable to load profile data. Please try again.', 'error');
@@ -66,42 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     balanceElement.textContent = '0 KSH';
   }
 
-  // Withdraw button handler
-  withdrawBtn.addEventListener('click', async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        showMessage('Please log in to withdraw.', 'error');
-        return;
-      }
 
-      const response = await fetch('https://remj82.onrender.com/api/orders/withdraw', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const result = await response.json();
-        console.error('Withdraw API error:', result); // Debug withdraw error
-        if (result.message.includes('insufficient')) {
-          showMessage('Insufficient funds in your account. Please ensure your balance is at least 500 KSH to withdraw.', 'error');
-        } else {
-          showMessage(result.message || 'Withdrawal failed. Please try again.', 'error');
-        }
-        return;
-      }
-
-      const result = await response.json();
-      showMessage(result.message || 'Withdrawal successful!', 'success');
-      balanceElement.textContent = `${result.balance || 0} KSH`;
-    } catch (error) {
-      console.error('Withdraw error:', error.message);
-      showMessage('You Have Insufficient Balance In Your Account.', 'error');
-    }
-  });
 
   // Logout button handler
   logoutBtn.addEventListener('click', () => {
