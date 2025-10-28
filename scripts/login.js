@@ -1,11 +1,10 @@
-// scripts/login.js
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const loginMessage = document.getElementById("loginMessage");
   const togglePassword = document.querySelector(".toggle-password");
   const backHomeBtn = document.querySelector(".back-home-btn");
 
-  // Display message
+  // Show message helper
   function showMessage(text, type = "error") {
     loginMessage.textContent = text;
     loginMessage.className = `message ${type}`;
@@ -30,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Login form submit
+  // Login submit handler
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(loginForm);
@@ -45,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showMessage("Logging in...", "success");
 
     try {
+      //  Login request
       const res = await fetch("https://remj82.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,18 +54,46 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       console.log("Login API response:", data);
 
-      if (res.ok && data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userEmail", email);
-        showMessage("Login successful! Redirecting...", "success");
-
-        loginForm.reset();
-        setTimeout(() => {
-          window.location.href = "profile.html"; // ✅ redirect to profile
-        }, 1500);
-      } else {
+      if (!res.ok || !data.token) {
         showMessage(data.message || "Login failed. Please check your credentials.");
+        return;
       }
+
+      //  Save token
+      const token = data.token;
+      localStorage.setItem("token", token);
+      localStorage.setItem("userEmail", email);
+
+      // Fetch user profile automatically
+      try {
+        const profileRes = await fetch("https://remj82.onrender.com/api/auth/user", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        const profileData = await profileRes.json();
+        console.log("Fetched profile:", profileData);
+
+        if (profileData.success && profileData.user) {
+          localStorage.setItem("userProfile", JSON.stringify(profileData.user));
+        } else {
+          console.warn("Profile not found or invalid response");
+        }
+      } catch (profileErr) {
+        console.error("Error fetching profile:", profileErr);
+      }
+
+      //  Redirect directly to upwork.html
+      showMessage("Login successful! Redirecting...", "success");
+      loginForm.reset();
+
+      setTimeout(() => {
+        window.location.href = "work.html";
+      }, 1500);
+
     } catch (err) {
       console.error("Login error:", err.message);
       showMessage("Network error. Please try again.");

@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const logoutBtn = document.getElementById('logoutBtn');
   const backBtn = document.querySelector('.back-btn');
 
+  // Show cached profile instantly if available
+const cachedProfile = JSON.parse(localStorage.getItem("userProfile"));
+if (cachedProfile) {
+  usernameElement.textContent = cachedProfile.name || "Unknown";
+  phoneElement.textContent = cachedProfile.phone || "Not provided";
+  emailElement.textContent = cachedProfile.email || "Not provided";
+  balanceElement.textContent = `${cachedProfile.balance || 0} $`;
+}
+
+
   // Function to display messages
   const showMessage = (text, type) => {
     messageElement.textContent = text;

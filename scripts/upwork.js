@@ -1,4 +1,19 @@
 // jobsData with 160 simple tech jobs, 90% remote, USA locations, realistic USD salaries
+// scripts/upwork.js
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (userProfile) {
+    console.log(`Welcome back, ${userProfile.name}!`);
+  }
+  
+});
+
 const jobsData = [
     // Manually crafted first 20 jobs for variety
     {
@@ -1045,11 +1060,12 @@ function setupEventListeners() {
     });
 
     // Logout button handler
-    const logoutBtn = document.getElementById('logout-btn');
+    const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userEmail');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userProfile');
             window.location.href = '../index.html';
         });
     }

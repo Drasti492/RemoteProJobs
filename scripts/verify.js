@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           showMessage(data.message || "Verification failed. Please try again.");
         }
+        
       } catch (err) {
         console.error("❌ Verification error:", err);
         showMessage("Network error. Please try again.");
