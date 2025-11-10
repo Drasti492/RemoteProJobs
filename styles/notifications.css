@@ -1,7 +1,15 @@
-/* Notifications Page */
+:root {
+    --notif-bg: #f9fafb;
+    --notif-unread: #eef6ff;
+    --notif-border: #dcdcdc;
+    --notif-radius: 8px;
+    --notif-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Main Section */
 .notifications-section {
     padding: 40px 0;
-    background-color: var(--light-color);
+    background-color: var(--notif-bg);
 }
 
 .notifications-header {
@@ -13,19 +21,15 @@
 }
 
 .notifications-header h2 {
-    font-size: 20px;
-    margin-bottom: 8px;
+    font-size: 22px;
+    margin-bottom: 10px;
 }
 
-.notifications-actions {
-    display: flex;
-    gap: 10px;
-}
-
+/* List */
 .notifications-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
 .notification-item {
@@ -33,16 +37,16 @@
     justify-content: space-between;
     align-items: center;
     background-color: white;
+    border: 1px solid var(--notif-border);
     padding: 16px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-    cursor: pointer;
+    border-radius: var(--notif-radius);
+    box-shadow: var(--notif-shadow);
+    transition: 0.2s ease;
 }
 
 .notification-item.unread {
+    background-color: var(--notif-unread);
     border-left: 4px solid var(--primary-color);
-    background-color: var(--primary-light);
 }
 
 .notification-item:hover {
@@ -57,23 +61,23 @@
     font-size: 15px;
     font-weight: 600;
     margin-bottom: 4px;
-    color: var(--dark-color);
 }
 
 .notification-message {
     font-size: 13px;
-    color: var(--gray-color);
+    color: #555;
 }
 
 .notification-meta {
     font-size: 12px;
-    color: var(--gray-color);
+    color: #888;
     margin-top: 4px;
 }
 
+/* Buttons */
 .notification-actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
 }
 
 .notification-actions button {
@@ -81,38 +85,51 @@
     font-size: 12px;
 }
 
-/* Notification Bell (sync with upwork.css) */
+/* Dropdown */
+.notification-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 300px;
+    background: white;
+    border-radius: var(--notif-radius);
+    box-shadow: var(--notif-shadow);
+    display: none;
+    z-index: 1000;
+    padding: 10px;
+}
+
+.notification-dropdown .notifications-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-wrapper {
+    position: relative;
+}
+
 .notification-icon {
     position: relative;
     font-size: 20px;
     color: var(--primary-color);
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    transition: var(--transition);
-}
-
-.notification-icon:hover {
-    color: var(--primary-dark);
 }
 
 .notification-count {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    background-color: var(--secondary-color);
+    top: -5px;
+    right: -5px;
+    background: var(--secondary-color);
     color: white;
     font-size: 11px;
-    font-weight: bold;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-radius: 50%;
-    border: 1px solid white;
+    padding: 2px 5px;
 }
 
-/* Pagination inherited from upwork.css */
+/* Empty State */
+.no-notifications {
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+    padding: 20px 0;
+}

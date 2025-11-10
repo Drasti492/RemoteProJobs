@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile — RemoteProJobs</title>
-    <link rel="stylesheet" href="../styles/profile.css">
-    <link rel="stylesheet" href="../styles/notifications.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — RemoteProJobs</title>
+
+  <link rel="stylesheet" href="../styles/profile.css" />
+  <link rel="stylesheet" href="../styles/verify.css" />
+<link rel="stylesheet" href="../styles/notifications.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
 </head>
+
 <body>
 <header>
   <div class="container">
@@ -31,79 +37,68 @@
         <i class="fas fa-user"></i>
       </a>
 
-      <!-- Notification Bell -->
-      <div class="notification-wrapper">
+      <!-- Notification Bell (Direct Redirect) -->
+      <a href="./notifications.html" class="notification-link" aria-label="Notifications">
         <div class="notification-icon" id="notificationBell">
           <i class="fas fa-bell"></i>
           <span class="notification-count" id="notificationCount">0</span>
         </div>
-        <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
-          <div id="notifications-list" class="notifications-list"></div>
-          <div class="notification-actions">
-            <button id="markAllRead" class="btn btn-sm">Mark All Read</button>
-            <button id="deleteAll" class="btn btn-sm">Delete All</button>
-          </div>
-        </div>
-      </div>
+      </a>
 
       <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">Logout</button>
     </div>
   </div>
 </header>
 
+  <main class="auth-card">
+    <div class="auth-brand">
+      <div class="logo">RP</div>
+      <h1>RemoteProJobs</h1>
+    </div>
 
-    <main class="auth-card" role="main" aria-labelledby="profile-title">
-        <div class="auth-brand">
-            <div class="logo">RP</div>
-            <h1>RemoteProJobs</h1>
-        </div>
+    <h2>Your Profile</h2>
 
-        <h2 id="profile-title">Your Profile</h2>
-        <p class="verify-notice">Your account is not verified. <a href="./pricing.html">Get Connects</a> to verify and unlock premium features!</p>
+    <p id="verifyNotice" class="verify-notice">Loading verification status...</p>
 
-        <div class="profile-info">
-            <div class="profile-field">
-                <i class="fas fa-user"></i>
-                <span><strong>Username:</strong> <span id="profile-username">Loading...</span></span>
-            </div>
-            <div class="profile-field">
-                <i class="fas fa-phone"></i>
-                <span><strong>Phone :</strong> <span id="profile-phone">Loading...</span></span>
-            </div>
-            <div class="profile-field">
-                <i class="fas fa-envelope"></i>
-                <span><strong>Email:</strong> <span id="profile-email">Loading...</span></span>
-            </div>
-            <div class="profile-field">
-                <i class="fas fa-wallet"></i>
-                <span><strong>Account Balance:</strong> <span id="profile-balance">0 $</span></span>
-            </div>
-            <p class="disclaimer">Minimum withdrawal is 4 $.</p>
-            <p class="warning">Any sign of irregularities will result in an immediate account ban.</p>
-        </div>
+    <div class="profile-info">
+      <div class="profile-field">
+        <i class="fas fa-user"></i>
+        <span><strong>Username:</strong> 
+          <span id="profile-username">Loading...</span>
+          <span id="verifiedBadge"></span>
+        </span>
+      </div>
+      <div class="profile-field">
+        <i class="fas fa-phone"></i>
+        <span><strong>Phone:</strong> <span id="profile-phone">Loading...</span></span>
+      </div>
+      <div class="profile-field">
+        <i class="fas fa-envelope"></i>
+        <span><strong>Email:</strong> <span id="profile-email">Loading...</span></span>
+      </div>
+      <div class="profile-field">
+        <i class="fas fa-wallet"></i>
+        <span><strong>Balance:</strong> <span id="profile-balance">$0.00</span></span>
+      </div>
+    </div>
 
-        <div class="form-group">
-            <button class="btn btn-outline btn-sm back-btn">Start Earning</button>
-            <a href="../pages/withraw.html"><button class="btn btn-primary btn-sm withdraw-btn" id="withdrawBtn">Withdraw</button></a>
-            <button class="btn btn-primary btn-sm" id="logoutBtn">Log Out</button>
-        </div>
+    <div class="form-group">
+      <button class="btn btn-outline btn-sm back-btn">Start Earning</button>
+      <a href="../pages/withraw.html"><button class="btn btn-primary btn-sm">Withdraw</button></a>
+      <button class="btn btn-primary btn-sm" id="logoutBtn">Log Out</button>
+    </div>
+  </main>
 
-        <p class="message" id="profileMessage" aria-live="polite"></p>
-    </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+    </div>
+  </footer>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact Us</a>
-            </div>
-        </div>
-    </footer>
+  <script>
+    const USER_ID = "replace_with_real_user_id"; // e.g., from login/session
+  </script>
 
-    <script src="../scripts/profile.js"></script>
-    <script src="../scripts/nav.js"></script>
-    <script src="../scripts/authGuard.js"></script>
+  <script src="../scripts/verify.js"></script>
 </body>
 </html>

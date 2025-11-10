@@ -100,6 +100,19 @@ img {
     padding: 6px 12px;
     font-size: 13px;
 }
+.notification-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-link:hover .notification-icon {
+  color: var(--primary-dark);
+  transform: scale(1.05);
+}
+
 
 .btn-social {
     display: flex;

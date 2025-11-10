@@ -1,117 +1,101 @@
-// scripts/verify.js
+// In-page notification element
+const inPageNotification = document.createElement("div");
+inPageNotification.id = "inPageNotification";
+inPageNotification.style.cssText = `
+    display: none;
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 9999;
+`;
+document.body.appendChild(inPageNotification);
+
+// Show messages in-page
+function showMessage(message, type = "success", duration = 4000) {
+    inPageNotification.innerHTML = "";
+    const icon = document.createElement("i");
+    icon.className = type === "success" ? "fas fa-check-circle" : "fas fa-exclamation-circle";
+    const text = document.createElement("span");
+    text.textContent = message;
+    inPageNotification.appendChild(icon);
+    inPageNotification.appendChild(text);
+
+    inPageNotification.style.background = type === "success" ? "rgba(16, 185, 129, 0.9)" : "rgba(239, 68, 68, 0.9)";
+    inPageNotification.style.display = "flex";
+
+    setTimeout(() => {
+        inPageNotification.style.display = "none";
+    }, duration);
+}
+
+// Load profile from localStorage
+function loadProfileFromLocal() {
+    const userStr = localStorage.getItem("user"); // Must have user object stored on login
+    if (!userStr) {
+        showMessage("No user data found. Please login.", "error");
+        return;
+    }
+
+    const user = JSON.parse(userStr);
+
+    // Set profile info immediately
+    document.getElementById("profile-username").textContent = user.name;
+    document.getElementById("profile-phone").textContent = user.phone;
+    document.getElementById("profile-email").textContent = user.email;
+    document.getElementById("profile-balance").textContent = `$${user.connects * 10}`;
+
+    const verifiedBadge = document.getElementById("verifiedBadge");
+    const verifyNotice = document.getElementById("verifyNotice");
+
+    if (user.verified || user.isManuallyVerified) {
+        // Verified
+        verifyNotice.textContent = "✅ Your account is verified and active!";
+        verifyNotice.style.color = "#10b981";
+        verifyNotice.style.background = "rgba(16, 185, 129, 0.1)";
+        verifyNotice.style.border = "1px solid rgba(16, 185, 129, 0.3)";
+        verifiedBadge.innerHTML = `<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>`;
+        showMessage("Welcome back! Your account is verified.", "success");
+    } else {
+        // Not verified
+        verifyNotice.textContent = "⚠️ Your account is not verified. Get connects to verify!";
+        verifyNotice.style.color = "#f87171";
+        verifyNotice.style.background = "rgba(248, 113, 113, 0.1)";
+        verifyNotice.style.border = "1px solid rgba(248, 113, 113, 0.3)";
+        verifiedBadge.innerHTML = "";
+        showMessage("Your account is not verified yet.", "error");
+    }
+}
+
+// Optional: Fetch updated verification from backend (if you want live update)
+async function fetchVerificationStatus() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+        const res = await fetch("https://remj82.onrender.com/api/auth/me", {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Failed to fetch user info");
+
+        const data = await res.json();
+        localStorage.setItem("user", JSON.stringify(data.user)); // update local storage
+        loadProfileFromLocal();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// Run on page load
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("verifyForm");
-  const msgEl = document.getElementById("verifyMessage");
-  const resendLink = document.getElementById("resendLink");
-  const backHomeBtn = document.querySelector(".back-home-btn");
-  const apiBase = "https://remj82.onrender.com/api/auth";
-
-  // Pre-fill email from localStorage if available
-  const savedEmail = localStorage.getItem("verifyEmail");
-  if (savedEmail) {
-    const emailInput = document.getElementById("verifyEmail");
-    if (emailInput) emailInput.value = savedEmail;
-  }
-
-  // Helper: Show feedback message
-  function showMessage(text, type = "error") {
-    if (!msgEl) return;
-    msgEl.textContent = text;
-    msgEl.className = `message ${type}`;
-    msgEl.style.display = text ? "block" : "none";
-  }
-
-  // ✅ Handle form submission (verify code)
-  if (form) {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      showMessage("");
-
-      const email = document.getElementById("verifyEmail").value.trim();
-      const code = document.getElementById("code").value.trim();
-      const btn = document.getElementById("verifyBtn");
-
-      if (!email || !code) {
-        showMessage("Please enter your email and the 6-digit code.");
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = "Verifying...";
-
-      try {
-        const res = await fetch(`${apiBase}/verify-code`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, code }),
-        });
-
-        const data = await res.json();
-        console.log("✅ Verify API response:", data);
-
-        if (res.ok) {
-          showMessage("Email verified successfully! Redirecting...", "success");
-          localStorage.setItem("userEmail", email);
-          localStorage.removeItem("verifyEmail");
-
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 1200);
-        } else {
-          showMessage(data.message || "Verification failed. Please try again.");
-        }
-        
-      } catch (err) {
-        console.error("❌ Verification error:", err);
-        showMessage("Network error. Please try again.");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Verify";
-      }
-    });
-  }
-
-  // ✅ Handle resend verification code
-  if (resendLink) {
-    resendLink.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("verifyEmail").value.trim();
-
-      if (!email) {
-        showMessage("Enter your email before resending the code.");
-        return;
-      }
-
-      resendLink.textContent = "Sending...";
-
-      try {
-        const res = await fetch(`${apiBase}/resend-code`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
-
-        const data = await res.json();
-        console.log("✅ Resend API response:", data);
-
-        if (res.ok) {
-          showMessage("Verification code resent to your email.", "success");
-        } else {
-          showMessage(data.message || "Failed to resend code.");
-        }
-      } catch (err) {
-        console.error("❌ Resend error:", err);
-        showMessage("Network error while resending the code.");
-      } finally {
-        resendLink.textContent = "Resend";
-      }
-    });
-  }
-
-  // ✅ Handle back to home
-  if (backHomeBtn) {
-    backHomeBtn.addEventListener("click", () => {
-      window.location.href = "../index.html";
-    });
-  }
+    loadProfileFromLocal();
+    // Optional: fetch live verification status after 2s
+    setTimeout(fetchVerificationStatus, 2000);
 });

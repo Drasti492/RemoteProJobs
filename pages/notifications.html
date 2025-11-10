@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RemoteProJobs - Notifications</title>
-  <link rel="stylesheet" href="../styles/upwork.css">
   <link rel="stylesheet" href="../styles/notifications.css">
+  <link rel="stylesheet" href="../styles/upwork.css">
 </head>
 <body>
+
+<div class="notifications-page">
+
 <header>
   <div class="container">
     <div class="logo"><h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1></div>
@@ -30,53 +33,94 @@
         <i class="fas fa-user"></i>
       </a>
 
-      <!-- Notification Bell -->
-      <div class="notification-wrapper">
+      <!-- Notification Bell (Direct Redirect) -->
+      <a href="./notifications.html" class="notification-link" aria-label="Notifications">
         <div class="notification-icon" id="notificationBell">
           <i class="fas fa-bell"></i>
           <span class="notification-count" id="notificationCount">0</span>
         </div>
-        <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
-          <div id="notifications-list" class="notifications-list"></div>
-          <div class="notification-actions">
-            <button id="markAllRead" class="btn btn-sm">Mark All Read</button>
-            <button id="deleteAll" class="btn btn-sm">Delete All</button>
-          </div>
-        </div>
-      </div>
+      </a>
 
       <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">Logout</button>
     </div>
   </div>
 </header>
 
-<section class="notifications-section">
-  <div class="container">
-    <div class="notifications-header">
-      <h2>Notifications</h2>
-      <div class="notifications-actions">
-        <button id="markAllRead" class="btn btn-outline btn-sm">Mark All as Read</button>
-        <button id="deleteAll" class="btn btn-outline btn-sm">Delete All</button>
+
+  <section class="notifications-section">
+    <div class="container">
+      <div class="notifications-header">
+        <h2>Notifications</h2>
+        <div class="notifications-actions">
+          <button id="markAllRead" class="btn btn-outline btn-sm">Mark All as Read</button>
+          <button id="deleteAll" class="btn btn-outline btn-sm">Delete All</button>
+        </div>
+      </div>
+
+      <div id="notifications-list" class="notifications-list">
+        <!-- Notifications dynamically inserted here -->
+      </div>
+
+      <div class="pagination-container">
+        <button id="prevPage" class="pagination-btn prev-page"><i class="fas fa-chevron-left"></i></button>
+        <div id="paginationNumbers" class="pagination-numbers"></div>
+        <button id="nextPage" class="pagination-btn next-page"><i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
-
-    <div id="notifications-list" class="notifications-list">
-      <!-- Notifications will be dynamically rendered here -->
-    </div>
-
-    <div class="pagination-container">
-      <button id="prevPage" class="pagination-btn prev-page"><i class="fas fa-chevron-left"></i></button>
-      <div id="paginationNumbers" class="pagination-numbers"></div>
-      <button id="nextPage" class="pagination-btn next-page"><i class="fas fa-chevron-right"></i></button>
-    </div>
-  </div>
-</section>
+  </section>
 
 <footer>
-  <div class="container">
-    <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
-  </div>
-</footer>
+        <div class="container">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h3><i class="fas fa-briefcase"></i> RemoteProJobs</h3>
+                    <p>Connecting talent with opportunity. Find your dream job or the perfect candidate.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>For Job Seekers</h4>
+                    <ul>
+                        <li><a href="jobs.html">Browse Jobs</a></li>
+                        <li><a href="resources.html">Career Resources</a></li>
+                        <li><a href="#">Job Alerts</a></li>
+                        <li><a href="resources.html">Career Advice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>For Employers</h4>
+                    <ul>
+                        <li><a href="./pricing.html">Post a Job</a></li>
+                        <li><a href="#">Search Resumes</a></li>
+                        <li><a href="#">Recruitment Solutions</a></li>
+                        <li><a href="./pricing.html">Get Connects</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 201 E Main St #500, El Paso, TX 79901</li>
+                        <li><i class="fas fa-phone"></i> +1-915-503-2586</li>
+                        <li><i class="fas fa-envelope"></i> remoteprojobs@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 <script src="../scripts/notifications.js"></script>
