@@ -1,76 +1,78 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const notificationBell = document.getElementById("notificationBell");
+    const notificationDropdown = document.getElementById("notificationDropdown");
     const notificationList = document.getElementById("notifications-list");
     const notificationCount = document.getElementById("notificationCount");
-    const token = localStorage.getItem("token");
 
+    const token = localStorage.getItem("token");
     if (!token) return;
 
-    let notifications = [];
+    let notificationsData = [];
 
-    // ==========================
-    // Fetch Notifications
-    // ==========================
+    // Toggle dropdown visibility
+    notificationBell.addEventListener("click", () => {
+        notificationDropdown.style.display = notificationDropdown.style.display === "block" ? "none" : "block";
+    });
+
+    // Fetch notifications
     async function fetchNotifications() {
         try {
             const res = await fetch("https://remj82.onrender.com/api/notifications", {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (!res.ok) throw new Error("Failed to fetch notifications.");
-            const data = await res.json();
-            notifications = data.notifications || [];
-            renderNotifications();
-            updateNotificationBell();
+            notificationsData = await res.json();
+            renderNotifications(notificationsData);
         } catch (err) {
-            console.error("Error fetching notifications:", err);
+            console.error(err);
         }
     }
 
-    // ==========================
-    // Render Notifications List
-    // ==========================
-    function renderNotifications() {
-        if (!notificationList) return;
-
+    function renderNotifications(notifications) {
         notificationList.innerHTML = "";
-
         if (notifications.length === 0) {
             notificationList.innerHTML = `<p class="no-notifications">No notifications yet.</p>`;
-            return;
+        } else {
+            notifications.forEach(n => {
+                const div = document.createElement("div");
+                div.className = `notification-item ${n.read ? "" : "unread"}`;
+                div.innerHTML = `
+                    <div class="notification-content">
+                        <div class="notification-title">${n.title}</div>
+                        <div class="notification-message">${n.message}</div>
+                        <div class="notification-meta">${new Date(n.createdAt).toLocaleString()}</div>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="mark-read-btn" data-id="${n._id}">Mark Read</button>
+                        <button class="delete-btn" data-id="${n._id}">Delete</button>
+                    </div>
+                `;
+                notificationList.appendChild(div);
+            });
         }
+        updateNotificationCount(notifications);
+        attachNotificationActions();
+    }
 
-        notifications.forEach(n => {
-            const div = document.createElement("div");
-            div.className = `notification-item ${n.read ? "" : "unread"}`;
-            div.innerHTML = `
-                <div class="notification-content">
-                    <div class="notification-title">${n.title}</div>
-                    <div class="notification-message">${n.message}</div>
-                    <div class="notification-meta">${new Date(n.createdAt).toLocaleString()}</div>
-                </div>
-                <div class="notification-actions">
-                    <button onclick="markRead('${n._id}')">Mark Read</button>
-                    <button onclick="deleteNotification('${n._id}')">Delete</button>
-                </div>
-            `;
-            notificationList.appendChild(div);
+    function updateNotificationCount(notifications) {
+        const unreadCount = notifications.filter(n => !n.read).length;
+        if (notificationCount) notificationCount.textContent = unreadCount;
+    }
+
+    function attachNotificationActions() {
+        document.querySelectorAll(".mark-read-btn").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                await markRead(btn.dataset.id);
+            });
+        });
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                await deleteNotification(btn.dataset.id);
+            });
         });
     }
 
-    // ==========================
-    // Update Notification Bell
-    // ==========================
-    function updateNotificationBell() {
-        const unreadCount = notifications.filter(n => !n.read).length;
-        if (notificationCount) {
-            notificationCount.textContent = unreadCount;
-            notificationCount.style.display = unreadCount > 0 ? "inline-block" : "none";
-        }
-    }
-
-    // ==========================
-    // Mark Read
-    // ==========================
-    window.markRead = async (id) => {
+    async function markRead(id) {
         try {
             await fetch(`https://remj82.onrender.com/api/notifications/${id}/read`, {
                 method: "PATCH",
@@ -80,12 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (err) {
             console.error(err);
         }
-    };
+    }
 
-    // ==========================
-    // Delete Notification
-    // ==========================
-    window.deleteNotification = async (id) => {
+    async function deleteNotification(id) {
         try {
             await fetch(`https://remj82.onrender.com/api/notifications/${id}`, {
                 method: "DELETE",
@@ -95,11 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (err) {
             console.error(err);
         }
-    };
+    }
 
-    // ==========================
-    // Mark All Read
-    // ==========================
     document.getElementById("markAllRead")?.addEventListener("click", async () => {
         try {
             await fetch("https://remj82.onrender.com/api/notifications/mark-all-read", {
@@ -112,9 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // ==========================
-    // Delete All
-    // ==========================
     document.getElementById("deleteAll")?.addEventListener("click", async () => {
         try {
             await fetch("https://remj82.onrender.com/api/notifications", {
@@ -127,9 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // ==========================
-    // Live updates every 30 seconds
-    // ==========================
+    // Polling: refresh notifications every 20 seconds
+    setInterval(fetchNotifications, 20000);
+
     fetchNotifications();
-    setInterval(fetchNotifications, 10000); // auto-refresh every 30s
 });
