@@ -6,8 +6,7 @@
   <title>Profile — RemoteProJobs</title>
 
   <link rel="stylesheet" href="../styles/profile.css" />
-  <link rel="stylesheet" href="../styles/verify.css" />
-<link rel="stylesheet" href="../styles/notifications.css">
+  <link rel="stylesheet" href="../styles/notifications.css">
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         crossorigin="anonymous"
@@ -37,7 +36,6 @@
         <i class="fas fa-user"></i>
       </a>
 
-      <!-- Notification Bell (Direct Redirect) -->
       <a href="./notifications.html" class="notification-link" aria-label="Notifications">
         <div class="notification-icon" id="notificationBell">
           <i class="fas fa-bell"></i>
@@ -50,55 +48,52 @@
   </div>
 </header>
 
-  <main class="auth-card">
-    <div class="auth-brand">
-      <div class="logo">RP</div>
-      <h1>RemoteProJobs</h1>
+<main class="auth-card">
+  <div class="auth-brand">
+    <div class="logo">RP</div>
+    <h1>RemoteProJobs</h1>
+  </div>
+
+  <h2>Your Profile</h2>
+
+  <!-- Removed loading message -->
+  <p id="verifyNotice" class="verify-notice" style="display:none;"></p>
+
+  <div class="profile-info">
+    <div class="profile-field">
+      <i class="fas fa-user"></i>
+      <span><strong>Username:</strong> 
+        <span id="profile-username">Unknown</span>
+        <span id="verifiedBadge"></span>
+      </span>
     </div>
-
-    <h2>Your Profile</h2>
-
-    <p id="verifyNotice" class="verify-notice">Loading verification status...</p>
-
-    <div class="profile-info">
-      <div class="profile-field">
-        <i class="fas fa-user"></i>
-        <span><strong>Username:</strong> 
-          <span id="profile-username">Loading...</span>
-          <span id="verifiedBadge"></span>
-        </span>
-      </div>
-      <div class="profile-field">
-        <i class="fas fa-phone"></i>
-        <span><strong>Phone:</strong> <span id="profile-phone">Loading...</span></span>
-      </div>
-      <div class="profile-field">
-        <i class="fas fa-envelope"></i>
-        <span><strong>Email:</strong> <span id="profile-email">Loading...</span></span>
-      </div>
-      <div class="profile-field">
-        <i class="fas fa-wallet"></i>
-        <span><strong>Balance:</strong> <span id="profile-balance">$0.00</span></span>
-      </div>
+    <div class="profile-field">
+      <i class="fas fa-phone"></i>
+      <span><strong>Phone:</strong> <span id="profile-phone">Not provided</span></span>
     </div>
-
-    <div class="form-group">
-      <button class="btn btn-outline btn-sm back-btn">Start Earning</button>
-      <a href="../pages/withraw.html"><button class="btn btn-primary btn-sm">Withdraw</button></a>
-      <button class="btn btn-primary btn-sm" id="logoutBtn">Log Out</button>
+    <div class="profile-field">
+      <i class="fas fa-envelope"></i>
+      <span><strong>Email:</strong> <span id="profile-email">Not provided</span></span>
     </div>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+    <div class="profile-field">
+      <i class="fas fa-wallet"></i>
+      <span><strong>Balance:</strong> <span id="profile-balance">0 $</span></span>
     </div>
-  </footer>
+  </div>
 
-  <script>
-    const USER_ID = "replace_with_real_user_id"; // e.g., from login/session
-  </script>
+  <div class="form-group">
+    <button class="btn btn-outline btn-sm back-btn">Start Earning</button>
+    <a href="../pages/withraw.html"><button class="btn btn-primary btn-sm">Withdraw</button></a>
+    <button class="btn btn-primary btn-sm" id="logoutBtn">Log Out</button>
+  </div>
+</main>
 
-  <script src="../scripts/verify.js"></script>
+<footer>
+  <div class="container">
+    <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../scripts/profile.js"></script>
 </body>
 </html>

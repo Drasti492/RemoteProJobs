@@ -71,89 +71,89 @@ body {
 /* Header Styles */
 /* ===== HEADER BASE ===== */
 header {
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  width: 100%;
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    width: 100%;
 }
 
 header .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  gap: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* ===== LOGO ===== */
 .logo h1 {
-  font-size: 20px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
+    font-size: 20px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
 }
 
 .logo i {
-  color: #007bff;
-  font-size: 20px;
+    color: #007bff;
+    font-size: 20px;
 }
 
 /* ===== NAVIGATION ===== */
 nav ul {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
 }
 
 nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
 nav a:hover,
 nav a.active {
-  color: #007bff;
+    color: #007bff;
 }
 
 /* ===== AUTH BUTTONS ===== */
 .auth-buttons {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .profile-icon {
-  color: #333;
-  font-size: 18px;
-  transition: color 0.3s ease;
+    color: #333;
+    font-size: 18px;
+    transition: color 0.3s ease;
 }
 
 .profile-icon:hover {
-  color: #007bff;
+    color: #007bff;
 }
 
 .btn.btn-sm {
-  font-size: 13px;
-  padding: 6px 12px;
+    font-size: 13px;
+    padding: 6px 12px;
 }
 
 /* ===== NAV TOGGLE ===== */
 .nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #333;
-  cursor: pointer;
+    display: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
 }
 
 .nav-toggle:hover {
@@ -193,13 +193,14 @@ nav a.active {
 }
 
 /* Main Content */
+/* ===== MAIN CARD ===== */
 .auth-card {
-    max-width: 500px;
+    max-width: 520px;
     margin: 40px auto;
     background: var(--white);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     text-align: center;
 }
 
@@ -208,7 +209,7 @@ nav a.active {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .auth-brand .logo {
@@ -228,37 +229,44 @@ nav a.active {
     color: var(--dark-color);
 }
 
-h2#profile-title {
+h2 {
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: var(--dark-color);
 }
 
+/* ===== VERIFICATION NOTICE ===== */
 .verify-notice {
+    display: none;
     font-size: 14px;
     font-weight: 500;
+    background: rgba(220, 38, 38, 0.08);
     color: var(--warning-color);
-    background: rgba(220, 38, 38, 0.1);
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.verify-notice.active {
+    display: block;
 }
 
 .verify-notice a {
     color: var(--primary-color);
-    text-decoration: none;
     font-weight: 600;
+    text-decoration: none;
 }
 
 .verify-notice a:hover {
-    color: var(--primary-dark);
+    text-decoration: underline;
 }
 
+/* ===== PROFILE INFO ===== */
 .profile-info {
     margin: 20px 0;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     background: var(--light-gray);
     padding: 20px;
     border-radius: 8px;
@@ -267,11 +275,11 @@ h2#profile-title {
 .profile-field {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     font-size: 16px;
     color: var(--dark-color);
-    padding: 10px;
-    border-bottom: 1px solid var(--light-gray);
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
 }
 
 .profile-field:last-child {
@@ -279,55 +287,56 @@ h2#profile-title {
 }
 
 .profile-field i {
-    font-size: 20px;
     color: var(--primary-color);
+    font-size: 18px;
 }
 
 .profile-field strong {
-    min-width: 120px;
+    min-width: 110px;
 }
 
-.disclaimer {
-    font-size: 14px;
-    color: var(--gray-color);
-    text-align: center;
-    margin-top: 15px;
+/* ===== VERIFIED BADGE ===== */
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(16, 185, 129, 0.12);
+    padding: 3px 8px;
+    border-radius: 14px;
+    font-size: 13px;
+    color: var(--success-color);
+    font-weight: 600;
+    margin-left: 6px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-.warning {
+.verified-badge i {
+    font-size: 13px;
+}
+
+/* ===== INLINE MESSAGES (no popups) ===== */
+.inline-message {
+    display: inline-block;
+    margin-top: 12px;
     font-size: 14px;
-    color: var(--warning-color);
-    text-align: center;
-    margin-top: 10px;
     font-weight: 500;
-    background: rgba(220, 38, 38, 0.1);
-    padding: 10px;
-    border-radius: 5px;
+    color: var(--gray-color);
 }
 
-.message {
-    display: none;
-    font-size: 14px;
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.message.error {
-    background: rgba(220, 38, 38, 0.1);
-    color: var(--warning-color);
-}
-
-.message.success {
-    background: rgba(16, 185, 129, 0.1);
+.inline-message.success {
     color: var(--success-color);
 }
 
+.inline-message.error {
+    color: var(--warning-color);
+}
+
+/* ===== BUTTON GROUP ===== */
 .form-group {
     display: flex;
-    gap: 12px;
     justify-content: center;
-    margin-top: 20px;
+    gap: 10px;
+    margin-top: 24px;
 }
 
 .withdraw-btn {
@@ -378,7 +387,7 @@ footer p {
 /* Responsive Design */
 
 @media (min-width: 1024px) {
-        header .container {
+    header .container {
         justify-content: space-around;
         padding: 16px 24px;
     }
@@ -444,7 +453,7 @@ footer p {
         flex-direction: column;
         align-items: flex-start;
         padding: 12px 0;
-         gap: 10px;
+        gap: 10px;
     }
 
     nav a {
@@ -461,10 +470,11 @@ footer p {
     .auth-buttons .btn {
         padding: 6px 12px;
         font-size: 13px;
-    }}
+    }
+}
 
 @media (max-width: 400px) {
-        header .container {
+    header .container {
         padding: 10px 12px;
     }
 
@@ -502,6 +512,7 @@ footer p {
         padding: 6px 12px;
         font-size: 13px;
     }
+
     .auth-card {
         margin: 20px;
         padding: 20px;
@@ -510,6 +521,7 @@ footer p {
     .auth-brand h1 {
         font-size: 17px;
     }
+
     #profile-title {
         font-size: 12;
     }
@@ -531,7 +543,8 @@ footer p {
         min-width: 100px;
     }
 
-    .disclaimer, .warning {
+    .disclaimer,
+    .warning {
         font-size: 12px;
     }
 
@@ -551,91 +564,91 @@ footer p {
 
 /* Small Devices (480px and below) */
 @media (max-width: 250px) {
-header {
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  width: 100%;
-}
+    header {
+        background: #fff;
+        border-bottom: 1px solid #e5e5e5;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        width: 100%;
+    }
 
-header .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  gap: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+    header .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 24px;
+        gap: 16px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-/* ===== LOGO ===== */
-.logo h1 {
-  font-size: 20px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-}
+    /* ===== LOGO ===== */
+    .logo h1 {
+        font-size: 20px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+    }
 
-.logo i {
-  color: #007bff;
-  font-size: 20px;
-}
+    .logo i {
+        color: #007bff;
+        font-size: 20px;
+    }
 
-/* ===== NAVIGATION ===== */
-nav ul {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  list-style: none;
-}
+    /* ===== NAVIGATION ===== */
+    nav ul {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        list-style: none;
+    }
 
-nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
+    nav a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
 
-nav a:hover,
-nav a.active {
-  color: #007bff;
-}
+    nav a:hover,
+    nav a.active {
+        color: #007bff;
+    }
 
-/* ===== AUTH BUTTONS ===== */
-.auth-buttons {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+    /* ===== AUTH BUTTONS ===== */
+    .auth-buttons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-.profile-icon {
-  color: #333;
-  font-size: 18px;
-  transition: color 0.3s ease;
-}
+    .profile-icon {
+        color: #333;
+        font-size: 18px;
+        transition: color 0.3s ease;
+    }
 
-.profile-icon:hover {
-  color: #007bff;
-}
+    .profile-icon:hover {
+        color: #007bff;
+    }
 
-.btn.btn-sm {
-  font-size: 13px;
-  padding: 6px 12px;
-}
+    .btn.btn-sm {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
 
-/* ===== NAV TOGGLE ===== */
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #333;
-  cursor: pointer;
-}
+    /* ===== NAV TOGGLE ===== */
+    .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: #333;
+        cursor: pointer;
+    }
 
     .hero {
         padding: 40px 0;
@@ -766,13 +779,15 @@ nav a.active {
 
 /* Small devices */
 @media (max-width: 480px) {
-  .pagination-container {
-    gap: 6px;
-  }
-  .pagination-btn, .page-number {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
+    .pagination-container {
+        gap: 6px;
+    }
+
+    .pagination-btn,
+    .page-number {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
 }
 
 
@@ -790,13 +805,14 @@ nav a.active {
     .logo i {
         font-size: 12px;
     }
-    .profile-icon i{
-      font-size: 18px;
+
+    .profile-icon i {
+        font-size: 18px;
     }
 
     .auth-buttons .btn {
         padding: 2px;
         font-size: 11px;
-        
+
     }
 }

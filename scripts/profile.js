@@ -1,92 +1,60 @@
-// scripts/profile.js
 document.addEventListener('DOMContentLoaded', async () => {
-  // Select DOM elements
-  const usernameElement = document.getElementById('profile-username');
-  const phoneElement = document.getElementById('profile-phone');
-  const emailElement = document.getElementById('profile-email');
-  const balanceElement = document.getElementById('profile-balance');
-  const messageElement = document.getElementById('profileMessage');
-  const withdrawBtn = document.getElementById('withdrawBtn');
+  const usernameEl = document.getElementById('profile-username');
+  const phoneEl = document.getElementById('profile-phone');
+  const emailEl = document.getElementById('profile-email');
+  const balanceEl = document.getElementById('profile-balance');
+  const verifiedBadgeEl = document.getElementById('verifiedBadge');
   const logoutBtn = document.getElementById('logoutBtn');
   const backBtn = document.querySelector('.back-btn');
 
-  // Show cached profile instantly if available
-const cachedProfile = JSON.parse(localStorage.getItem("userProfile"));
-if (cachedProfile) {
-  usernameElement.textContent = cachedProfile.name || "Unknown";
-  phoneElement.textContent = cachedProfile.phone || "Not provided";
-  emailElement.textContent = cachedProfile.email || "Not provided";
-  balanceElement.textContent = `${cachedProfile.balance || 0} $`;
-}
+  // Show cached data instantly
+  const cachedProfile = JSON.parse(localStorage.getItem("userProfile"));
+  if (cachedProfile) {
+    usernameEl.textContent = cachedProfile.name || "Unknown";
+    phoneEl.textContent = cachedProfile.phone || "Not provided";
+    emailEl.textContent = cachedProfile.email || "Not provided";
+    balanceEl.textContent = `${cachedProfile.balance || 0} $`;
 
-
-  // Function to display messages
-  const showMessage = (text, type) => {
-    messageElement.textContent = text;
-    messageElement.className = `message ${type}`;
-    messageElement.style.display = 'block';
-    setTimeout(() => {
-      messageElement.style.display = 'none';
-    }, 3000);
-  };
-
-  // Fetch user profile data
-  try {
-    const token = localStorage.getItem('token');
-    console.log('Token from localStorage:', token); // Debug token
-    if (!token) {
-      showMessage('Please log in to view your profile.', 'error');
-      console.error('No token found in localStorage');
-      setTimeout(() => (window.location.href = '../index.html'), 2000);
-      return;
+    if (cachedProfile.isManuallyVerified) {
+      verifiedBadgeEl.innerHTML = `<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>`;
     }
-
-    const response = await fetch('https://remj82.onrender.com/api/auth/user', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('API error response:', errorData, 'Status:', response.status); // Debug API error
-      throw new Error(errorData.message || 'Failed to fetch profile data');
-    }
-
-    const data = await response.json();
-    console.log('API response:', data); // Debug API response
-
-    if (!data.success || !data.user) {
-      throw new Error('Invalid response format');
-    }
-
-    const user = data.user;
-    usernameElement.textContent = user.name || 'Unknown';
-    phoneElement.textContent = user.phone || 'Not provided';
-    emailElement.textContent = user.email || 'Not provided';
-    balanceElement.textContent = `${user.balance || 0} $`;
-  } catch (error) {
-    console.error('Error fetching profile:', error.message); // Debug error
-    showMessage(error.message || 'Unable to load profile data. Please try again.', 'error');
-    usernameElement.textContent = 'Unknown';
-    phoneElement.textContent = 'Not provided';
-    emailElement.textContent = 'Not provided';
-    balanceElement.textContent = '0 $';
   }
 
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error("Not logged in");
 
+    const res = await fetch('https://remj82.onrender.com/api/auth/user', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch user data");
 
-  // Logout button handler
+    const data = await res.json();
+    const user = data.user;
+
+    usernameEl.textContent = user.name || "Unknown";
+    phoneEl.textContent = user.phone || "Not provided";
+    emailEl.textContent = user.email || "Not provided";
+    balanceEl.textContent = `${user.balance || 0} $`;
+
+    verifiedBadgeEl.innerHTML = user.isManuallyVerified
+      ? `<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>`
+      : '';
+
+    localStorage.setItem("userProfile", JSON.stringify(user));
+  } catch (err) {
+    console.error(err.message);
+  }
+
+  // Logout
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userProfile');
     window.location.href = '../index.html';
   });
 
-  // Back button handler
+  // Back button
   backBtn.addEventListener('click', () => {
-    window.location.href = '../pages/work.html';
+    window.location.href = './work.html';
   });
 });
