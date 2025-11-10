@@ -654,7 +654,7 @@ const jobsData = [
     })
 ];
 
-// Verify 144 remote jobs
+// Verify 159 remote jobs
 const remoteCount = jobsData.filter(job => job.remote === "Remote").length;
 console.log(`Remote jobs: ${remoteCount}`); // Should be ~144
 
@@ -910,6 +910,7 @@ function addPageButton(pageNum, totalPages) {
 }
 
 // Show Job Modal
+// Show Job Modal
 function showJobModal(job) {
     DOM.modalJobContent.innerHTML = `
         <h2>${job.title}</h2>
@@ -927,7 +928,15 @@ function showJobModal(job) {
         <h3>Benefits</h3>
         <ul>${job.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
         <button class="btn btn-primary btn-block apply-btn">Apply Now</button>`;
+
+    // Show the modal
     DOM.jobModal.style.display = 'block';
+
+    // Attach click listener to modal Apply Now button
+    const modalApplyBtn = DOM.modalJobContent.querySelector('.apply-btn');
+    if (modalApplyBtn) {
+        modalApplyBtn.addEventListener('click', () => applyJob(job.id));
+    }
 }
 
 // Salary Range
@@ -959,6 +968,7 @@ function setupEventListeners() {
             }, 300);
         });
     });
+
     DOM.searchBtn.addEventListener('click', e => {
         e.preventDefault();
         currentPage = 1;
@@ -1004,69 +1014,54 @@ function setupEventListeners() {
             if (jobData) showJobModal(jobData);
         }
     });
+}
 
-    DOM.jobModal.addEventListener('click', e => {
-        if (e.target.classList.contains('apply-btn')) {
-            window.location.href = '../pages/pricing.html';
-        }
-    });
+// Apply Job Function
+async function applyJob(jobId) {
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Please login first.");
 
-    document.querySelectorAll('.close').forEach(btn => {
-        btn.addEventListener('click', () => {
-            DOM.jobModal.style.display = 'none';
+    try {
+        const res = await fetch(`https://remj82.onrender.com/api/applications/apply/${jobId}`, {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
         });
-    });
 
-    DOM.navToggle.addEventListener('click', () => {
-        DOM.nav.classList.toggle('active');
-    });
+        const data = await res.json();
 
-    DOM.prevPage.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            updateJobs();
-            window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
-            const activeBtn = DOM.paginationNumbers.querySelector(`button[aria-label="Go to page ${currentPage} of ${Math.ceil(currentFilteredJobs.length / jobsPerPage)}"]`);
-            if (activeBtn) activeBtn.focus();
+        if (!res.ok) {
+            return alert(data.message || "Something went wrong.");
         }
-    });
 
-    DOM.nextPage.addEventListener('click', () => {
-        const totalPages = Math.ceil(currentFilteredJobs.length / jobsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            updateJobs();
-            window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
-            const activeBtn = DOM.paginationNumbers.querySelector(`button[aria-label="Go to page ${currentPage} of ${totalPages}"]`);
-            if (activeBtn) activeBtn.focus();
-        }
-    });
+        alert(data.message);
 
-    DOM.paginationContainer.addEventListener('keydown', (e) => {
-        const totalPages = Math.ceil(currentFilteredJobs.length / jobsPerPage);
-        if (e.key === 'ArrowLeft' && currentPage > 1) {
-            currentPage--;
-            updateJobs();
-            window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
-            const activeBtn = DOM.paginationNumbers.querySelector(`button[aria-label="Go to page ${currentPage} of ${totalPages}"]`);
-            if (activeBtn) activeBtn.focus();
-        } else if (e.key === 'ArrowRight' && currentPage < totalPages) {
-            currentPage++;
-            updateJobs();
-            window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
-            const activeBtn = DOM.paginationNumbers.querySelector(`button[aria-label="Go to page ${currentPage} of ${totalPages}"]`);
-            if (activeBtn) activeBtn.focus();
-        }
-    });
+        // Redirect to notifications page
+        window.location.href = "./notifications.html";
+    } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Please try again later.");
+    }
+}
 
-    // Logout button handler
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
+// Close modal buttons
+document.querySelectorAll('.close').forEach(btn => {
+    btn.addEventListener('click', () => {
+        DOM.jobModal.style.display = 'none';
+    });
+});
+
+// Navigation toggle
+DOM.navToggle.addEventListener('click', () => {
+    DOM.nav.classList.toggle('active');
+});
+
+// Logout button
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userEmail');
         localStorage.removeItem('userProfile');
-            window.location.href = '../index.html';
-        });
-    }
+        window.location.href = '../index.html';
+    });
 }

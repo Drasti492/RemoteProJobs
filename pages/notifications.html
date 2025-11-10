@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RemoteProJobs - Notifications</title>
+  <link rel="stylesheet" href="../styles/upwork.css">
+  <link rel="stylesheet" href="../styles/notifications.css">
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="logo"><h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1></div>
+    <nav>
+      <ul>
+        <li><a href="./work.html">Earn</a></li>
+        <li><a href="./companies.html">Companies</a></li>
+        <li><a href="./resources.html">Resources</a></li>
+        <li><a href="./notifications.html" class="active">Notifications</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="auth-buttons">
+      <a href="./profile.html"><i class="fas fa-user"></i></a>
+      <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
+<section class="notifications-section">
+  <div class="container">
+    <div class="notifications-header">
+      <h2>Notifications</h2>
+      <div class="notifications-actions">
+        <button id="markAllRead" class="btn btn-outline btn-sm">Mark All as Read</button>
+        <button id="deleteAll" class="btn btn-outline btn-sm">Delete All</button>
+      </div>
+    </div>
+    <div id="notifications-list" class="notifications-list"></div>
+    <div class="pagination-container">
+      <button id="prevPage" class="pagination-btn prev-page"><i class="fas fa-chevron-left"></i></button>
+      <div id="paginationNumbers" class="pagination-numbers"></div>
+      <button id="nextPage" class="pagination-btn next-page"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<script src="../scripts/notifications.js"></script>
+</body>
+</html>
