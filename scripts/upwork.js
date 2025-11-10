@@ -659,6 +659,9 @@ const remoteCount = jobsData.filter(job => job.remote === "Remote").length;
 console.log(`Remote jobs: ${remoteCount}`); // Should be ~144
 
 // DOM Elements
+// ================================
+// DOM Elements
+// ================================
 const DOM = {
     jobsList: document.getElementById('jobs-list'),
     jobModal: document.getElementById('job-modal'),
@@ -679,12 +682,16 @@ const DOM = {
     popularSearches: document.querySelectorAll('.popular-searches a'),
 };
 
-// Pagination Settings
+// ================================
+// Pagination & Jobs
+// ================================
 const jobsPerPage = 5;
 let currentPage = 1;
-let currentFilteredJobs = [...jobsData];
+let currentFilteredJobs = [...jobsData]; // Assuming jobsData is defined globally
 
+// ================================
 // Page Init
+// ================================
 document.addEventListener('DOMContentLoaded', () => {
     if (!DOM.jobsList) return console.error('Jobs list element not found');
     initRangeSlider();
@@ -692,7 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateJobs();
 });
 
+// ================================
 // Master Controller
+// ================================
 function updateJobs() {
     let filtered = applyFilters(jobsData);
     filtered = applySearch(filtered);
@@ -702,17 +711,22 @@ function updateJobs() {
     const paginated = getPaginatedJobs(filtered);
     renderJobs(paginated);
     renderPagination(filtered);
-    document.getElementById('job-count').textContent = `(${filtered.length})`;
+    const jobCountEl = document.getElementById('job-count');
+    if (jobCountEl) jobCountEl.textContent = `(${filtered.length})`;
 }
 
-// Get Paginated Jobs
+// ================================
+// Pagination Logic
+// ================================
 function getPaginatedJobs(jobs) {
     const start = (currentPage - 1) * jobsPerPage;
     const end = start + jobsPerPage;
     return jobs.slice(start, end);
 }
 
+// ================================
 // Filters
+// ================================
 function applyFilters(jobs) {
     const jobTypes = Array.from(document.querySelectorAll('input[name="job-type"]:checked')).map(el => el.value.toLowerCase());
     const experiences = Array.from(document.querySelectorAll('input[name="experience"]:checked')).map(el => el.value.toLowerCase());
@@ -737,7 +751,9 @@ function applyFilters(jobs) {
     });
 }
 
+// ================================
 // Search
+// ================================
 function applySearch(jobs) {
     const searchTerm = DOM.jobSearch.value.toLowerCase().trim();
     const locationTerm = DOM.locationSearch.value.toLowerCase().trim();
@@ -764,7 +780,9 @@ function applySearch(jobs) {
     });
 }
 
+// ================================
 // Sorting
+// ================================
 function applySorting(jobs) {
     const sortBy = DOM.sortSelect.value;
     const sorted = [...jobs];
@@ -774,7 +792,7 @@ function applySorting(jobs) {
             return sorted.sort((a, b) => {
                 const aTime = a.date.includes('day') ? parseInt(a.date) : 14;
                 const bTime = b.date.includes('day') ? parseInt(b.date) : 14;
-                return aTime - bTime;
+                return bTime - aTime;
             });
         case 'salary-high':
             return sorted.sort((a, b) => {
@@ -793,7 +811,9 @@ function applySorting(jobs) {
     }
 }
 
+// ================================
 // Render Jobs
+// ================================
 function renderJobs(jobs) {
     if (!DOM.jobsList) return;
     DOM.jobsList.innerHTML = '';
@@ -810,7 +830,7 @@ function renderJobs(jobs) {
     jobs.forEach(job => {
         const card = document.createElement('div');
         card.className = 'job-card';
-        card.setAttribute('data-id', job.id);
+        card.dataset.id = job.id;
         card.innerHTML = `
             <div class="job-info">
                 <h3>${job.title}</h3>
@@ -830,15 +850,16 @@ function renderJobs(jobs) {
             </div>`;
         card.addEventListener('click', e => {
             if (!e.target.classList.contains('apply-btn')) {
-                const jobData = jobsData.find(j => j.id === parseInt(card.dataset.id));
-                if (jobData) showJobModal(jobData);
+                showJobModal(job);
             }
         });
         DOM.jobsList.appendChild(card);
     });
 }
 
+// ================================
 // Render Pagination
+// ================================
 function renderPagination(jobs) {
     const totalPages = Math.ceil(jobs.length / jobsPerPage);
     DOM.paginationNumbers.innerHTML = '';
@@ -849,8 +870,8 @@ function renderPagination(jobs) {
         DOM.nextPage.disabled = true;
         return;
     }
-    DOM.paginationContainer.style.display = 'flex';
 
+    DOM.paginationContainer.style.display = 'flex';
     const pagesPerBlock = 5;
     const currentBlock = Math.ceil(currentPage / pagesPerBlock);
     let startPage = (currentBlock - 1) * pagesPerBlock + 1;
@@ -867,7 +888,6 @@ function renderPagination(jobs) {
             const ellipsis = document.createElement('span');
             ellipsis.className = 'pagination-ellipsis';
             ellipsis.textContent = '...';
-            ellipsis.setAttribute('aria-hidden', 'true');
             DOM.paginationNumbers.appendChild(ellipsis);
         }
     }
@@ -881,7 +901,6 @@ function renderPagination(jobs) {
             const ellipsis = document.createElement('span');
             ellipsis.className = 'pagination-ellipsis';
             ellipsis.textContent = '...';
-            ellipsis.setAttribute('aria-hidden', 'true');
             DOM.paginationNumbers.appendChild(ellipsis);
         }
         addPageButton(totalPages, totalPages);
@@ -889,18 +908,16 @@ function renderPagination(jobs) {
 
     DOM.prevPage.disabled = currentPage === 1;
     DOM.nextPage.disabled = currentPage === totalPages;
-
-    DOM.prevPage.setAttribute('aria-label', 'Go to previous page');
-    DOM.nextPage.setAttribute('aria-label', 'Go to next page');
 }
 
-// Helper Function to Add Page Button
+// ================================
+// Helper: Add Page Button
+// ================================
 function addPageButton(pageNum, totalPages) {
     const btn = document.createElement('button');
     btn.className = `pagination-btn page-number ${pageNum === currentPage ? 'active' : ''}`;
     btn.textContent = pageNum;
     btn.setAttribute('aria-label', `Go to page ${pageNum} of ${totalPages}`);
-    btn.setAttribute('aria-current', pageNum === currentPage ? 'page' : 'false');
     btn.addEventListener('click', () => {
         currentPage = pageNum;
         updateJobs();
@@ -909,8 +926,9 @@ function addPageButton(pageNum, totalPages) {
     DOM.paginationNumbers.appendChild(btn);
 }
 
+// ================================
 // Show Job Modal
-// Show Job Modal
+// ================================
 function showJobModal(job) {
     DOM.modalJobContent.innerHTML = `
         <h2>${job.title}</h2>
@@ -929,34 +947,77 @@ function showJobModal(job) {
         <ul>${job.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
         <button class="btn btn-primary btn-block apply-btn">Apply Now</button>`;
 
-    // Show the modal
     DOM.jobModal.style.display = 'block';
 
-    // Attach click listener to modal Apply Now button
+    // Prevent duplicate listeners
     const modalApplyBtn = DOM.modalJobContent.querySelector('.apply-btn');
     if (modalApplyBtn) {
-        modalApplyBtn.addEventListener('click', () => applyJob(job.id));
+        modalApplyBtn.replaceWith(modalApplyBtn.cloneNode(true));
+        const newBtn = DOM.modalJobContent.querySelector('.apply-btn');
+        newBtn.addEventListener('click', () => applyJob(job));
     }
 }
 
-// Salary Range
-function initRangeSlider() {
-    if (DOM.salaryRange && DOM.salaryValue) {
-        DOM.salaryRange.min = 2;
-        DOM.salaryRange.max = 23;
-        DOM.salaryRange.step = 1;
-        DOM.salaryRange.value = 2;
-        DOM.salaryValue.textContent = `$${DOM.salaryRange.value}+`;
+// ================================
+// Apply Job Function
+// ================================
+async function applyJob(job) {
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Please login first.");
 
-        DOM.salaryRange.addEventListener('input', () => {
-            DOM.salaryValue.textContent = `$${DOM.salaryRange.value}+`;
-            currentPage = 1;
-            updateJobs();
+    try {
+        const res = await fetch(`https://remj82.onrender.com/api/applications/apply/${job.id}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: job.title,
+                company: job.company,
+                description: job.description
+            })
         });
+
+        const data = await res.json();
+        if (!res.ok) return alert(data.message || "Something went wrong.");
+
+        // ✅ Success: show alert and update notification bell
+        alert(data.message);
+
+        // Update notifications dynamically
+        if (typeof fetchNotifications === "function") {
+            fetchNotifications();
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Please try again later.");
     }
 }
 
-// Event Listeners
+// ================================
+// Salary Range Slider
+// ================================
+function initRangeSlider() {
+    if (!DOM.salaryRange || !DOM.salaryValue) return;
+
+    DOM.salaryRange.min = 2;
+    DOM.salaryRange.max = 23;
+    DOM.salaryRange.step = 1;
+    DOM.salaryRange.value = 2;
+    DOM.salaryValue.textContent = `$${DOM.salaryRange.value}+`;
+
+    DOM.salaryRange.addEventListener('input', () => {
+        DOM.salaryValue.textContent = `$${DOM.salaryRange.value}+`;
+        currentPage = 1;
+        updateJobs();
+    });
+}
+
+// ================================
+// Setup Event Listeners
+// ================================
 function setupEventListeners() {
     let debounce;
     [DOM.jobSearch, DOM.locationSearch].forEach(input => {
@@ -969,7 +1030,7 @@ function setupEventListeners() {
         });
     });
 
-    DOM.searchBtn.addEventListener('click', e => {
+    DOM.searchBtn?.addEventListener('click', e => {
         e.preventDefault();
         currentPage = 1;
         updateJobs();
@@ -991,7 +1052,7 @@ function setupEventListeners() {
         });
     });
 
-    DOM.clearFilters.addEventListener('click', () => {
+    DOM.clearFilters?.addEventListener('click', () => {
         document.querySelectorAll('.checkbox-group input').forEach(cb => cb.checked = false);
         DOM.salaryRange.value = 2;
         DOM.salaryValue.textContent = `$2+`;
@@ -1001,12 +1062,12 @@ function setupEventListeners() {
         updateJobs();
     });
 
-    DOM.sortSelect.addEventListener('change', () => {
+    DOM.sortSelect?.addEventListener('change', () => {
         currentPage = 1;
         updateJobs();
     });
 
-    DOM.jobsList.addEventListener('click', e => {
+    DOM.jobsList?.addEventListener('click', e => {
         if (e.target.classList.contains('apply-btn')) {
             const jobCard = e.target.closest('.job-card');
             const jobId = parseInt(jobCard.dataset.id);
@@ -1014,54 +1075,24 @@ function setupEventListeners() {
             if (jobData) showJobModal(jobData);
         }
     });
-}
 
-// Apply Job Function
-async function applyJob(jobId) {
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Please login first.");
-
-    try {
-        const res = await fetch(`https://remj82.onrender.com/api/applications/apply/${jobId}`, {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
+    document.querySelectorAll('.close').forEach(btn => {
+        btn.addEventListener('click', () => {
+            DOM.jobModal.style.display = 'none';
         });
+    });
 
-        const data = await res.json();
+    DOM.navToggle?.addEventListener('click', () => {
+        DOM.nav.classList.toggle('active');
+    });
 
-        if (!res.ok) {
-            return alert(data.message || "Something went wrong.");
-        }
-
-        alert(data.message);
-
-        // Redirect to notifications page
-        window.location.href = "./notifications.html";
-    } catch (err) {
-        console.error(err);
-        alert("Something went wrong. Please try again later.");
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userProfile');
+            window.location.href = '../index.html';
+        });
     }
-}
-
-// Close modal buttons
-document.querySelectorAll('.close').forEach(btn => {
-    btn.addEventListener('click', () => {
-        DOM.jobModal.style.display = 'none';
-    });
-});
-
-// Navigation toggle
-DOM.navToggle.addEventListener('click', () => {
-    DOM.nav.classList.toggle('active');
-});
-
-// Logout button
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('userProfile');
-        window.location.href = '../index.html';
-    });
 }
