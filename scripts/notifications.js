@@ -1,20 +1,38 @@
+// scripts/notification.js
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) return;
 
-  const notificationBell = document.getElementById("notificationBell");
-  const notificationDropdown = document.getElementById("notificationDropdown");
+  const bell = document.getElementById("notificationBell");
+  const dropdown = document.getElementById("notificationDropdown");
   const dropdownList = document.getElementById("dropdown-list");
-  const notificationList = document.getElementById("notifications-list");
-  const notificationCount = document.getElementById("notificationCount");
+  const count = document.getElementById("notificationCount");
+  const toast = document.getElementById("toast");
 
-  // ✅ Toggle dropdown visibility
-  notificationBell?.addEventListener("click", () => {
-    notificationDropdown.style.display =
-      notificationDropdown.style.display === "block" ? "none" : "block";
+  let notifications = [];
+
+  // ✅ Toast function
+  function showToast(message, type = "info") {
+    toast.textContent = message;
+    toast.style.background =
+      type === "success" ? "#28a745" : type === "error" ? "#e63946" : "#323232";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
+  }
+
+  // ✅ Toggle dropdown
+  bell?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.style.display =
+      dropdown.style.display === "block" ? "none" : "block";
+  });
+  document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target) && !bell.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
   });
 
-  // ✅ Fetch all notifications
+  // ✅ Fetch notifications
   async function fetchNotifications() {
     try {
       const res = await fetch("https://remj82.onrender.com/api/notifications", {
@@ -22,97 +40,40 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       if (!res.ok) throw new Error("Failed to fetch notifications");
       const data = await res.json();
-      renderNotifications(data, notificationList);
-      renderNotifications(data.slice(0, 5), dropdownList); // show top 5
-      updateNotificationCount(data);
+      notifications = data;
+      renderDropdown(data);
+      updateCount(data);
     } catch (err) {
       console.error("Notification fetch error:", err);
     }
   }
 
-  // ✅ Render notification list
-  function renderNotifications(notifications, container) {
-    container.innerHTML = "";
-    if (!notifications || notifications.length === 0) {
-      container.innerHTML = `<p class="no-notifications">No notifications yet.</p>`;
+  // ✅ Render dropdown list
+  function renderDropdown(list) {
+    dropdownList.innerHTML = "";
+    if (!list || list.length === 0) {
+      dropdownList.innerHTML = `<p class="no-notifications">No notifications yet.</p>`;
       return;
     }
 
-    notifications.forEach((n) => {
-      const div = document.createElement("div");
-      div.className = `notification-item ${n.read ? "" : "unread"}`;
-
-      // ✅ Safe date formatting
-      const dateObj = new Date(n.createdAt);
-      const formattedDate = !isNaN(dateObj)
-        ? dateObj.toLocaleString("en-US", {
-            dateStyle: "medium",
-            timeStyle: "short",
-          })
-        : "Just now";
-
-      // ✅ Render item
-      div.innerHTML = `
+    list.slice(0, 5).forEach((n) => {
+      const timeAgo = formatTimeAgo(n.createdAt);
+      const item = document.createElement("div");
+      item.className = `notification-item ${n.read ? "" : "unread"}`;
+      item.innerHTML = `
         <div class="notification-content">
           <div class="notification-title">${n.title || "Notification"}</div>
           <div class="notification-message">${n.message}</div>
-          <div class="notification-meta">${formattedDate}</div>
-        </div>
-        <div class="notification-actions">
-          <button class="mark-read-btn" data-id="${n._id}">Mark Read</button>
-          <button class="delete-btn" data-id="${n._id}">Delete</button>
-        </div>
-      `;
-      container.appendChild(div);
-    });
-
-    attachNotificationActions(container);
-  }
-
-  // ✅ Attach handlers
-  function attachNotificationActions(container) {
-    container.querySelectorAll(".mark-read-btn").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await markRead(btn.dataset.id);
-      });
-    });
-    container.querySelectorAll(".delete-btn").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await deleteNotification(btn.dataset.id);
-      });
+          <div class="notification-meta">${timeAgo}</div>
+        </div>`;
+      dropdownList.appendChild(item);
     });
   }
 
-  // ✅ Update bell count
-  function updateNotificationCount(notifications) {
-    const unreadCount = notifications.filter((n) => !n.read).length;
-    if (notificationCount) notificationCount.textContent = unreadCount;
-  }
-
-  // ✅ Mark read
-  async function markRead(id) {
-    try {
-      await fetch(`https://remj82.onrender.com/api/notifications/${id}/read`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchNotifications();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  // ✅ Delete single notification
-  async function deleteNotification(id) {
-    try {
-      await fetch(`https://remj82.onrender.com/api/notifications/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchNotifications();
-    } catch (err) {
-      console.error(err);
-    }
+  // ✅ Count unread
+  function updateCount(list) {
+    const unread = list.filter((n) => !n.read).length;
+    count.textContent = unread;
   }
 
   // ✅ Mark all read
@@ -123,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchNotifications();
+      showToast("All notifications marked as read", "success");
     } catch (err) {
       console.error(err);
     }
@@ -136,22 +98,34 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchNotifications();
+      showToast("All notifications cleared", "success");
     } catch (err) {
       console.error(err);
     }
   }
 
-  // ✅ Attach to all possible buttons
-  document.getElementById("markAllRead")?.addEventListener("click", markAllRead);
-  document.getElementById("deleteAll")?.addEventListener("click", deleteAll);
-  document
-    .getElementById("dropdownMarkAllRead")
-    ?.addEventListener("click", markAllRead);
-  document
-    .getElementById("dropdownDeleteAll")
-    ?.addEventListener("click", deleteAll);
+  // ✅ Format "time ago"
+  function formatTimeAgo(date) {
+    const seconds = Math.floor((Date.now() - new Date(date)) / 1000);
+    if (seconds < 60) return "Just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hr${hours > 1 ? "s" : ""} ago`;
+    const days = Math.floor(hours / 24);
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  }
 
-  // ✅ Auto refresh every 20 seconds
-  setInterval(fetchNotifications, 20000);
+  // ✅ Expose globally (so work.js can call)
+  window.notify = {
+    show: showToast,
+    refresh: fetchNotifications,
+  };
+
+  document.getElementById("dropdownMarkAllRead")?.addEventListener("click", markAllRead);
+  document.getElementById("dropdownDeleteAll")?.addEventListener("click", deleteAll);
+
+  // Auto refresh every 20s
   fetchNotifications();
+  setInterval(fetchNotifications, 20000);
 });

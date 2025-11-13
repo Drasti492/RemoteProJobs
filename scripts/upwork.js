@@ -983,7 +983,14 @@ async function applyJob(job) {
         if (!res.ok) return alert(data.message || "Something went wrong.");
 
         // ✅ Success: show alert and update notification bell
-        alert(data.message);
+     // ✅ Success message
+if (window.notify && typeof window.notify.show === "function") {
+  window.notify.show(data.message, "success");
+  if (window.notify.refresh) window.notify.refresh();
+} else {
+  alert(data.message);
+}
+
 
         // Update notifications dynamically
         if (typeof fetchNotifications === "function") {

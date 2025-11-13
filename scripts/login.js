@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Redirect to main work page
-      showMessage("Login successful! Redirecting...", "success");
+      showMessage("Login successful! please wait...", "success");
       loginForm.reset();
       setTimeout(() => {
         window.location.href = "work.html";

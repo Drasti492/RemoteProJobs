@@ -133,3 +133,42 @@
     color: #777;
     padding: 20px 0;
 }
+
+/* ================= TOAST (Inline small notification) ================= */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 25px;
+  background: #323232;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1500;
+}
+
+.toast.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.dropdown-actions button {
+  background: var(--primary-color, #007bff);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
