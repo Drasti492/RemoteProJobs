@@ -30,20 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(signupForm);
-
     const formDataEntries = {};
     for (const [key, value] of formData.entries()) {
-      formDataEntries[key] = value;
+      formDataEntries[key] = value.trim();
     }
-    console.log("Raw FormData:", formDataEntries);
 
-    const name = formData.get("name").trim();
-    const phone = formData.get("phone").trim();
-    const email = formData.get("email").trim();
-    const password = formData.get("password").trim();
-    const confirmPassword = formData.get("confirm-password").trim();
-
-    console.log("Processed form data:", { name, phone, email, password, confirmPassword });
+    const { name, phone, email, password, "confirm-password": confirmPassword } = formDataEntries;
 
     if (!name || !phone || !email || !password || !confirmPassword) {
       showMessage("Please fill in all fields, including phone number.");
@@ -72,13 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("verifyEmail", email);
         signupForm.reset();
         setTimeout(() => {
-          window.location.href = "verify.html";
+          window.location.href = "../pages/verify.html";
         }, 1500);
       } else {
         showMessage(data.message || "Registration failed. Please try again.");
       }
     } catch (err) {
-      console.error("Signup error:", err.message);
+      console.error("Signup error:", err);
       showMessage("Network error. Please try again.");
     }
   });
