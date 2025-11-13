@@ -35,29 +35,14 @@
           <i class="fas fa-user"></i>
         </a>
 
-        <!-- Notification Bell -->
-        <div class="notification-wrapper">
-          <div class="notification-icon" id="notificationBell">
-            <i class="fas fa-bell"></i>
-            <span class="notification-count" id="notificationCount">0</span>
-          </div>
+<!-- Notification Bell -->
+<div class="notification-wrapper">
+  <div class="notification-icon" id="notificationBell" aria-label="Notifications">
+    <i class="fas fa-bell"></i>
+    <span class="notification-count" id="notificationCount">0</span>
+  </div>
+</div>
 
-          <!-- Dropdown (shows top 5 notifications) -->
-          <div class="notification-dropdown" id="notificationDropdown">
-            <div class="notifications-list" id="dropdown-list"></div>
-            <div class="dropdown-actions">
-              <button id="dropdownMarkAllRead">Mark all read</button>
-              <button id="dropdownDeleteAll">Clear all</button>
-            </div>
-          </div>
-        </div>
-
-        <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">
-          Logout
-        </button>
-      </div>
-    </div>
-  </header>
 
   <!--  Toast notification -->
   <div id="toast" class="toast"></div>

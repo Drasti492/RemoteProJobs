@@ -961,6 +961,8 @@ function showJobModal(job) {
 // ================================
 // Apply Job Function
 // ================================
+// ================================
+// Apply Job Function (Updated)
 async function applyJob(job) {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please login first.");
@@ -982,26 +984,32 @@ async function applyJob(job) {
         const data = await res.json();
         if (!res.ok) return alert(data.message || "Something went wrong.");
 
-        // ✅ Success: show alert and update notification bell
-     // ✅ Success message
-if (window.notify && typeof window.notify.show === "function") {
-  window.notify.show(data.message, "success");
-  if (window.notify.refresh) window.notify.refresh();
-} else {
-  alert(data.message);
-}
+        // ✅ Show small toast notification
+        if (window.notify && typeof window.notify.show === "function") {
+            window.notify.show(data.message || "Thank you for applying!", "success");
+        } else {
+            alert(data.message || "Thank you for applying!");
+        }
 
-
-        // Update notifications dynamically
-        if (typeof fetchNotifications === "function") {
-            fetchNotifications();
+        // ✅ Increment notification bell count dynamically
+        const notificationCountEl = document.getElementById("notificationCount");
+        if (notificationCountEl) {
+            let currentCount = parseInt(notificationCountEl.textContent) || 0;
+            currentCount += 1;
+            notificationCountEl.textContent = currentCount > 9 ? "9+" : currentCount;
+            notificationCountEl.style.display = "flex";
         }
 
     } catch (err) {
         console.error(err);
-        alert("Something went wrong. Please try again later.");
+        if (window.notify && typeof window.notify.show === "function") {
+            window.notify.show("Something went wrong. Please try again later.", "error");
+        } else {
+            alert("Something went wrong. Please try again later.");
+        }
     }
 }
+
 
 // ================================
 // Salary Range Slider

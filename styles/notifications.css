@@ -5,6 +5,8 @@
   --notif-radius: 8px;
   --notif-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   --notif-transition: 0.25s ease;
+  --primary-color: #007bff;
+  --secondary-color: #0056b3;
 }
 
 /* ===========================
@@ -93,7 +95,7 @@
 }
 
 /* ===========================
-   DROPDOWN (HEADER)
+   NOTIFICATION ICON (BELL)
 =========================== */
 .notification-wrapper {
   position: relative;
@@ -115,16 +117,19 @@
   position: absolute;
   top: -6px;
   right: -6px;
-  background: var(--secondary-color);
+  background: red;
   color: white;
   font-size: 11px;
+  font-weight: bold;
   border-radius: 50%;
   padding: 2px 6px;
   display: none;
   line-height: 1;
 }
 
-/* Dropdown container */
+/* ===========================
+   DROPDOWN (OPTIONAL)
+=========================== */
 .notification-dropdown {
   position: absolute;
   top: 40px;
@@ -150,7 +155,6 @@
   }
 }
 
-/* Header inside dropdown */
 .notification-dropdown .notifications-header {
   display: flex;
   justify-content: space-between;
@@ -165,13 +169,11 @@
   margin: 0;
 }
 
-/* Dropdown list */
 .notification-dropdown .notifications-list {
   max-height: 300px;
   overflow-y: auto;
 }
 
-/* Dropdown list items */
 .notification-dropdown .notification-item {
   border: none;
   border-bottom: 1px solid #f0f0f0;
@@ -191,7 +193,6 @@
   border-bottom: none;
 }
 
-/* View all link */
 .view-all {
   text-align: center;
   margin-top: 8px;
