@@ -1,140 +1,225 @@
 :root {
-    --notif-bg: #f9fafb;
-    --notif-unread: #eef6ff;
-    --notif-border: #dcdcdc;
-    --notif-radius: 8px;
-    --notif-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  --notif-bg: #f9fafb;
+  --notif-unread: #eef6ff;
+  --notif-border: #dcdcdc;
+  --notif-radius: 8px;
+  --notif-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  --notif-transition: 0.25s ease;
 }
 
-/* Main Section */
+/* ===========================
+   FULL PAGE SECTION
+=========================== */
 .notifications-section {
-    padding: 40px 0;
-    background-color: var(--notif-bg);
+  padding: 40px 0;
+  background-color: var(--notif-bg);
 }
 
 .notifications-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .notifications-header h2 {
-    font-size: 22px;
-    margin-bottom: 10px;
+  font-size: 22px;
+  margin-bottom: 10px;
 }
 
-/* List */
+/* ===========================
+   LIST ITEMS
+=========================== */
 .notifications-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .notification-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    border: 1px solid var(--notif-border);
-    padding: 16px;
-    border-radius: var(--notif-radius);
-    box-shadow: var(--notif-shadow);
-    transition: 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid var(--notif-border);
+  padding: 16px;
+  border-radius: var(--notif-radius);
+  box-shadow: var(--notif-shadow);
+  transition: var(--notif-transition);
 }
 
 .notification-item.unread {
-    background-color: var(--notif-unread);
-    border-left: 4px solid var(--primary-color);
+  background-color: var(--notif-unread);
+  border-left: 4px solid var(--primary-color);
 }
 
 .notification-item:hover {
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .notification-content {
-    flex: 1;
+  flex: 1;
 }
 
 .notification-title {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
 .notification-message {
-    font-size: 13px;
-    color: #555;
+  font-size: 13px;
+  color: #555;
 }
 
 .notification-meta {
-    font-size: 12px;
-    color: #888;
-    margin-top: 4px;
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
 }
 
-/* Buttons */
+/* ===========================
+   ACTION BUTTONS (FULL PAGE)
+=========================== */
 .notification-actions {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .notification-actions button {
-    padding: 6px 10px;
-    font-size: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
 }
 
-/* Dropdown */
-.notification-dropdown {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    width: 300px;
-    background: white;
-    border-radius: var(--notif-radius);
-    box-shadow: var(--notif-shadow);
-    display: none;
-    z-index: 1000;
-    padding: 10px;
-}
-
-.notification-dropdown .notifications-list {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
+/* ===========================
+   DROPDOWN (HEADER)
+=========================== */
 .notification-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .notification-icon {
-    position: relative;
-    font-size: 20px;
-    color: var(--primary-color);
-    cursor: pointer;
+  position: relative;
+  font-size: 20px;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.notification-icon:hover {
+  color: var(--secondary-color);
 }
 
 .notification-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: var(--secondary-color);
-    color: white;
-    font-size: 11px;
-    border-radius: 50%;
-    padding: 2px 5px;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--secondary-color);
+  color: white;
+  font-size: 11px;
+  border-radius: 50%;
+  padding: 2px 6px;
+  display: none;
+  line-height: 1;
 }
 
-/* Empty State */
+/* Dropdown container */
+.notification-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 320px;
+  background: white;
+  border-radius: var(--notif-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  display: none;
+  z-index: 1000;
+  padding: 10px;
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header inside dropdown */
+.notification-dropdown .notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+}
+
+.notification-dropdown .notifications-header h4 {
+  font-size: 15px;
+  margin: 0;
+}
+
+/* Dropdown list */
+.notification-dropdown .notifications-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Dropdown list items */
+.notification-dropdown .notification-item {
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  border-left: none;
+  border-radius: 0;
+  padding: 10px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.notification-dropdown .notification-item.unread {
+  background: var(--notif-unread);
+  border-left: 3px solid var(--primary-color);
+}
+
+.notification-dropdown .notification-item:last-child {
+  border-bottom: none;
+}
+
+/* View all link */
+.view-all {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.view-all a {
+  color: var(--primary-color);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.view-all a:hover {
+  text-decoration: underline;
+}
+
+/* ===========================
+   EMPTY STATE
+=========================== */
 .no-notifications {
-    text-align: center;
-    font-size: 14px;
-    color: #777;
-    padding: 20px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+  padding: 20px 0;
 }
 
-/* ================= TOAST (Inline small notification) ================= */
+/* ===========================
+   TOAST (Inline small message)
+=========================== */
 .toast {
   position: fixed;
   bottom: 30px;
@@ -157,6 +242,9 @@
   transform: translateY(0);
 }
 
+/* ===========================
+   DROPDOWN ACTION BUTTONS
+=========================== */
 .dropdown-actions {
   display: flex;
   justify-content: space-between;
@@ -171,4 +259,9 @@
   padding: 6px 10px;
   cursor: pointer;
   font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.dropdown-actions button:hover {
+  background: var(--secondary-color, #0056b3);
 }
