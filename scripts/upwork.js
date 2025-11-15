@@ -1111,3 +1111,50 @@ function setupEventListeners() {
         });
     }
 }
+// ================================
+// NOTIFICATION BELL SYNC (Shared across pages)
+// ================================
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const bell = document.getElementById("notificationBell");
+  const countSpan = document.getElementById("notificationCount");
+
+  if (!bell || !countSpan) return;
+
+  // Fetch unread count
+  async function updateCount() {
+    try {
+      const res = await fetch("https://remj82.onrender.com/api/notifications", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      const unread = (data || []).filter(n => !n.read).length;
+
+      countSpan.textContent = unread > 9 ? "9+" : unread;
+      countSpan.style.display = unread > 0 ? "flex" : "none";
+    } catch (err) {
+      console.error("Notification fetch error:", err);
+    }
+  }
+
+  // Click → Mark all read + go to notifications.html
+  bell.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      await fetch("https://remj82.onrender.com/api/notifications/mark-all-read", {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err) {
+      console.error("Mark all read failed:", err);
+    } finally {
+      window.location.href = "./notifications.html"; // ← CORRECT PATH
+    }
+  });
+
+  // Initial + every 15 seconds
+  updateCount();
+  setInterval(updateCount, 15000);
+});
