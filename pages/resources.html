@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources — RemoteProJobs</title>
+    <link rel="stylesheet" href="../styles/navs.css">
+    <link rel="stylesheet" href="../styles/upwork.css">
+     <link rel="stylesheet" href="../styles/notifications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <nav>
+        <ul>
+          <li><a href="./work.html">Earn</a></li>
+          <li><a href="./companies.html">Companies</a></li>
+          <li><a href="./resources.html">Resources</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="auth-buttons">
+        <a href="./profile.html" class="profile-icon" aria-label="User Profile">
+          <i class="fas fa-user"></i>
+        </a>
+
+        <!-- Notification Bell -->
+<div class="notification-wrapper">
+  <a href="./notifications.html" class="notification-icon" id="notificationBell" aria-label="Notifications">
+    <i class="fas fa-bell"></i>
+    <span class="notification-count" id="notificationCount">0</span>
+  </a>
+</div>
+
+        <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Empower Your Career Journey</h1>
+                <p>Access expert tips, resume guides, and interview strategies to land your dream remote job.</p>
+                <a href="./work.html" class="btn btn-primary btn-lg">Find Jobs Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="resources">
+        <div class="container">
+            <h2>Career Resources</h2>
+            <p>Boost your skills and confidence with our curated resources for remote job seekers.</p>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Resume Building</h3>
+                    <p>Craft a standout resume tailored for remote roles with our expert guides.</p>
+                    <a href="https://www.canva.com/create/resumes/" class="btn btn-outline btn-sm">Learn More</a>
+                </div>
+                <div class="resource-card">
+                    <i class="fas fa-video"></i>
+                    <h3>Interview Prep</h3>
+                    <p>Master virtual interviews with tips on communication and tech setup.</p>
+                    <a href="https://meet.google.com/landing?pli=1" class="btn btn-outline btn-sm">Learn More</a>
+                </div>
+                <div class="resource-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>Career Advice</h3>
+                    <p>Get insights on thriving in remote work and advancing your career.</p>
+                    <a href="https://nationalcareers.service.gov.uk/careers-advice" class="btn btn-outline btn-sm">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Take the Next Step?</h2>
+                <p>Explore thousands of remote jobs and start your journey with RemoteProJobs.</p>
+                <a href="./work.html" class="btn btn-primary btn-lg">Browse Jobs</a>
+            </div>
+          
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h3><i class="fas fa-briefcase"></i> RemoteProJobs</h3>
+                    <p>Connecting talent with opportunity. Find your dream job or the perfect candidate.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>For Job Seekers</h4>
+                    <ul>
+                        <li><a href="jobs.html">Browse Jobs</a></li>
+                        <li><a href="resources.html">Career Resources</a></li>
+                        <li><a href="#">Job Alerts</a></li>
+                        <li><a href="resources.html">Career Advice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>For Employers</h4>
+                    <ul>
+                        <li><a href="./pricing.html">Post a Job</a></li>
+                        <li><a href="#">Search Resumes</a></li>
+                        <li><a href="#">Recruitment Solutions</a></li>
+                        <li><a href="./pricing.html">Get Connects</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 201 E Main St #500, El Paso, TX 79901</li>
+                        <li><i class="fas fa-phone"></i> +1-915-503-2586</li>
+                        <li><i class="fas fa-envelope"></i> remoteprojobs@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../scripts/nav.js"></script>
+    <script src="../scripts/authGuard.js"></script>
+    <script src="../scripts/notifications.js"></script>
+
+</body>
+</html>

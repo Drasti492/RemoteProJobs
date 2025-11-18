@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — RemoteProJobs</title>
+
+  <link rel="stylesheet" href="../styles/profile.css" />
+  <link rel="stylesheet" href="../styles/upwork.css">
+  <link rel="stylesheet" href="../styles/notifications.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <nav>
+        <ul>
+          <li><a href="./work.html">Earn</a></li>
+          <li><a href="./companies.html">Companies</a></li>
+          <li><a href="./resources.html">Resources</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="auth-buttons">
+        <a href="./profile.html" class="profile-icon" aria-label="User Profile">
+          <i class="fas fa-user"></i>
+        </a>
+
+<!-- Notification Bell -->
+<div class="notification-wrapper">
+  <a href="./notifications.html" class="notification-icon" id="notificationBell" aria-label="Notifications">
+    <i class="fas fa-bell"></i>
+    <span class="notification-count" id="notificationCount">0</span>
+  </a>
+</div>
+
+
+        <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!--  Toast notification -->
+  <div id="toast" class="toast"></div>
+
+<main class="auth-card">
+  <div class="auth-brand">
+    <div class="logo">RP</div>
+    <h1>RemoteProJobs</h1>
+  </div>
+
+  <h2>Your Profile</h2>
+
+  <!-- Removed loading message -->
+  <p id="verifyNotice" class="verify-notice" style="display:none;"></p>
+
+  <div class="profile-info">
+    <div class="profile-field">
+      <i class="fas fa-user"></i>
+      <span><strong>Username:</strong> 
+        <span id="profile-username">Unknown</span>
+        <span id="verifiedBadge"></span>
+      </span>
+    </div>
+    <div class="profile-field">
+      <i class="fas fa-phone"></i>
+      <span><strong>Phone:</strong> <span id="profile-phone">Not provided</span></span>
+    </div>
+    <div class="profile-field">
+      <i class="fas fa-envelope"></i>
+      <span><strong>Email:</strong> <span id="profile-email">Not provided</span></span>
+    </div>
+    <div class="profile-field">
+      <i class="fas fa-wallet"></i>
+      <span><strong>Balance:</strong> <span id="profile-balance">0 $</span></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button class="btn btn-outline btn-sm back-btn">Start Earning</button>
+    <a href="../pages/withraw.html"><button class="btn btn-primary btn-sm">Withdraw</button></a>
+    <button class="btn btn-primary btn-sm" id="logoutBtn">Log Out</button>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../scripts/profile.js"></script>
+<script src="../scripts/notifications.js"></script>
+
+</body>
+</html>
