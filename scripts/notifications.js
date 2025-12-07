@@ -1,16 +1,11 @@
-// ================================
-// notifications.js – Full Page Logic + Delete + Mark All + Pagination
-// Works with your exact routes
-// ================================
-
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) {
-    window.location.href = "../auth/login.html";
+    window.location.href = "login.html";
     return;
   }
 
-  // DOM
+  // ==================== DOM Elements ====================
   const notificationBell = document.getElementById("notificationBell");
   const notificationCount = document.getElementById("notificationCount");
   const listContainer = document.getElementById("notifications-list");
@@ -20,22 +15,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextPageBtn = document.getElementById("nextPage");
   const paginationNumbers = document.getElementById("paginationNumbers");
 
-  if (!notificationBell || !notificationCount || !listContainer) {
-    console.error("Required elements missing.");
-    return;
-  }
+  if (!listContainer) return;
 
-  // Pagination
+  // ==================== Shared Nav Toggle ====================
+  const navToggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector("nav");
+  navToggle?.addEventListener("click", () => nav.classList.toggle("active"));
+
+  // ==================== Pagination ====================
   const PER_PAGE = 6;
   let currentPage = 1;
-  let allNotifs = [];
+  let allNotifications = [];
 
-  // Time ago
+  // ==================== Time Ago Helper ====================
   function timeAgo(dateString) {
     const now = new Date();
     const past = new Date(dateString);
     const seconds = Math.floor((now - past) / 1000);
-
     const intervals = [
       { label: "year", sec: 31536000 },
       { label: "month", sec: 2592000 },
@@ -44,234 +40,175 @@ document.addEventListener("DOMContentLoaded", () => {
       { label: "minute", sec: 60 },
       { label: "second", sec: 1 }
     ];
-
-    for (const i of intervals) {
-      const count = Math.floor(seconds / i.sec);
-      if (count >= 1) {
-        return count === 1 ? `${count} ${i.label} ago` : `${count} ${i.label}s ago`;
-      }
+    for (const { label, sec } of intervals) {
+      const count = Math.floor(seconds / sec);
+      if (count >= 1) return count === 1 ? `1 ${label} ago` : `${count} ${label}s ago`;
     }
     return "Just now";
   }
 
-  // Render list + pagination
-  function render(notifs) {
-    allNotifs = notifs || [];
-    const totalPages = Math.ceil(allNotifs.length / PER_PAGE);
+  // ==================== Render Notifications ====================
+  function render() {
+    const totalPages = Math.ceil(allNotifications.length / PER_PAGE) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
     const start = (currentPage - 1) * PER_PAGE;
-    const page = allNotifs.slice(start, start + PER_PAGE);
+    const pageData = allNotifications.slice(start, start + PER_PAGE);
 
-    if (allNotifs.length === 0) {
-      listContainer.innerHTML = `
-        <div class="notif-item" style="text-align:center;color:#777;padding:32px;">
-          <i class="fas fa-bell-slash" style="font-size:24px;margin-bottom:8px;"></i>
-          No notifications yet.
-        </div>`;
-      renderPagination(0);
+    if (allNotifications.length === 0) {
+      listContainer.innerHTML = `<div style="text-align:center;padding:50px 20px;color:#777;">
+        <i class="fas fa-bell-slash" style="font-size:48px;margin-bottom:16px;opacity:0.5;"></i>
+        <p>No notifications yet</p>
+      </div>`;
+      renderPagination();
       return;
     }
 
-    listContainer.innerHTML = page
-      .map(n => `
-        <div class="notif-item ${!n.read ? "unread" : ""}" data-id="${n._id}">
-          <div class="notif-content">
-            <div class="notif-title">${n.title || "Notification"}</div>
-            <div class="notif-message">${n.message}</div>
-            <div class="notif-meta">${timeAgo(n.createdAt)}</div>
-          </div>
-          <div class="notif-actions">
-            ${!n.read ? `<button class="btn-mark-read" data-id="${n._id}">Mark Read</button>` : ""}
-            <button class="btn-delete" data-id="${n._id}">Delete</button>
-          </div>
+    listContainer.innerHTML = pageData.map(notif => `
+      <div class="notif-item ${!notif.read ? 'unread' : ''}" data-id="${notif._id}">
+        <div class="notif-content">
+          <div class="notif-title">${notif.title || "Notification"}</div>
+          <div class="notif-message">${notif.message}</div>
+          <div class="notif-meta">${timeAgo(notif.createdAt)}</div>
         </div>
-      `)
-      .join("");
+        <div class="notif-actions">
+          ${!notif.read ? `<button class="btn-mark-read" data-id="${notif._id}">Mark Read</button>` : ""}
+          <button class="btn-delete" data-id="${notif._id}">Delete</button>
+        </div>
+      </div>
+    `).join("");
 
-    renderPagination(totalPages);
-    attachListeners();
+    attachItemListeners();
+    renderPagination();
   }
 
-  // Pagination UI
-  function renderPagination(total) {
+  // ==================== Render Pagination Buttons ====================
+  function renderPagination() {
+    const totalPages = Math.ceil(allNotifications.length / PER_PAGE) || 1;
     paginationNumbers.innerHTML = "";
+
     prevPageBtn.disabled = currentPage === 1;
-    nextPageBtn.disabled = currentPage === total || total === 0;
+    nextPageBtn.disabled = currentPage >= totalPages;
 
-    document.querySelector('.notif-pagination').style.display = total <= 1 ? 'none' : 'flex';
+    const maxButtons = 5;
+    let start = Math.max(1, currentPage - 2);
+    let end = Math.min(totalPages, start + maxButtons - 1);
+    if (end - start + 1 < maxButtons) start = Math.max(1, end - maxButtons + 1);
 
-    const max = 5;
-    let start = Math.max(1, currentPage - Math.floor(max / 2));
-    let end = Math.min(total, start + max - 1);
-    if (end - start + 1 < max) start = Math.max(1, end - max + 1);
-
-    if (start > 1) { addBtn(1); if (start > 2) addEllipsis(); }
-    for (let i = start; i <= end; i++) addBtn(i);
-    if (end < total) { if (end < total - 1) addEllipsis(); addBtn(total); }
-  }
-
-  function addBtn(page) {
-    const b = document.createElement("button");
-    b.textContent = page;
-    b.className = `pagination-btn ${page === currentPage ? "active" : ""}`;
-    b.onclick = () => {
-      currentPage = page;
-      render(allNotifs);
-      window.scrollTo({ top: listContainer.offsetTop - 100, behavior: "smooth" });
+    const addBtn = (num) => {
+      const btn = document.createElement("button");
+      btn.textContent = num;
+      btn.className = `pagination-btn ${num === currentPage ? "active" : ""}`;
+      btn.onclick = () => { currentPage = num; render(); window.scrollTo({ top: listContainer.offsetTop - 100, behavior: "smooth" }); };
+      paginationNumbers.appendChild(btn);
     };
-    paginationNumbers.appendChild(b);
+
+    if (start > 1) { addBtn(1); if (start > 2) paginationNumbers.innerHTML += '<span class="pagination-ellipsis">...</span>'; }
+    for (let i = start; i <= end; i++) addBtn(i);
+    if (end < totalPages) { if (end < totalPages - 1) paginationNumbers.innerHTML += '<span class="pagination-ellipsis">...</span>'; addBtn(totalPages); }
   }
 
-  function addEllipsis() {
-    const e = document.createElement("span");
-    e.textContent = "...";
-    e.className = "pagination-ellipsis";
-    paginationNumbers.appendChild(e);
-  }
+// ==================== Attach Actions ====================
+function attachItemListeners() {
+  // Mark read
+  document.querySelectorAll(".btn-mark-read").forEach(btn => {
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      try {
+        await fetch(`https://remj82.onrender.com/api/notifications/${id}/read`, { 
+          method: "PATCH", 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        // Update locally
+        const notif = allNotifications.find(n => n._id === id);
+        if (notif) notif.read = true;
+        render();
+      } catch {
+        notify.error("Failed to mark as read");
+      }
+    };
+  });
 
-  // Attach per-item actions
-  function attachListeners() {
-    // Mark read
-    document.querySelectorAll(".btn-mark-read").forEach(btn => {
-      btn.onclick = async e => {
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        try {
-          await fetch(`https://remj82.onrender.com/api/notifications/${id}/read`, {
-            method: "PATCH",
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          fetchNotifs();
-        } catch {
-          window.notify.show("Failed to mark as read.", "error");
-        }
-      };
-    });
+  // Delete
+  document.querySelectorAll(".btn-delete").forEach(btn => {
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      if (!confirm("Delete this notification?")) return;
+      const id = btn.dataset.id;
+      try {
+        await fetch(`https://remj82.onrender.com/api/notifications/${id}`, { 
+          method: "DELETE", 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        // Remove from local array immediately
+        allNotifications = allNotifications.filter(n => n._id !== id);
+        
+        // Adjust current page if needed
+        const totalPages = Math.ceil(allNotifications.length / PER_PAGE) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
 
-    // Delete one
-    document.querySelectorAll(".btn-delete").forEach(btn => {
-      btn.onclick = async e => {
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        if (!confirm("Delete this notification?")) return;
-        try {
-          await fetch(`https://remj82.onrender.com/api/notifications/${id}`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          window.notify.show("Deleted.", "success");
-          fetchNotifs();
-        } catch {
-          window.notify.show("Delete failed.", "error");
-        }
-      };
-    });
-  }
+        notify.success("Deleted");
+        render(); // rerender current page slice
+      } catch {
+        notify.error("Delete failed");
+      }
+    };
+  });
+}
 
-  // Fetch + update bell
-  async function fetchNotifs() {
+
+  // ==================== Fetch Notifications & Update Bell ====================
+  async function fetchNotifications() {
     try {
-      const res = await fetch("https://remj82.onrender.com/api/notifications", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!res.ok) throw "";
+      const res = await fetch("https://remj82.onrender.com/api/notifications", { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error("Failed to fetch notifications");
       const data = await res.json();
-      const unread = data.filter(n => !n.read).length;
+      allNotifications = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-      notificationCount.textContent = unread > 9 ? "9+" : unread;
-      notificationCount.style.display = unread > 0 ? "flex" : "none";
+      const unreadCount = allNotifications.filter(n => !n.read).length;
+      if (notificationCount) {
+        notificationCount.textContent = unreadCount > 9 ? "9+" : unreadCount;
+        notificationCount.style.display = unreadCount > 0 ? "flex" : "none";
+      }
 
-      render(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+      render();
     } catch (err) {
-      listContainer.innerHTML = `<div class="notif-item" style="text-align:center;color:#e74c3c;"><i class="fas fa-exclamation-triangle"></i><br>Failed to load.</div>`;
-      renderPagination(0);
+      listContainer.innerHTML = `<div style="text-align:center;color:#e74c3c;padding:40px;">Failed to load notifications</div>`;
+      renderPagination();
+      console.error(err);
     }
   }
 
-  // Mark All Read
-  markAllReadBtn.onclick = async () => {
+  // ==================== Mark All Read ====================
+  markAllReadBtn?.addEventListener("click", async () => {
     try {
-      await fetch("https://remj82.onrender.com/api/notifications/mark-all-read", {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      window.notify.show("All marked as read.", "success");
-      fetchNotifs();
-    } catch {
-      window.notify.show("Failed to mark all.", "error");
-    }
-  };
+      await fetch("https://remj82.onrender.com/api/notifications/mark-all-read", { method: "PATCH", headers: { Authorization: `Bearer ${token}` } });
+      allNotifications.forEach(n => n.read = true); // update locally
+      notify.success("All marked as read");
+      render();
+    } catch { notify.error("Failed"); }
+  });
 
-  // Delete All
-  deleteAllBtn.onclick = async () => {
-    if (allNotifs.length === 0) return;
+  // ==================== Delete All ====================
+  deleteAllBtn?.addEventListener("click", async () => {
+    if (!allNotifications.length) return;
     if (!confirm("Delete ALL notifications?")) return;
     try {
-      await fetch("https://remj82.onrender.com/api/notifications/", {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      window.notify.show("All deleted.", "success");
-      fetchNotifs();
-    } catch {
-      window.notify.show("Failed to delete all.", "error");
-    }
-  };
+      await fetch("https://remj82.onrender.com/api/notifications/", { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      allNotifications = [];
+      notify.success("All notifications deleted");
+      render();
+    } catch { notify.error("Failed to delete all"); }
+  });
 
-  // Pagination arrows
-  prevPageBtn.onclick = () => { if (currentPage > 1) { currentPage--; render(allNotifs); } };
-  nextPageBtn.onclick = () => {
-    const total = Math.ceil(allNotifs.length / PER_PAGE);
-    if (currentPage < total) { currentPage++; render(allNotifs); }
-  };
+  // ==================== Pagination Buttons ====================
+  prevPageBtn?.addEventListener("click", () => { if (currentPage > 1) { currentPage--; render(); } });
+  nextPageBtn?.addEventListener("click", () => { if (currentPage < Math.ceil(allNotifications.length / PER_PAGE)) { currentPage++; render(); } });
 
-  // Bell → go to page
-  notificationBell.onclick = e => { e.preventDefault(); window.location.href = "./notifications.html"; };
+  // ==================== Bell Click ====================
+  notificationBell?.addEventListener("click", (e) => e.preventDefault());
 
-  // Init + poll
-  fetchNotifs();
-  setInterval(fetchNotifs, 20000);
+  // ==================== INIT ====================
+  fetchNotifications();
+  setInterval(fetchNotifications, 20000);
 });
-
-// ================================
-// TOAST – unchanged (your working version)
-// ================================
-window.notify = (function () {
-  const id = "notification-toast-container";
-  function container() {
-    let c = document.getElementById(id);
-    if (!c) {
-      c = document.createElement("div");
-      c.id = id;
-      c.style.cssText = `position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:12px;max-width:360px;font-family:system-ui,sans-serif;pointer-events:none;`;
-      document.body.appendChild(c);
-    }
-    return c;
-  }
-
-  function show(msg, type = "info", dur = 6000) {
-    const cont = container();
-    if (Array.from(cont.children).some(el => el.querySelector(".toast-message")?.textContent === msg)) return;
-
-    const toast = document.createElement("div");
-    toast.className = `toast toast-${type}`;
-    toast.style.cssText = `
-      background:${type==="success"?"#10b981":type==="error"?"#ef4444":"#3b82f6"};
-      color:white;padding:14px 16px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);
-      display:flex;align-items:center;gap:12px;min-width:280px;font-size:14px;
-      opacity:0;transform:translateX(20px);transition:opacity .3s,transform .3s;
-      pointer-events:auto;animation:slideIn .3s forwards;
-    `;
-    toast.innerHTML = `
-      <span class="toast-message">${msg}</span>
-      <button class="toast-close" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;" onclick="this.parentElement.remove()">×</button>
-    `;
-    cont.appendChild(toast);
-    requestAnimationFrame(() => { toast.style.opacity = "1"; toast.style.transform = "translateX(0)"; });
-    if (dur) setTimeout(() => { toast.style.opacity = "0"; toast.style.transform = "translateX(20px)"; setTimeout(() => toast.remove(), 300); }, dur);
-  }
-  return { show };
-})();
-
-const style = document.createElement("style");
-style.textContent = `@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}`;
-document.head.appendChild(style);

@@ -139,3 +139,12 @@ document.addEventListener("DOMContentLoaded", () => {
       showMessage('You Have Insufficient Balance In Your Account.', 'error');
     }
   });
+   // Navigation toggle for all pages
+    const navToggle = document.querySelector(".nav-toggle");
+    const nav = document.querySelector("nav");
+
+    if (navToggle && nav) {
+        navToggle.addEventListener("click", () => {
+            nav.classList.toggle("active");
+        });
+    }

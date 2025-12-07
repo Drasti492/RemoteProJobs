@@ -3,41 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile — RemoteProJobs</title>
+  <title>My Profile — RemoteProJobs</title>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../styles/upwork.css" />
+  <link rel="stylesheet" href="../styles/notifications.css" />
   <link rel="stylesheet" href="../styles/profile.css" />
-  <link rel="stylesheet" href="../styles/upwork.css">
-  <link rel="stylesheet" href="../styles/notifications.css">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
 </head>
-
 <body>
-  <header>
-    <div class="container">
-      <div class="logo">
-        <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
-      </div>
 
-      <button class="nav-toggle" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
+ <header>
+  <div class="container">
+    <div class="logo">
+      <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
+    </div>
 
-      <nav>
-        <ul>
-          <li><a href="./work.html">Earn</a></li>
-          <li><a href="./companies.html">Companies</a></li>
-          <li><a href="./resources.html">Resources</a></li>
-          <li><a href="./contact.html">Contact</a></li>
-        </ul>
-      </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
 
-      <div class="auth-buttons">
-        <a href="./profile.html" class="profile-icon" aria-label="User Profile">
-          <i class="fas fa-user"></i>
-        </a>
+    <nav>
+      <ul>
+        <li><a href="./work.html">Earn</a></li>
+        <li><a href="./companies.html">Companies</a></li>
+        <li><a href="./resources.html">Resources</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="auth-buttons">
+      <a href="./profile.html" class="profile-icon" aria-label="User Profile">
+        <i class="fas fa-user"></i>
+      </a>
 
 <!-- Notification Bell -->
 <div class="notification-wrapper">
@@ -48,64 +45,106 @@
 </div>
 
 
-        <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">
-          Logout
-        </button>
+      <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
+<div id="toast" class="toast"></div>
+
+<main class="profile-main">
+  <div class="container">
+    <div class="profile-card">
+
+      <!-- NOT VERIFIED BANNER (RED) -->
+      <div id="notVerifiedBanner" class="status-banner red">
+        <i class="fas fa-times-circle"></i>
+        <div>
+          <strong>Account Not Verified</strong><br>
+          <small>Verify to unlock unlimited applications & withdrawals</small>
+        </div>
+        <button class="btn-verify" onclick="location.href='./pricing.html'">Verify Now</button>
       </div>
+
+      <!-- VERIFIED BANNER (GREEN) -->
+      <div id="verifiedBanner" class="status-banner green" style="display:none;">
+        <i class="fas fa-check-circle"></i>
+        <strong>Verified Account</strong> — Full access unlocked
+      </div>
+
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <h2 id="profile-name">Loading...</h2>
+        <p id="profile-email" class="email"></p>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat">
+          <i class="fas fa-briefcase"></i>
+          <div class="number" id="applications-count">0</div>
+          <div class="label">Applications</div>
+        </div>
+        <div class="stat">
+          <i class="fas fa-wallet"></i>
+          <div class="number" id="profile-balance">0 $</div>
+          <div class="label">Balance</div>
+        </div>
+        <div class="stat">
+          <i class="fas fa-bolt"></i>
+          <div class="number" id="connects-count">0</div>
+          <div class="label">Connects</div>
+        </div>
+      </div>
+
+      <!-- Info Rows -->
+      <div class="info-section">
+        <div class="info-row">
+          <span><i class="fas fa-user"></i> Full Name</span>
+          <strong id="profile-fullname">—</strong>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-phone"></i> Phone</span>
+          <strong id="profile-phone">—</strong>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-envelope"></i> Email</span>
+          <strong id="profile-email2">—</strong>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-calendar-alt"></i> Member Since</span>
+          <strong id="member-since">—</strong>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="profile-actions">
+        <button class="btn btn-primary btn-full" onclick="location.href='./work.html'">
+          <i class="fas fa-search"></i> Find Jobs
+        </button>
+        <button class="btn btn-outline btn-full" onclick="location.href='./pricing.html'">
+          <i class="fas fa-gem"></i> Upgrade Account
+        </button>
+        <a href="../pages/withdraw.html" class="btn btn-success btn-full">
+          <i class="fas fa-money-bill-wave"></i> Withdraw Earnings
+        </a>
+      </div>
+
     </div>
-  </header>
-
-  <!--  Toast notification -->
-  <div id="toast" class="toast"></div>
-
-<main class="auth-card">
-  <div class="auth-brand">
-    <div class="logo">RP</div>
-    <h1>RemoteProJobs</h1>
-  </div>
-
-  <h2>Your Profile</h2>
-
-  <!-- Removed loading message -->
-  <p id="verifyNotice" class="verify-notice" style="display:none;"></p>
-
-  <div class="profile-info">
-    <div class="profile-field">
-      <i class="fas fa-user"></i>
-      <span><strong>Username:</strong> 
-        <span id="profile-username">Unknown</span>
-        <span id="verifiedBadge"></span>
-      </span>
-    </div>
-    <div class="profile-field">
-      <i class="fas fa-phone"></i>
-      <span><strong>Phone:</strong> <span id="profile-phone">Not provided</span></span>
-    </div>
-    <div class="profile-field">
-      <i class="fas fa-envelope"></i>
-      <span><strong>Email:</strong> <span id="profile-email">Not provided</span></span>
-    </div>
-    <div class="profile-field">
-      <i class="fas fa-wallet"></i>
-      <span><strong>Balance:</strong> <span id="profile-balance">0 $</span></span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <button class="btn btn-outline btn-sm back-btn">Start Earning</button>
-    <a href="../pages/withraw.html"><button class="btn btn-primary btn-sm">Withdraw</button></a>
-    <button class="btn btn-primary btn-sm" id="logoutBtn">Log Out</button>
   </div>
 </main>
 
 <footer>
   <div class="container">
-    <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+    <p>© 2025 RemoteProJobs. All rights reserved.</p>
   </div>
 </footer>
 
+<script src="../scripts/nav.js"></script>
 <script src="../scripts/profile.js"></script>
 <script src="../scripts/notifications.js"></script>
-
 </body>
 </html>

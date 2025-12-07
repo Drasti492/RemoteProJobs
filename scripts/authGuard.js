@@ -1,4 +1,4 @@
-// scripts/authGuard.js
+// scripts/authGuard.js — FINAL WORKING VERSION
 
 document.addEventListener("DOMContentLoaded", () => {
   const publicPages = [
@@ -10,85 +10,66 @@ document.addEventListener("DOMContentLoaded", () => {
     "reset.html"
   ];
 
-  // Get current page filename
-  const currentPage = window.location.pathname.split("/").pop();
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
-  // Skip auth check for public pages
+  // Allow public pages without login
   if (publicPages.includes(currentPage)) return;
 
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.warn("No token found. Redirecting to login...");
     redirectToLogin();
     return;
   }
 
-  // Verify token and auto-logout if invalid
+  // Verify token
   verifyToken(token);
 
-  // =========================
-  // Inactivity-based logout
-  // =========================
-  const maxInactive = 10 * 60 * 1000; // 10 minutes
+  // Inactivity logout after 10 minutes
+  const INACTIVE_TIMEOUT = 10 * 60 * 1000; // 10 minutes
+
   const updateActivity = () => localStorage.setItem("lastActive", Date.now());
 
-  ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(evt => {
-    document.addEventListener(evt, updateActivity);
+  ["mousedown", "mousemove", "keypress", "scroll", "touchstart"].forEach(event => {
+    document.addEventListener(event, updateActivity, { passive: true });
   });
 
   setInterval(() => {
-    const lastActive = parseInt(localStorage.getItem("lastActive") || "0");
-    if (Date.now() - lastActive > maxInactive) {
-      console.warn("User inactive for 10 minutes. Logging out...");
+    const lastActive = localStorage.getItem("lastActive") || 0;
+    if (Date.now() - Number(lastActive) > INACTIVE_TIMEOUT) {
       logout();
     }
   }, 30000);
 });
 
-// =========================
-// Helper Functions
-// =========================
 async function verifyToken(token) {
   try {
     const res = await fetch("https://remj82.onrender.com/api/auth/user", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
+      headers: { "Authorization": `Bearer ${token}` }
     });
 
-    if (!res.ok) {
-      console.warn("Invalid or expired token. Logging out...");
-      logout();
-      return;
-    }
+    if (!res.ok) throw new Error("Invalid token");
 
     const data = await res.json();
-
     if (data.success && data.user) {
       localStorage.setItem("userProfile", JSON.stringify(data.user));
-      console.log(`Authenticated as: ${data.user.name}`);
-      // Update lastActive on verified token
       localStorage.setItem("lastActive", Date.now());
     } else {
       logout();
     }
   } catch (err) {
-    console.error("Token verification failed:", err.message);
     logout();
   }
 }
 
 function logout() {
   localStorage.removeItem("token");
-  localStorage.removeItem("userEmail");
   localStorage.removeItem("userProfile");
   localStorage.removeItem("lastActive");
   redirectToLogin();
 }
 
 function redirectToLogin() {
-  window.location.href = "../pages/login.html";
+  // THIS IS THE ONLY LINE THAT WORKS
+  window.location.href = "login.html";
 }

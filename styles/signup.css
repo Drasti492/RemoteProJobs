@@ -1,6 +1,6 @@
 /* styles/signup.css */
 :root {
-    --primary-color: #2563eb;
+    --primary-color: #2563eb; 
     --primary-dark: #1d4ed8;
     --dark-color: #333;
     --gray-color: #6c757d;
@@ -96,27 +96,25 @@ h2 {
     box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
 }
 
-.password-wrapper {
+.password-wrapper,
+.password-container {
     position: relative;
-    display: flex;
-    align-items: center;
 }
 
-.password-wrapper input {
+.password-wrapper input,
+.password-container input {
     padding-right: 40px;
     width: 100%;
 }
 
 .toggle-password {
     position: absolute;
-    right: 12px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: var(--gray-color);
     font-size: 16px;
-    line-height: 1;
-    z-index: 2;
 }
 
 .toggle-password:hover {
@@ -166,18 +164,21 @@ h2 {
     font-size: 13px;
 }
 
-.auth-link, .small {
+.auth-link, 
+.small {
     margin-top: 16px;
     font-size: 13px;
     color: var(--gray-color);
 }
 
-.auth-link a, .small a {
+.auth-link a, 
+.small a {
     color: var(--primary-color);
     text-decoration: none;
 }
 
-.auth-link a:hover, .small a:hover {
+.auth-link a:hover, 
+.small a:hover {
     text-decoration: underline;
 }
 
@@ -201,6 +202,7 @@ h2 {
 }
 
 @media (max-width: 480px) {
+
     .auth-card {
         padding: 16px;
         max-width: 320px;
@@ -223,12 +225,13 @@ h2 {
         padding: 8px;
     }
 
-    .password-wrapper input {
+    .password-wrapper input,
+    .password-container input {
         padding-right: 36px;
     }
 
     .toggle-password {
-        right: 10px;
+        right: 8px;
         font-size: 14px;
     }
 
@@ -247,7 +250,8 @@ h2 {
         padding: 6px 12px;
     }
 
-    .auth-link, .small {
+    .auth-link, 
+    .small {
         font-size: 12px;
     }
 

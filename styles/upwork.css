@@ -134,10 +134,24 @@ img {
 }
 
 /* Header Styles */
-/* ===== HEADER BASE ===== */
+/* styles/header.css — FINAL PROFESSIONAL HEADER (All devices) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --gray: #6b7280;
+  --dark: #1f2937;
+  --light: #f9fafb;
+  --white: #ffffff;
+  --border: #e5e7eb;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 header {
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
+  background: white;
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 999;
@@ -145,116 +159,212 @@ header {
 }
 
 header .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
-  gap: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
+  height: 70px;
 }
 
-/* ===== LOGO ===== */
+/* LOGO */
 .logo h1 {
-  font-size: 20px;
-  color: #333;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin: 0;
+  white-space: nowrap;
 }
 
 .logo i {
-  color: #007bff;
-  font-size: 20px;
+  color: var(--blue);
+  font-size: 26px;
 }
 
-/* ===== NAVIGATION ===== */
+/* NAVIGATION */
 nav ul {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  gap: 28px;
   list-style: none;
 }
 
 nav a {
+  color: var(--dark);
   text-decoration: none;
-  color: #333;
   font-weight: 500;
-  transition: color 0.3s ease;
+  font-size: 15px;
+  padding: 8px 0;
+  transition: color 0.3s;
+  white-space: nowrap;
 }
 
 nav a:hover,
 nav a.active {
-  color: #007bff;
+  color: var(--blue);
 }
 
-/* ===== AUTH BUTTONS ===== */
+/* AUTH ICONS & LOGOUT */
 .auth-buttons {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+}
+
+.profile-icon,
+.notification-wrapper,
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-icon {
-  color: #333;
-  font-size: 18px;
-  transition: color 0.3s ease;
+  color: var(--gray);
+  font-size: 22px;
+  transition: color 0.3s;
 }
 
 .profile-icon:hover {
-  color: #007bff;
+  color: var(--blue);
 }
 
-.btn.btn-sm {
-  font-size: 13px;
-  padding: 6px 12px;
+.notification-icon {
+  position: relative;
+  color: var(--gray);
+  font-size: 22px;
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.3s;
 }
 
-/* ===== NAV TOGGLE ===== */
+.notification-icon:hover {
+  color: var(--blue);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.notification-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1.5px solid var(--blue);
+  color: var(--blue);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.logout-btn:hover {
+  background: var(--blue);
+  color: white;
+}
+
+/* MOBILE TOGGLE */
 .nav-toggle {
   display: none;
   background: none;
   border: none;
-  font-size: 20px;
-  color: #333;
+  font-size: 24px;
+  color: var(--dark);
   cursor: pointer;
+  padding: 8px;
 }
 
-.nav-toggle:hover {
-    color: var(--primary-dark);
+/* RESPONSIVE — PERFECT ON ALL DEVICES */
+@media (max-width: 900px) {
+  nav ul { gap: 20px; }
+  nav a { font-size: 14.5px; }
+  .logo h1 { font-size: 20px; }
+  .logo i { font-size: 24px; }
 }
 
-/*profile icon*/
-.profile-icon {
-    font-size: 24px;
-    color: var(--primary-color);
-    padding: 8px;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+@media (max-width: 768px) {
+  header .container {
+    height: auto;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
 
-.profile-icon:hover {
-    color: var(--primary-dark);
-}
+  .nav-toggle {
+    display: block;
+    order: 3;
+  }
 
-.logout-btn {
-    padding: 6px 12px;
-    font-size: 13px;
+  nav {
+    order: 4;
+    width: 100%;
+    background: white;
+    border-top: 1px solid var(--border);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  nav.active {
+    max-height: 400px;
+    padding: 16px 0;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  nav a {
+    display: block;
+    padding: 14px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .auth-buttons {
+    order: 2;
+    gap: 14px;
+  }
+
+  .logout-btn {
+    padding: 8px 14px;
+    font-size: 13.5px;
+  }
 }
 
 @media (max-width: 480px) {
-    .profile-icon {
-        font-size: 20px;
-        padding: 6px;
-    }
+  header .container { padding: 10px 12px; }
+  .logo h1 { font-size: 18px; }
+  .logo i { font-size: 22px; }
+  .notification-icon,
+  .profile-icon { font-size: 21px; }
+  .logout-btn { font-size: 13px; padding: 7px 12px; }
+}
 
-    .logout-btn {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
+@media (max-width: 360px) {
+  .logo h1 { font-size: 17px; }
+  .logo i { font-size: 21px; }
+  .notification-icon,
+  .profile-icon { font-size: 20px; }
+  .logout-btn { font-size: 12.5px; padding: 6px 10px; }
 }
 
 /* Hero Section */
@@ -1108,127 +1218,49 @@ footer {
 }
 
 /* Responsive Styles */
-
-/* Large Devices (1024px and above) */
+/* ===========================
+   LARGE DEVICES (1024px and above)
+   =========================== */
 @media (min-width: 1024px) {
     header .container {
         justify-content: space-around;
         padding: 16px 24px;
     }
 
-    .logo h1 {
-        font-size: 26px;
-    }
+    .logo h1 { font-size: 26px; }
+    .logo i { font-size: 26px; }
 
-    .logo i {
-        font-size: 26px;
-    }
+    nav ul { gap: 32px; }
+    nav a { font-size: 16px; padding: 10px 16px; }
 
-    nav ul {
-        gap: 32px;
-    }
+    .auth-buttons { gap: 16px; }
+    .auth-buttons .btn { padding: 10px 20px; font-size: 16px; }
 
-    nav a {
-        font-size: 16px;
-        padding: 10px 16px;
-    }
+    .hero .container { padding: 0 32px; }
+    .hero-content { max-width: 900px; padding: 32px; }
+    .hero h1 { font-size: 48px; margin-bottom: 24px; }
+    .hero p { font-size: 20px; margin-bottom: 32px; }
 
-    .auth-buttons {
-        gap: 16px;
-    }
+    .search-box { padding: 20px; max-width: 800px; gap: 16px; }
+    .search-group input { padding: 14px 14px 14px 40px; font-size: 16px; }
+    .search-btn { padding: 14px 24px; font-size: 16px; }
 
-    .auth-buttons .btn {
-        padding: 10px 20px;
-        font-size: 16px;
-    }
+    .popular-searches { gap: 12px; max-width: 800px; }
+    .popular-searches span { font-size: 16px; }
+    .popular-searches a { padding: 8px 16px; font-size: 15px; }
 
-    .hero .container {
-        padding: 0 32px;
-    }
+    .job-listings .container { grid-template-columns: 250px 1fr; }
+    .job-card { display: grid; grid-template-columns: auto 1fr auto; }
+    .job-actions { align-items: flex-end; }
 
-    .hero-content {
-        max-width: 900px;
-        padding: 32px;
-    }
+    .cta .container { flex-direction: row; align-items: center; justify-content: center; }
+    .cta-content { max-width: 500px; margin: 0; }
+    .cta-image { max-width: 400px; }
 
-    .hero h1 {
-        font-size: 48px;
-        margin-bottom: 24px;
-    }
+    .footer-columns { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .footer-bottom { flex-direction: row; justify-content: space-between; }
 
-    .hero p {
-        font-size: 20px;
-        margin-bottom: 32px;
-    }
-
-    .search-box {
-        padding: 20px;
-        max-width: 800px;
-        gap: 16px;
-    }
-
-    .search-group input {
-        padding: 14px 14px 14px 40px;
-        font-size: 16px;
-    }
-
-    .search-btn {
-        padding: 14px 24px;
-        font-size: 16px;
-    }
-
-    .popular-searches {
-        gap: 12px;
-        max-width: 800px;
-    }
-
-    .popular-searches span {
-        font-size: 16px;
-    }
-
-    .popular-searches a {
-        padding: 8px 16px;
-        font-size: 15px;
-    }
-
-    .job-listings .container {
-        grid-template-columns: 250px 1fr;
-    }
-
-    .job-card {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-    }
-
-    .job-actions {
-        align-items: flex-end;
-    }
-
-    .cta .container {
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .cta-content {
-        max-width: 500px;
-        margin: 0;
-    }
-
-    .cta-image {
-        max-width: 400px;
-    }
-
-    .footer-columns {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .footer-bottom {
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .companies-grid {
+    .companies-grid, .employer-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         justify-content: center;
         justify-items: center;
@@ -1236,142 +1268,47 @@ footer {
         padding: 0;
     }
 
-    .employer-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        justify-content: center;
-        justify-items: center;
-        margin: 0 auto;
-        padding: 0;
-    }
-    .pagination-container {
-        gap: 10px;
-        margin: 24px 0;
-    }
-    .pagination-btn,
-    .page-number {
-        width: 38px;
-        height: 38px;
-        font-size: 15px;
-    }
-    .pagination-btn i {
-        font-size: 15px;
-    }
-    .pagination-ellipsis {
-        width: 38px;
-        height: 38px;
-        font-size: 14px;
-    }
-
+    .pagination-container { gap: 10px; margin: 24px 0; }
+    .pagination-btn, .page-number { width: 38px; height: 38px; font-size: 15px; }
+    .pagination-btn i { font-size: 15px; }
+    .pagination-ellipsis { width: 38px; height: 38px; font-size: 14px; }
 }
 
-/* Laptops (1024px and below) */
+/* ===========================
+   LAPTOPS (1024px and below / 690px)
+   =========================== */
 @media (max-width: 690px) {
-    header .container {
-        flex-wrap: wrap;
-    }
+    header .container { flex-wrap: wrap; }
 
-    .logo h1 {
-        font-size: 14px;
-    }
+    .logo h1 { font-size: 14px; }
+    .logo i { font-size: 18px; }
 
-    .logo i {
-        font-size: 18px;
-    }
+    .nav-toggle { display: block; }
+    nav { display: none; width: 100%; background: #fff; border-top: 1px solid #eee; margin-top: 10px; }
+    nav.active { display: block; }
+    nav ul { flex-direction: column; align-items: flex-start; padding: 12px 0; gap: 10px; }
+    nav a { display: block; width: 100%; padding: 8px 16px; font-size: 14px; }
 
-    .nav-toggle {
-        display: block;
-    }
+    .auth-buttons { gap: 10px; }
+    .auth-buttons .btn { padding: 6px 12px; font-size: 13px; }
 
-    nav {
-        display: none;
-        width: 100%;
-        background: #fff;
-        border-top: 1px solid #eee;
-        margin-top: 10px;
-    }
+    .hero .container { padding: 0 16px; }
+    .hero-content { max-width: 700px; padding: 20px; }
+    .hero h1 { font-size: 36px; }
+    .hero p { font-size: 18px; }
 
-    nav.active {
-        display: block;
-    }
+    .search-box { max-width: 600px; padding: 14px; gap: 12px; }
+    .search-group input { font-size: 15px; }
+    .search-btn { font-size: 15px; }
+    .popular-searches { max-width: 600px; }
 
-    nav ul {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 12px 0;
-         gap: 10px;
-    }
+    .container { padding: 0 12px; }
+    .hero { height: 100vh; padding-top: 70px; }
 
-    nav a {
-        display: block;
-        width: 100%;
-        padding: 8px 16px;
-        font-size: 14px;
-    }
+    .job-listings .container { display: flex; flex-direction: column; gap: 16px; }
+    .filters-panel { position: static; }
 
-    .auth-buttons {
-        gap: 10px;
-    }
-
-    .auth-buttons .btn {
-        padding: 6px 12px;
-        font-size: 13px;
-    }
-
-    .hero .container {
-        padding: 0 16px;
-    }
-
-    .hero-content {
-        max-width: 700px;
-        padding: 20px;
-    }
-
-    .hero h1 {
-        font-size: 36px;
-    }
-
-    .hero p {
-        font-size: 18px;
-    }
-
-    .search-box {
-        max-width: 600px;
-        padding: 14px;
-        gap: 12px;
-    }
-
-    .search-group input {
-        font-size: 15px;
-    }
-
-    .search-btn {
-        font-size: 15px;
-    }
-
-    .popular-searches {
-        max-width: 600px;
-    }
-
-    .container {
-        padding: 0 12px;
-    }
-
-    .hero {
-        height: 100vh;
-        padding-top: 70px;
-    }
-
-    .job-listings .container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .filters-panel {
-        position: static;
-    }
-
-    .companies-grid {
+    .companies-grid, .employer-grid {
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         justify-content: center;
         justify-items: center;
@@ -1379,158 +1316,50 @@ footer {
         padding: 0;
     }
 
-    .employer-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        justify-content: center;
-        justify-items: center;
-        margin: 0 auto;
-        padding: 0;
-    }
+    .cta .container { flex-direction: column; align-items: center; justify-content: center; }
+    .cta-content { max-width: 500px; margin: 0 auto; }
+    .modal-content { max-width: 90%; }
 
-    .cta .container {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .cta-content {
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .modal-content {
-        max-width: 90%;
-    }
-       .pagination-container {
-        gap: 6px;
-        margin: 18px 0;
-    }
-    .pagination-btn,
-    .page-number {
-        width: 34px;
-        height: 34px;
-        font-size: 13px;
-    }
-    .pagination-btn i {
-        font-size: 13px;
-    }
-    .pagination-ellipsis {
-        width: 34px;
-        height: 34px;
-        font-size: 12px;
-    }
+    .pagination-container { gap: 6px; margin: 18px 0; }
+    .pagination-btn, .page-number { width: 34px; height: 34px; font-size: 13px; }
+    .pagination-btn i { font-size: 13px; }
+    .pagination-ellipsis { width: 34px; height: 34px; font-size: 12px; }
 }
 
-/* Tablets (768px and below) */
+/* ===========================
+   TABLETS (400px and below)
+   =========================== */
 @media (max-width: 400px) {
-    header .container {
-        padding: 10px 12px;
-    }
+    header .container { padding: 10px 12px; }
+    .logo h1, .logo i { font-size: 18px; }
+    .nav-toggle { display: block; }
+    nav { display: none; width: 100%; margin-top: 12px; }
+    nav.active { display: block; }
+    nav ul { flex-direction: column; }
 
-    .logo h1 {
-        font-size: 18px;
-    }
+    .auth-buttons { gap: 6px; }
+    .auth-buttons .btn { padding: 6px 12px; font-size: 13px; }
 
-    .logo i {
-        font-size: 18px;
-    }
+    .hero { height: 100vh; background-attachment: scroll; padding-top: 100px; }
+    .hero-content { max-width: 600px; padding: 16px; }
+    .hero h1 { font-size: 28px; }
+    .hero p { font-size: 16px; margin-bottom: 24px; }
 
-    .nav-toggle {
-        display: block;
-    }
+    .search-box { flex-direction: column; padding: 12px; max-width: 500px; }
+    .search-btn { padding: 10px; font-size: 14px; }
+    .popular-searches { max-width: 500px; gap: 8px; }
+    .popular-searches span { font-size: 14px; }
+    .popular-searches a { font-size: 13px; }
 
-    nav {
-        display: none;
-        width: 100%;
-        margin-top: 12px;
-    }
+    .filters-panel { padding: 12px; }
+    .jobs-header { padding: 10px 12px; }
+    .jobs-header h2 { font-size: 16px; }
+    .job-card { flex-direction: column; }
+    .job-actions { align-items: flex-start; }
 
-    nav.active {
-        display: block;
-    }
+    .featured-companies h2 { font-size: 18px; }
 
-    nav ul {
-        flex-direction: column;
-    }
-
-    .auth-buttons {
-        gap: 6px;
-    }
-
-    .auth-buttons .btn {
-        padding: 6px 12px;
-        font-size: 13px;
-    }
-
-    .hero {
-        height: 100vh;
-        background-attachment: scroll;
-        padding-top: 100px;
-    }
-
-    .hero-content {
-        max-width: 600px;
-        padding: 16px;
-    }
-
-    .hero h1 {
-        font-size: 28px;
-    }
-
-    .hero p {
-        font-size: 16px;
-        margin-bottom: 24px;
-    }
-
-    .search-box {
-        flex-direction: column;
-        padding: 12px;
-        max-width: 500px;
-    }
-
-    .search-btn {
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    .popular-searches {
-        max-width: 500px;
-        gap: 8px;
-    }
-
-    .popular-searches span {
-        font-size: 14px;
-    }
-
-    .popular-searches a {
-        font-size: 13px;
-    }
-
-    .filters-panel {
-        padding: 12px;
-    }
-
-    .jobs-header {
-        padding: 10px 12px;
-    }
-
-    .jobs-header h2 {
-        font-size: 16px;
-    }
-
-    .job-card {
-        flex-direction: column;
-    }
-
-    .job-actions {
-        align-items: flex-start;
-    }
-
-    .featured-companies h2 {
-        font-size: 18px;
-    }
-
-    .companies-grid {
+    .companies-grid, .employer-grid {
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         justify-content: center;
         justify-items: center;
@@ -1538,536 +1367,50 @@ footer {
         padding: 0;
     }
 
-    .employer-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        justify-content: center;
-        justify-items: center;
-        margin: 0 auto;
-        padding: 0;
-    }
+    .cta h2 { font-size: 18px; }
+    .cta-image { max-width: 250px; }
 
-    .cta h2 {
-        font-size: 18px;
-    }
-
-    .cta-image {
-        max-width: 250px;
-    }
-     .pagination-container {
-        gap: 5px;
-        margin: 16px 0;
-    }
-    .pagination-btn,
-    .page-number {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
-    }
-    .pagination-btn i {
-        font-size: 12px;
-    }
-    .pagination-ellipsis {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
-    }
-
+    .pagination-container { gap: 5px; margin: 16px 0; }
+    .pagination-btn, .page-number { width: 32px; height: 32px; font-size: 12px; }
+    .pagination-btn i { font-size: 12px; }
+    .pagination-ellipsis { width: 32px; height: 32px; font-size: 12px; }
 }
 
-/* Small Devices (Android Phones, 480px and below) */
-@media (max-width: 250px) {
- /* ===== HEADER BASE ===== */
-header {
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  width: 100%;
-}
-
-header .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  gap: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* ===== LOGO ===== */
-.logo h1 {
-  font-size: 20px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-}
-
-.logo i {
-  color: #007bff;
-  font-size: 20px;
-}
-
-/* ===== NAVIGATION ===== */
-nav ul {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  list-style: none;
-}
-
-nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-nav a:hover,
-nav a.active {
-  color: #007bff;
-}
-
-/* ===== AUTH BUTTONS ===== */
-.auth-buttons {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.profile-icon {
-  color: #333;
-  font-size: 18px;
-  transition: color 0.3s ease;
-}
-
-.profile-icon:hover {
-  color: #007bff;
-}
-
-.btn.btn-sm {
-  font-size: 13px;
-  padding: 6px 12px;
-}
-
-/* ===== NAV TOGGLE ===== */
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #333;
-  cursor: pointer;
-}
-}
-/* ===== RESPONSIVE ===== */
-
-/* Tablets & smaller */
-@media (max-width: 600px) {
-  header .container {
-    flex-wrap: wrap;
-  }
-
-  .nav-toggle {
-    display: block;
-  }
-
-  nav {
-    display: none;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid #eee;
-    margin-top: 10px;
-  }
-
-  nav.active {
-    display: block;
-  }
-
-  nav ul {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px 0;
-    gap: 10px;
-  }
-
-  nav a {
-    display: block;
-    width: 100%;
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-
-  .auth-buttons {
-    margin-top: 10px;
-  }
-}
-
-/* Phones */
-@media (max-width: 200px) {
-  header .container {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 16px;
-    gap: 10px;
-  }
-
-  .logo h1 {
-    font-size: 16px;
-  }
-
-  .nav-toggle {
-    align-self: flex-end;
-  }
-
-  nav ul {
-    width: 100%;
-  }
-
-  .auth-buttons {
-    width: 10px;
-  
-   
-  }
-
-  .auth-buttons .btn {
-    flex: 1;
-  }
-
-
-    .hero {
-        height: 100vh;
-        padding-top: 100px;
-    }
-
-    .hero-content {
-        max-width: 100%;
-        padding: 12px;
-    }
-
-    .hero h1 {
-        font-size: 24px;
-        line-height: 1.3;
-    }
-
-    .hero p {
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-    .search-box {
-        padding: 10px;
-        gap: 10px;
-        max-width: 100%;
-    }
-
-    .search-group input {
-        padding: 10px 10px 10px 32px;
-        font-size: 14px;
-    }
-
-    .search-btn {
-        font-size: 14px;
-    }
-
-    .popular-searches {
-        max-width: 100%;
-        gap: 6px;
-    }
-
-    .popular-searches a {
-        font-size: 12px;
-    }
-
-    .filters-panel {
-        padding: 10px;
-    }
-
-    .filters-panel h3 {
-        font-size: 16px;
-    }
-
-    .filter-group h4 {
-        font-size: 13px;
-    }
-
-    .checkbox-group label {
-        font-size: 12px;
-    }
-
-    .jobs-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .jobs-header h2 {
-        font-size: 15px;
-    }
-
-    .sort-options select {
-        font-size: 12px;
-    }
-
-    .job-card {
-        gap: 10px;
-    }
-
-    .job-info h3 {
-        font-size: 15px;
-    }
-
-    .company-name {
-        font-size: 13px;
-    }
-
-    .job-meta {
-        font-size: 12px;
-    }
-
-    .job-tag {
-        font-size: 11px;
-    }
-
-    .salary {
-        font-size: 13px;
-    }
-
-    .job-date {
-        font-size: 11px;
-    }
-
-    .pagination-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
-    }
-
-    .featured-companies h2 {
-        font-size: 16px;
-    }
-
-    .companies-grid {
-        grid-template-columns: 1fr;
-        justify-content: center;
-        justify-items: center;
-        margin: 0 auto;
-        padding: 0;
-    }
-
-    .employer-grid {
-        grid-template-columns: 1fr;
-        justify-content: center;
-        justify-items: center;
-        margin: 0 auto;
-        padding: 0;
-    }
-
-    .company-card {
-        padding: 12px;
-        max-width: 200px;
-    }
-
-    .company-logo {
-        width: 50px;
-        height: 50px;
-    }
-
-    .company-card h3 {
-        font-size: 15px;
-    }
-
-    .employer-card {
-        padding: 12px;
-        max-width: 200px;
-    }
-
-    .employer-card img {
-        width: 50px;
-        height: 50px;
-    }
-
-    .employer-card h3 {
-        font-size: 15px;
-    }
-
-    .cta h2 {
-        font-size: 16px;
-    }
-
-    .cta p {
-        font-size: 13px;
-    }
-
-    .cta-content {
-        max-width: 100%;
-    }
-
-    .cta-image {
-        max-width: 200px;
-    }
-
-    .modal-content {
-        max-width: 95%;
-        margin: 20px auto;
-        padding: 12px;
-    }
-
-    .job-modal-header {
-        gap: 10px;
-    }
-
-    .job-modal-title h2 {
-        font-size: 16px;
-    }
-
-    .job-modal-company {
-        font-size: 13px;
-    }
-
-    .job-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .job-stat-item {
-        padding: 10px;
-    }
-
-    .auth-container {
-        max-width: 90%;
-    }
-
-    .auth-container h2 {
-        font-size: 16px;
-    }
-
-    .form-group input {
-        font-size: 12px;
-    }
-
-
-    .pagination-container {
-        gap: 6px;
-        margin: 16px 0;
-    }
-
-
-    .pagination-btn,
-    .page-number {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
-    }
-    .pagination-btn i {
-        font-size: 12px;
-    }
-    .pagination-ellipsis {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
-    }
-}
-
-
-/* Small devices */
+/* ===========================
+   SMALL DEVICES (480px and below)
+   =========================== */
 @media (max-width: 480px) {
-  .pagination-container {
-    gap: 6px;
-  }
-  .pagination-btn, .page-number {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
+    .pagination-container { gap: 6px; }
+    .pagination-btn, .page-number { padding: 6px 10px; font-size: 13px; }
 }
 
-
-/* Very Small Devices (360px and below) */
+/* ===========================
+   VERY SMALL DEVICES (360px and below)
+   =========================== */
 @media (max-width: 360px) {
-    .container {
-        padding: 0 8px;
-    }
+    .container { padding: 0 8px; }
+    .logo h1 { font-size: 10px; }
+    .logo i { font-size: 12px; }
+    .profile-icon i { font-size: 19px; }
+    .auth-buttons .btn { padding: 2px; font-size: 13px; }
 
+    .hero .container { padding: 0 8px; min-height: 30vh; }
+    .hero-content { padding: 10px; }
+    .hero h1 { font-size: 15px; }
+    .hero p { font-size: 13px; }
 
-    .logo h1 {
-        font-size: 10px;
-    }
+    .search-box { padding: 8px; gap: 8px; }
+    .search-group input { padding: 8px 8px 8px 28px; font-size: 13px; }
+    .search-btn { font-size: 13px; }
+    .popular-searches a { font-size: 12px; }
 
-    .logo i {
-        font-size: 12px;
-    }
-    .profile-icon i{
-      font-size: 19px;
-    }
+    .filters-panel h3 { font-size: 14px; }
+    .jobs-header h2 { font-size: 14px; }
+    .job-info h3 { font-size: 14px; }
+    .company-card h3, .employer-card h3 { font-size: 14px; }
 
-    .auth-buttons .btn {
-        padding: 2px;
-        font-size: 13px;
-        
-    }
-
-    .hero .container {
-        padding: 0 8px;
-        min-height: 30vh;
-    }
-
-    .hero-content {
-        padding: 10px;
-    }
-
-    .hero h1 {
-        font-size: 15px;
-    }
-
-    .hero p {
-        font-size: 13px;
-    }
-
-    .search-box {
-        padding: 8px;
-        gap: 8px;
-    }
-
-    .search-group input {
-        padding: 8px 8px 8px 28px;
-        font-size: 13px;
-    }
-
-    .search-btn {
-        font-size: 13px;
-    }
-
-    .popular-searches a {
-        font-size: 12px;
-    }
-
-    .filters-panel h3 {
-        font-size: 14px;
-    }
-
-    .jobs-header h2 {
-        font-size: 14px;
-    }
-
-    .job-info h3 {
-        font-size: 14px;
-    }
-
-    .company-card h3 {
-        font-size: 14px;
-    }
-
-    .employer-card h3 {
-        font-size: 14px;
-    }
-
-    .cta-content {
-        max-width: 100%;
-    }
+    .cta-content { max-width: 100%; }
 }
-
 
 
 /* ==============================================================

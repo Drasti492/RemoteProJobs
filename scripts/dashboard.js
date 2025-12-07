@@ -17,3 +17,12 @@ window.onclick = function(event) {
         event.target.style.display = 'none';
     }
 };
+ // Navigation toggle for all pages
+    const navToggle = document.querySelector(".nav-toggle");
+    const nav = document.querySelector("nav");
+
+    if (navToggle && nav) {
+        navToggle.addEventListener("click", () => {
+            nav.classList.toggle("active");
+        });
+    }

@@ -659,9 +659,6 @@ const remoteCount = jobsData.filter(job => job.remote === "Remote").length;
 console.log(`Remote jobs: ${remoteCount}`); // Should be ~144
 
 // DOM Elements
-// ================================
-// DOM Elements
-// ================================
 const DOM = {
     jobsList: document.getElementById('jobs-list'),
     jobModal: document.getElementById('job-modal'),
@@ -858,7 +855,7 @@ function renderJobs(jobs) {
 }
 
 // ================================
-// Render Pagination
+// Render Pagination (Block-based, 5-pages per block)
 // ================================
 function renderPagination(jobs) {
     const totalPages = Math.ceil(jobs.length / jobsPerPage);
@@ -877,37 +874,26 @@ function renderPagination(jobs) {
     let startPage = (currentBlock - 1) * pagesPerBlock + 1;
     let endPage = Math.min(startPage + pagesPerBlock - 1, totalPages);
 
-    if (totalPages - startPage < pagesPerBlock - 1 && totalPages > pagesPerBlock) {
-        startPage = Math.max(1, totalPages - pagesPerBlock + 1);
-        endPage = totalPages;
-    }
-
+    // First page + leading ellipsis
     if (startPage > 1) {
         addPageButton(1, totalPages);
-        if (startPage > 2) {
-            const ellipsis = document.createElement('span');
-            ellipsis.className = 'pagination-ellipsis';
-            ellipsis.textContent = '...';
-            DOM.paginationNumbers.appendChild(ellipsis);
-        }
+        if (startPage > 2) addEllipsis();
     }
 
+    // Middle pages (current block)
     for (let i = startPage; i <= endPage; i++) {
         addPageButton(i, totalPages);
     }
 
+    // Last page + trailing ellipsis
     if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            const ellipsis = document.createElement('span');
-            ellipsis.className = 'pagination-ellipsis';
-            ellipsis.textContent = '...';
-            DOM.paginationNumbers.appendChild(ellipsis);
-        }
+        if (endPage < totalPages - 1) addEllipsis();
         addPageButton(totalPages, totalPages);
     }
 
-    DOM.prevPage.disabled = currentPage === 1;
-    DOM.nextPage.disabled = currentPage === totalPages;
+    // Enable / Disable Prev / Next based on blocks
+    DOM.prevPage.disabled = currentPage <= pagesPerBlock;
+    DOM.nextPage.disabled = endPage >= totalPages;
 }
 
 // ================================
@@ -927,6 +913,39 @@ function addPageButton(pageNum, totalPages) {
 }
 
 // ================================
+// Helper: Add Ellipsis
+// ================================
+function addEllipsis() {
+    const ellipsis = document.createElement('span');
+    ellipsis.className = 'pagination-ellipsis';
+    ellipsis.textContent = '...';
+    DOM.paginationNumbers.appendChild(ellipsis);
+}
+
+// ================================
+// Prev / Next Block Buttons Logic
+// ================================
+DOM.prevPage?.addEventListener('click', () => {
+    const pagesPerBlock = 5;
+    if (currentPage > 1) {
+        // Jump to previous block
+        currentPage = Math.max(1, currentPage - pagesPerBlock);
+        updateJobs();
+        window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
+    }
+});
+
+DOM.nextPage?.addEventListener('click', () => {
+    const pagesPerBlock = 5;
+    const totalPages = Math.ceil(currentFilteredJobs.length / jobsPerPage);
+    if (currentPage < totalPages) {
+        // Jump to next block
+        currentPage = Math.min(totalPages, currentPage + pagesPerBlock);
+        updateJobs();
+        window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
+    }
+});
+
 // Show Job Modal
 // ================================
 function showJobModal(job) {
@@ -945,28 +964,110 @@ function showJobModal(job) {
         <ul>${job.requirements.map(r => `<li>${r}</li>`).join('')}</ul>
         <h3>Benefits</h3>
         <ul>${job.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
-        <button class="btn btn-primary btn-block apply-btn">Apply Now</button>`;
+        <button id="modal-apply-btn" class="btn btn-primary btn-block">Apply Now</button>`;
 
     DOM.jobModal.style.display = 'block';
 
     // Prevent duplicate listeners
-    const modalApplyBtn = DOM.modalJobContent.querySelector('.apply-btn');
-    if (modalApplyBtn) {
-        modalApplyBtn.replaceWith(modalApplyBtn.cloneNode(true));
-        const newBtn = DOM.modalJobContent.querySelector('.apply-btn');
-        newBtn.addEventListener('click', () => applyJob(job));
+       // Apply button in modal
+    const modalApplyBtn = DOM.modalJobContent.querySelector('#modal-apply-btn');
+    modalApplyBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        applyJob(job);
+    };
+    }
+
+//apply job redirect logic
+// ================================
+// Temporary Notification Helper
+// ================================
+function showTemporaryNotification(message, color = "green") {
+    // Remove existing message if any
+    const existingMsg = document.getElementById("apply-error-msg");
+    if (existingMsg) existingMsg.remove();
+
+    // Create new notification div
+    const msg = document.createElement("div");
+    msg.id = "apply-error-msg";
+    msg.textContent = message;
+
+    msg.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${color};
+        color: white;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 500;
+        z-index: 10000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: slideDown 0.4s ease;
+    `;
+
+    document.body.appendChild(msg);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        msg.remove();
+    }, 5000);
+
+    // Add slideDown animation once
+    if (!document.getElementById("slideDownStyle")) {
+        const style = document.createElement("style");
+        style.id = "slideDownStyle";
+        style.textContent = `
+            @keyframes slideDown {
+                from { opacity: 0; transform: translate(-50%, -20px); }
+                to { opacity: 1; transform: translateX(-50%); }
+            }
+        `;
+        document.head.appendChild(style);
     }
 }
 
 // ================================
 // Apply Job Function
 // ================================
-// ================================
-// Apply Job Function (Updated)
 async function applyJob(job) {
     const token = localStorage.getItem("token");
-    if (!token) return alert("Please login first.");
+    if (!token) {
+        showTemporaryNotification("Please login first to apply.", "red");
+        setTimeout(() => window.location.href = "login.html", 2000);
+        return;
+    }
 
+    // Fetch user profile
+    let user;
+    try {
+        const res = await fetch("https://remj82.onrender.com/api/auth/user", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        user = data.user;
+    } catch (err) {
+        console.error("Failed to fetch user:", err);
+        showTemporaryNotification("Unable to verify your profile. Try again later.", "red");
+        return;
+    }
+
+    // Check verification
+    if (!user.verified) {
+        showTemporaryNotification("Your account is not verified to apply.", "red");
+        return;
+    }
+
+    // Check connects
+    if ((user.connects || 0) <= 0) {
+        showTemporaryNotification("You don’t have enough connects to apply.", "red");
+        setTimeout(() => window.location.href = "pricing.html", 4000);
+        return;
+    }
+
+    // Apply job request
     try {
         const res = await fetch(`https://remj82.onrender.com/api/applications/apply/${job.id}`, {
             method: "POST",
@@ -982,38 +1083,48 @@ async function applyJob(job) {
         });
 
         const data = await res.json();
-        if (!res.ok) return alert(data.message || "Something went wrong.");
 
-        // ✅ Show small toast notification
-        if (window.notify && typeof window.notify.show === "function") {
-            window.notify.show(data.message || "Thank you for applying!", "success");
-        } else {
-            alert(data.message || "Thank you for applying!");
+        // Already applied
+        if (data.alreadyApplied) {
+            showTemporaryNotification("You have already applied for this job. Try another.", "yellow");
+            return;
         }
 
-        // ✅ Increment notification bell count dynamically
-        const notificationCountEl = document.getElementById("notificationCount");
-        if (notificationCountEl) {
-            let currentCount = parseInt(notificationCountEl.textContent) || 0;
-            currentCount += 1;
-            notificationCountEl.textContent = currentCount > 9 ? "9+" : currentCount;
-            notificationCountEl.style.display = "flex";
+        // Not enough connects (backend fallback)
+        if (data.limitReached) {
+            showTemporaryNotification("You don’t have enough connects to apply.", "red");
+            setTimeout(() => window.location.href = "pricing.html", 4000);
+            return;
+        }
+
+        // Successful application
+        if (res.ok && data.success) {
+            // Update local user connects
+            user.connects -= 1;
+
+            showTemporaryNotification("Application submitted successfully!", "green");
+
+            // Update in-site notification bell immediately
+            const notificationCountEl = document.getElementById("notificationCount");
+            if (notificationCountEl) {
+                let count = parseInt(notificationCountEl.textContent) || 0;
+                notificationCountEl.textContent = count >= 9 ? "9+" : count + 1;
+                notificationCountEl.style.display = "flex";
+            }
+        } else {
+            // Any other error fallback
+            showTemporaryNotification(data.message || "Unable to apply. Try again later.", "red");
         }
 
     } catch (err) {
-        console.error(err);
-        if (window.notify && typeof window.notify.show === "function") {
-            window.notify.show("Something went wrong. Please try again later.", "error");
-        } else {
-            alert("Something went wrong. Please try again later.");
-        }
+        console.error("Apply error:", err);
+        showTemporaryNotification("Unable to apply. Please try again later.", "red");
     }
 }
 
 
-// ================================
 // Salary Range Slider
-// ================================
+
 function initRangeSlider() {
     if (!DOM.salaryRange || !DOM.salaryValue) return;
 
@@ -1030,9 +1141,9 @@ function initRangeSlider() {
     });
 }
 
-// ================================
+
 // Setup Event Listeners
-// ================================
+
 function setupEventListeners() {
     let debounce;
     [DOM.jobSearch, DOM.locationSearch].forEach(input => {
@@ -1111,9 +1222,9 @@ function setupEventListeners() {
         });
     }
 }
-// ================================
+ 
 // NOTIFICATION BELL SYNC (Shared across pages)
-// ================================
+ 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) return;
