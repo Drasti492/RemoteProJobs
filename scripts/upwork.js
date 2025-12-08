@@ -1088,7 +1088,7 @@ async function applyJob(job) {
 
         // Already applied
         if (data.alreadyApplied) {
-            showTemporaryNotification("You have already applied for this job. Try another.", "yellow");
+            showTemporaryNotification("You have already applied for this job. Try another.", "#865711ff");
             return;
         }
 

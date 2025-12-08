@@ -200,63 +200,32 @@ h2 {
     color: var(--success-color);
     background: rgba(16, 185, 129, 0.1);
 }
-
 @media (max-width: 480px) {
-
     .auth-card {
-        padding: 16px;
-        max-width: 320px;
+        padding: 22px;
+        max-width: 360px;
+        transform: scale(1); /* No shrinking */
     }
 
     .auth-brand h1 {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     h2 {
-        font-size: 18px;
-    }
-
-    .form-group label {
-        font-size: 13px;
+        font-size: 19px;
     }
 
     .form-group input {
-        font-size: 13px;
-        padding: 8px;
-    }
-
-    .password-wrapper input,
-    .password-container input {
-        padding-right: 36px;
-    }
-
-    .toggle-password {
-        right: 8px;
         font-size: 14px;
-    }
-
-    .form-group.button-group {
-        flex-direction: column;
-        gap: 10px;
+        padding: 10px;
     }
 
     .btn {
-        font-size: 13px;
-        padding: 8px 16px;
-    }
-
-    .btn-sm {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-
-    .auth-link, 
-    .small {
-        font-size: 12px;
+        font-size: 14px;
+        padding: 10px 18px;
     }
 
     .message {
-        font-size: 12px;
-        padding: 8px;
+        font-size: 13px;
     }
 }
