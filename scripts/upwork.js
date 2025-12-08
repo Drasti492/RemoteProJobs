@@ -1069,17 +1069,19 @@ async function applyJob(job) {
 
     // Apply job request
     try {
-        const res = await fetch(`https://remj82.onrender.com/api/applications/apply/${job.id}`, {
+        const res = await fetch(`https://remj82.onrender.com/api/applications/apply/${String(job.id)}`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                title: job.title,
-                company: job.company,
-                description: job.description
-            })
+               jobId: String(job.id),
+               title: job.title,
+               company: job.company,
+               description: job.description
+           })
+
         });
 
         const data = await res.json();
