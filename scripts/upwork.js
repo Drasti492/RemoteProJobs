@@ -1271,3 +1271,34 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCount();
   setInterval(updateCount, 15000);
 });
+
+
+
+  // Footer legal dropdowns – pure lightweight JS
+  document.querySelectorAll('.legal-trigger').forEach(trigger => {
+    trigger.addEventListener('click', function () {
+      const item = this.closest('.legal-item');
+      const isOpen = item.classList.toggle('open');
+      
+      // Update aria for accessibility
+      this.setAttribute('aria-expanded', isOpen);
+      
+      // Close others when one opens (optional – feels cleaner)
+      document.querySelectorAll('.legal-item.open').forEach(other => {
+        if (other !== item) {
+          other.classList.remove('open');
+          other.querySelector('.legal-trigger').setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.footer-legal')) {
+      document.querySelectorAll('.legal-item.open').forEach(item => {
+        item.classList.remove('open');
+        item.querySelector('.legal-trigger').setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
