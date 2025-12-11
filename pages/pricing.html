@@ -1,141 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing — RemoteProJobs</title>
-    <link rel="stylesheet" href="../styles/pricing.css">
-    <link rel="stylesheet" href="../styles/upwork.css">
-     <link rel="stylesheet" href="../styles/notifications.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — RemoteProJobs</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../styles/upwork.css" />
+  <link rel="stylesheet" href="../styles/notifications.css" />
+  <link rel="stylesheet" href="../styles/pricing.css" />
 </head>
+
 <body>
   <header>
     <div class="container">
       <div class="logo">
-        <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
-      </div>
+        <h1><i class="fas fa-briefcase">i> RemoteProJobsh1>
+      div>
 
       <button class="nav-toggle" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
+        <i class="fas fa-bars">i>
+      button>
 
       <nav>
         <ul>
-          <li><a href="./work.html">Earn</a></li>
-          <li><a href="./companies.html">Companies</a></li>
-          <li><a href="./resources.html">Resources</a></li>
-          <li><a href="./contact.html">Contact</a></li>
-        </ul>
-      </nav>
+          <li><a href="./work.html">Earna>li>
+          <li><a href="./companies.html">Companiesa>li>
+          <li><a href="./resources.html">Resourcesa>li>
+          <li><a href="./contact.html">Contacta>li>
+        ul>
+      nav>
 
       <div class="auth-buttons">
         <a href="./profile.html" class="profile-icon" aria-label="User Profile">
-          <i class="fas fa-user"></i>
-        </a>
+          <i class="fas fa-user">i>
+        a>
 
-<!-- Notification Bell -->
-<div class="notification-wrapper">
-  <a href="./notifications.html" class="notification-icon" id="notificationBell" aria-label="Notifications">
-    <i class="fas fa-bell"></i>
-    <span class="notification-count" id="notificationCount">0</span>
-  </a>
-</div>
+        <div class="notification-wrapper">
+          <a href="./notifications.html" class="notification-icon" id="notificationBell">
+            <i class="fas fa-bell">i>
+            <span class="notification-count" id="notificationCount">0span>
+          a>
+        div>
 
+        <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">Logoutbutton>
+      div>
+    div>
+  header>
 
-        <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">
-          Logout
-        </button>
-      </div>
-    </div>
-  </header>
+  <div id="toast" class="toast">div>
 
-  <!--  Toast notification -->
-  <div id="toast" class="toast"></div>
+  <!-- Currency Selector Modal (Shows only once or when changed) -->
+  <div id="currencyModal" class="currency-modal">
+    <div class="currency-card">
+      <h2><i class="fas fa-globe">i> Select Your Currencyh2>
+      <p>We’ll show prices in your local currency</p>
+      <select id="currencySelect">
+        <option value="USD">🇺🇸 USD - US Dollaroption>
+        <option value="EUR">🇪🇺 EUR - Eurooption>
+        <option value="GBP">🇬🇧 GBP - British Poundoption>
+        <option value="NGN">🇳🇬 NGN - Nigerian Nairaoption>
+        <option value="GHS">🇬🇭 GHS - Ghanaian Cedioption>
+        <option value="KES">🇰🇪 KES - Kenyan Shillingoption>
+        <option value="ZAR">🇿🇦 ZAR - South African Randoption>
+        <option value="INR">🇮🇳 INR - Indian Rupeeoption>
+        <option value="CAD">🇨🇦 CAD - Canadian Dollaroption>
+        <option value="AUD">🇦🇺 AUD - Australian Dollaroption>
+      select>
+      <button id="saveCurrencyBtn" class="btn btn-primary btn-full">Continue →button>
+    div>
+  div>
 
-    <section class="pricing-section">
-        <div class="container">
-            <h1>Purchase Connects to Apply</h1>
-            <p>Unlock premium job opportunities with our Connects token, payable via PayPal.</p>
-            <ul class="pricing p-yel">
-                <li><h3>Get Connects Token</h3></li>
-                <li><big>$10.4</big></li>
-                <li>Get Your Account Verified to Post a Job</li>
-                <li>Access to Top USA Clients</li>
-                <li>Priority Job Applications</li>
-                <li>Connect with Leading Employers</li>
-                <li class="notification">Purchasing Connects is temporarily unavailable due to system maintenance. Please contact the admin for assistance at <a href="tel:+1-915-503-2586">+1-915-503-2586</a> to get your Connects!</li>
-                <li><button onclick="window.location.href='https://wa.me/19155032586?text=I%20want%20to%20purchase%20the%20RemoteProJobs%20Connects%20token%20for%20$10.4'">Contact Admin</button></li>
-            </ul>
-        </div>
-    </section>
-
-    <footer>
+  <main class="pricing-main">
     <div class="container">
-        <div class="footer-columns">
-            <div class="footer-column">
-                <h3><i class="fas fa-briefcase"></i> RemoteProJobs</h3>
-                <p>Connecting talent with opportunity. Find your dream job or the perfect candidate.</p>
-             
-            </div>
-            <div class="footer-column">
-                <h4>For Job Seekers</h4>
-               <ul>
-        <li><a href="./work.html">Earn</a></li>
-        <li><a href="./companies.html">Companies</a></li>
-        <li><a href="./resources.html">Resources</a></li>
-        <li><a href="./contact.html">Contact</a></li>
-        <li><a href="./pricing.html">Buy Connects</a></li>
-      </ul>
-            </div>
-           
-            <div class="footer-column">
-                <h4>Contact Us</h4>
-                <ul class="contact-info">
-                <ul class="contact-info">
-                    <li><i class="fas fa-map-marker-alt"></i> 201 E Main St, Suite 500, El Paso, TX 79901.</li>
-                    <li><i class="fas fa-phone"></i>+1-915-503-2586</li>
-                    <li><i class="fas fa-envelope"></i>remoteprojobs@gmail.com</li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
-            <div class="footer-legal">
-  <div class="legal-item">
-    <button class="legal-trigger" aria-expanded="false">
-      Privacy Policy <i class="fas fa-chevron-down"></i>
-    </button>
-    <div class="legal-dropdown">
-      <p>We only collect data needed to provide and improve our service. Your personal information is never sold to third parties.</p>
-    </div>
-  </div>
+      <div class="pricing-card">
 
-  <div class="legal-item">
-    <button class="legal-trigger" aria-expanded="false">
-      Terms of Service <i class="fas fa-chevron-down"></i>
-    </button>
-    <div class="legal-dropdown">
-      <p>By using Remote Pro Jobs, you agree to our fair usage policy, no spam, no fake accounts, and respect for all users.</p>
-    </div>
-  </div>
+        <!-- Header -->
+        <div class="pricing-header">
+          <div class="avatar">
+            <i class="fas fa-gem">i>
+          div>
+          <h2>Unlock Full Accessh2>
+          <p>Get verified & purchase Connects to apply to premium jobsp>
+        div>
 
-  <div class="legal-item">
-    <button class="legal-trigger" aria-expanded="false">
-      Accessibility <i class="fas fa-chevron-down"></i>
-    </button>
-    <div class="legal-dropdown">
-      <p>We are committed to WCAG 2.1 standards and continuously improve keyboard navigation, screen reader support, and contrast.</p>
-    </div>
-  </div>
-</div>
-        </div>
-    </div>
-</footer>
+        <!-- Price Display -->
+        <div class="price-display">
+          <div class="currency-flag" id="currencyFlag">🇺🇸div>
+          <div class="price-amount" id="priceAmount">$10.40div>
+          <div class="price-label">One-time paymentdiv>
+        div>
 
-    <script src="../scripts/nav.js"></script>
-    <script src="../scripts/authGuard.js"></script>
-    <script src="../scripts/notifications.js"></script>
+        <!-- Features -->
+        <div class="info-section">
+          <div class="info-row"><i class="fas fa-check-circle">i> <strong>Account Verified Instantlystrong>div>
+          <div class="info-row"><i class="fas fa-rocket">i> <strong>Priority Job Applicationsstrong>div>
+          <div class="info-row"><i class="fas fa-users">i> <strong>Access Top USA Clientsstrong>div>
+          <div class="info-row"><i class="fas fa-shield-alt">i> <strong>Trusted & Securestrong>div>
+        div>
 
-</body>
-</html>
+        <!-- CTA Button -->
+        <div class="profile-actions">
+          <button class="btn btn-success btn-full" onclick="window.location.href='https://wa.me/19155032586?text=I%20want%20to%20purchase%20RemoteProJobs%20Connects%20for%20the%20price%20shown'">
+            <i class="fab fa-whatsapp">i> Buy via WhatsApp
+          button>
+          <button class="btn btn-outline btn-full" id="changeCurrencyBtn">
+            <i class="fas fa-exchange-alt">i> Change Currency
+          button>
+        div>
+
+        <!-- Note -->
+        <p style="text-align:center; margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
+          Purchasing temporarily via WhatsApp • Admin will verify manually
+        p>
+      div>
+    div>
+  main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 RemoteProJobs. All rights reserved.p>
+    div>
+  footer>
+
+  <script src="../scripts/nav.js"></script>
+  <script src="../scripts/notifications.js"></script>
+  <script src="../scripts/pricing.js"></script>
+body>
+html>

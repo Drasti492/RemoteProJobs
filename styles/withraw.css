@@ -1,132 +1,194 @@
-/* Withdrawal Page Additions */
-.balance-info {
-    margin: 20px 0;
-    background: var(--light-gray);
-    padding: 20px;
-    border-radius: 8px;
+/* styles/withraw.css — Redesigned to match profile.css with adaptations for withdrawal page */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+
+.withdraw-main {
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e2ecec 0%, #d5dde0 100%);
 }
 
-.tasks-completed {
-    margin: 20px 0;
-    background: var(--white);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+.container {
+  max-width: 520px;
+  margin: 0 auto;
 }
 
-.tasks-completed h3 {
-    font-size: 20px;
-    color: var(--dark-color);
-    margin-bottom: 15px;
+.withdraw-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
 }
 
-.tasks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* BANNERS — BIG & BOLD (Same as profile) */
+.status-banner {
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 1.05rem;
+  border-bottom: none;
+}
+.status-banner.red {
+  background: #fee2e2;
+  color: #991b1b;
+  border-bottom: 5px solid #ef4444;
+}
+.status-banner.green {
+  background: #ecfdf5;
+  color: #065f46;
+  border-bottom: 5px solid #10b981;
+}
+.status-banner i {
+  font-size: 2rem;
+}
+.btn-verify {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+.btn-verify:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
 }
 
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid var(--light-gray);
+/* HEADER (Adapted for Withdraw) */
+.withdraw-header {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  text-align: center;
+  padding: 3.5rem 1.5rem 2.5rem;
+}
+.avatar {
+  width: 110px; height: 110px;
+  background: rgba(255,255,255,0.25);
+  border: 6px solid white;
+  border-radius: 50%;
+  margin: 0 auto 1.2rem;
+  font-size: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.withdraw-header h2 { font-size: 1.9rem; font-weight: 700; margin: 0.6rem 0; }
+.disclaimer { opacity: 0.9; font-size: 1.05rem; margin-top: 0.5rem; }
+
+/* STATS (Adapted, removed one stat) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  background: #f1f5f9;
+  padding: 1.8rem;
+  text-align: center;
+  gap: 1rem;
+}
+.stat i { font-size: 2rem; color: #10b981; margin-bottom: 0.6rem; }
+.stat .number { font-size: 1.8rem; font-weight: 800; color: #1e293b; }
+.stat .label { font-size: 0.95rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.6px; }
+
+/* INFO SECTIONS (Forms adapted to rows) */
+.info-section {
+  padding: 1.8rem;
+  background: white;
+}
+.info-section h3 { font-size: 1.4rem; margin-bottom: 1rem; color: #1e293b; }
+.form-group { margin-bottom: 1.2rem; }
+.info-row {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  font-size: 1.1rem;
+}
+.info-row label { display: flex; align-items: center; gap: 8px; font-weight: 500; margin-bottom: 0.5rem; }
+.info-row input, .info-row select {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f8fafc;
+  width: 100%;
+}
+.tax-notice { font-size: 0.95rem; color: #64748b; margin: 1rem 0; }
+
+/* TASKS SECTION */
+.tasks-section .tasks-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.tasks-list div { padding: 0.8rem 0; border-bottom: 1px solid #e2e8f0; font-size: 1rem; }
+.tasks-list div:last-child { border: none; }
+
+/* SLIDEVIEW NOTIFICATION (Custom slide-in near button) */
+.notification-slide {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  display: none;
+}
+.notification-slide.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+.notification-slide.success {
+  background: #ecfdf5;
+  color: #065f46;
 }
 
-.task-item:last-child {
-    border-bottom: none;
+/* ACTIONS (Same as profile) */
+.profile-actions {
+  padding: 1.8rem;
+  display: grid;
+  gap: 14px;
 }
-
-.task-item span {
-    font-size: 14px;
-    color: var(--dark-color);
+.btn-full {
+  width: 100%; padding: 18px; font-size: 1.15rem; border-radius: 14px;
+  font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px;
 }
+.btn-primary { background: #10b981; color: white; border: none; }
+.btn-primary:hover { background: #059669; }
+.btn-outline { background: transparent; border: 2px solid #10b981; color: #10b981; }
+.btn-outline:hover { background: #10b981; color: white; }
 
-.withdrawal-form {
-    margin: 20px 0;
-    padding: 20px;
-    background: var(--light-gray);
-    border-radius: 8px;
-}
-
-.withdrawal-form h3 {
-    font-size: 20px;
-    color: var(--dark-color);
-    margin-bottom: 15px;
-}
-
-.withdrawal-form p {
-    font-size: 14px;
-    color: var(--gray-color);
-    margin-bottom: 15px;
-}
-
-.withdrawal-form .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.withdrawal-form label {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--dark-color);
-}
-
-.withdrawal-form input,
-.withdrawal-form select {
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid var(--light-gray);
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.withdrawal-form input:focus,
-.withdrawal-form select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
-}
-
-.tax-notice {
-    font-size: 12px;
-    color: var(--gray-color);
-    margin-top: 10px;
-}
-
-/* Responsive Adjustments */
+/* RESPONSIVE — PERFECT ON ALL DEVICES (Same as profile) */
 @media (max-width: 480px) {
-    .tasks-completed h3,
-    .withdrawal-form h3 {
-        font-size: 18px;
-    }
-
-    .task-item span {
-        font-size: 12px;
-    }
-
-    .withdrawal-form input,
-    .withdrawal-form select {
-        font-size: 12px;
-        padding: 8px;
-    }
-
-    .tax-notice {
-        font-size: 11px;
-    }
+  .withdraw-header { padding: 2.8rem 1rem 2rem; }
+  .avatar { width: 95px; height: 95px; font-size: 2.8rem; }
+  .withdraw-header h2 { font-size: 1.7rem; }
+  .stats-grid { grid-template-columns: 1fr; gap: 1.4rem; padding: 1.6rem 1.2rem; }
+  .status-banner { padding: 1.2rem; font-size: 0.95rem; }
+  .btn-verify { padding: 11px 22px; font-size: 0.95rem; }
+  .info-row { font-size: 0.95rem; }
+  .btn-full { padding: 15px; font-size: 1rem; }
 }
 
 @media (max-width: 360px) {
-    .tasks-completed h3,
-    .withdrawal-form h3 {
-        font-size: 16px;
-    }
-
-    .task-item span {
-        font-size: 11px;
-    }
+  .withdraw-header { padding: 2.4rem 1rem 1.8rem; }
+  .avatar { width: 85px; height: 85px; font-size: 2.4rem; }
+  .withdraw-header h2 { font-size: 1.5rem; }
+  .status-banner { font-size: 0.9rem; padding: 1rem; }
+  .stats-grid { padding: 1.4rem 1rem; }
+  .info-row { font-size: 0.9rem; }
 }
