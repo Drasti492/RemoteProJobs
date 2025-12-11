@@ -1,78 +1,80 @@
-// scripts/pricing.js
+// scripts/pricing.js — FINAL & ERROR-FREE
 document.addEventListener("DOMContentLoaded", async () => {
   const PRICE_IN_USD = 10.40;
-  const priceElement = document.getElementById("priceAmount");
-  const flagElement = document.getElementById("currencyFlag");
-  const modal = document.getElementById("currencyModal");
-  const select = document.getElementById("currencySelect");
-  const saveBtn = document.getElementById("saveCurrencyBtn");
-  const changeBtn = document.getElementById("changeCurrencyBtn");
 
-  // Free API — no key needed
-  const API_URL = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json";
+  const priceEl    = document.getElementById("priceAmount");
+  const flagEl     = document.getElementById("currencyFlag");
+  const overlay    = document.getElementById("currencyOverlay");
+  const main       = document.getElementById("mainContent");
+  const select     = document.getElementById("currencySelect");
+  const continueBtn = document.getElementById("continueBtn");
+  const changeBtn  = document.getElementById("changeCurrencyBtn");
+  const contactBtn = document.getElementById("contactBtn");
 
+  const API_URL = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json";
   let rates = {};
 
-  // Load saved currency or show modal
-  const savedCurrency = localStorage.getItem("userCurrency") || "USD";
+  // Default to USD
+  let currentCurrency = "USD";
+
+  // Show overlay if no currency saved
   if (!localStorage.getItem("userCurrency")) {
-    modal.classList.add("show"); // First time → force show
+    overlay.style.display = "flex";
   } else {
-    await updatePrice(savedCurrency);
+    currentCurrency = localStorage.getItem("userCurrency");
+    main.style.display = "block";
+    await loadAndUpdatePrice(currentCurrency);
   }
 
-  // Load rates on page load
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    rates = data.usd;
-    updatePrice(savedCurrency);
-  } catch (err) {
-    priceElement.textContent = `$${PRICE_IN_USD.toFixed(2)}`;
-    flagElement.textContent = "USD";
-  }
+  // Fetch rates and update price
+  async function loadAndUpdatePrice(currency) {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      rates = data.usd;
 
-  // Save & update
-  saveBtn.addEventListener("click", () => {
-    const currency = select.value;
-    localStorage.setItem("userCurrency", currency);
-    updatePrice(currency);
-    modal.classList.remove("show");
-  });
+      const rate = rates[currency.toLowerCase()] || 1;
+      const amount = (PRICE_IN_USD * rate).toFixed(2);
 
-  changeBtn.addEventListener("click", () => {
-    modal.classList.add("show");
-    select.value = localStorage.getItem("userCurrency") || "USD";
-  });
-
-  async function updatePrice(currency) {
-    if (!rates[currency.toLowerCase()]) {
-      priceElement.textContent = `$${PRICE_IN_USD.toFixed(2)}`;
-      flagElement.textContent = getFlag(currency);
-      return;
+      priceEl.textContent = formatCurrency(amount, currency);
+      flagEl.textContent = getFlag(currency);
+    } catch (err) {
+      priceEl.textContent = "$10.40";
+      flagEl.textContent = "USD";
     }
-
-    const rate = rates[currency.toLowerCase()];
-    const converted = (PRICE_IN_USD * rate).toFixed(2);
-
-    priceElement.textContent = formatPrice(converted, currency);
-    flagElement.textContent = getFlag(currency);
   }
 
+  // Continue button
+  continueBtn.addEventListener("click", () => {
+    currentCurrency = select.value;
+    localStorage.setItem("userCurrency", currentCurrency);
+    overlay.style.display = "none";
+    main.style.display = "block";
+    loadAndUpdatePrice(currentCurrency);
+  });
+
+  // Change currency button
+  changeBtn.addEventListener("click", () => {
+    overlay.style.display = "flex";
+  });
+
+  // Contact button
+  contactBtn.addEventListener("click", () => {
+    window.location.href = "tel:+19155032586";
+  });
+
+  // Helpers
   function getFlag(code) {
-    const flags = {
-      USD: "USD", EUR: "EUR", GBP: "GBP", NGN: "NGN",
-      GHS: "GHS", KES: "KES", ZAR: "ZAR", INR: "INR",
-      CAD: "CAD", AUD: "AUD"
-    };
+    const flags = { USD:"USD", NGN:"NGN", GHS:"GHS", KES:"KES", ZAR:"ZAR", INR:"INR", EUR:"EUR", GBP:"GBP", CAD:"CAD", AUD:"AUD" };
     return flags[code] || "USD";
   }
 
-  function formatPrice(amount, currency) {
-    if (currency === "NGN") return `₦${parseFloat(amount).toLocaleString()}`;
-    if (currency === "INR") return `₹${parseFloat(amount).toLocaleString()}`;
-    if (currency === "EUR") return `€${amount}`;
-    if (currency === "GBP") return `£${amount}`;
-    return `$${amount}`;
+  function formatCurrency(amount, currency) {
+    const symbols = {
+      USD:"$", EUR:"€", GBP:"£", NGN:"₦", INR:"₹",
+      GHS:"GH₵", KES:"KSh", ZAR:"R", CAD:"$", AUD:"A$"
+    };
+    const symbol = symbols[currency] || "$";
+    return `${symbol}${parseFloat(amount).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
   }
 });
