@@ -90,11 +90,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   // =====================================================
   // LOGOUT
   // =====================================================
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.clear();
-      window.location.href = "../index.html";
-    });
-  }
+  // DELETE THIS WHOLE BLOCK FROM profile.js
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "../index.html";
+  });
+}
 });

@@ -1,8 +1,5 @@
-/* ==============================================================
-   notifications-page.css – ONLY notification page styles
-   Uses shared-layout.css for header/footer
-   All class names prefixed with .notif- to avoid conflict
-   ============================================================== */
+/* styles/notifications.css — FINAL & 100% SAFE (NO MORE HAMBURGER CONFLICT) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
   --notif-bg: #f9fafb;
@@ -27,7 +24,7 @@
   background: var(--notif-bg);
 }
 
-/* Header inside section */
+/* Header bar */
 .notif-header-bar {
   display: flex;
   justify-content: space-between;
@@ -35,7 +32,10 @@
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
-.notif-header-bar h2 { font-size: 22px; margin-bottom: 10px; }
+.notif-header-bar h2 { 
+  font-size: 22px; 
+  margin: 0 0 10px 0; 
+}
 
 /* Notification List */
 .notif-list {
@@ -54,15 +54,30 @@
   align-items: center;
   transition: transform .25s ease;
 }
-.notif-item:hover { transform: translateY(-1px); }
+.notif-item:hover { 
+  transform: translateY(-1px); 
+}
 .notif-item.unread {
   background: var(--notif-unread);
   border-left: 4px solid var(--notif-primary);
 }
-.notif-content { flex: 1; }
-.notif-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
-.notif-message { font-size: 13px; color: #555; }
-.notif-meta { font-size: 12px; color: #888; margin-top: 4px; }
+.notif-content { 
+  flex: 1; 
+}
+.notif-title { 
+  font-weight: 600; 
+  font-size: 15px; 
+  margin-bottom: 4px; 
+}
+.notif-message { 
+  font-size: 13px; 
+  color: #555; 
+}
+.notif-meta { 
+  font-size: 12px; 
+  color: #888; 
+  margin-top: 4px; 
+}
 
 /* Action Buttons */
 .notif-actions button {
@@ -78,62 +93,60 @@
   background: #dbeafe;
 }
 
-/* Bell Icon */
-.notif-bell-wrapper { position: relative; cursor: pointer; }
-.notif-bell { font-size: 20px; color: var(--notif-primary); transition: color .2s; }
-.notif-bell:hover { color: #0056b3; }
-.notif-count {
-  position: absolute; top: -6px; right: -6px;
-  background: red; color: white; font-size: 11px; font-weight: bold;
-  border-radius: 50%; min-width: 16px; height: 16px;
-  display: flex; align-items: center; justify-content: center;
-}
-
 /* Pagination */
 .notif-pagination {
-  display: flex; justify-content: center; align-items: center;
-  gap: 8px; margin: 20px 0; flex-wrap: wrap;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  gap: 8px; 
+  margin: 20px 0; 
+  flex-wrap: wrap;
 }
-.notif-pagination button, .notif-page-num {
-  width: 36px; height: 36px; display: flex; align-items: center;
-  justify-content: center; background: var(--light-color);
-  border: 1px solid var(--primary-color); color: var(--primary-color);
-  border-radius: var(--border-radius); font-size: 14px; cursor: pointer;
+.notif-pagination button, 
+.notif-page-num {
+  width: 36px; 
+  height: 36px; 
+  display: flex; 
+  align-items: center;
+  justify-content: center; 
+  background: #f9fafb;
+  border: 1px solid #007bff; 
+  color: #007bff;
+  border-radius: 8px; 
+  font-size: 14px; 
+  cursor: pointer;
 }
 .notif-pagination button:hover:not(:disabled),
-.notif-page-num:hover, .notif-page-num.active {
-  background: var(--primary-color); color: white;
+.notif-page-num:hover, 
+.notif-page-num.active {
+  background: #007bff; 
+  color: white;
 }
+
 
 /* Toast */
 .notif-toast {
-  position: fixed; bottom: 30px; right: 25px;
-  background: #323232; color: #fff; padding: 10px 16px;
-  border-radius: 8px; font-size: 14px; opacity: 0;
-  transform: translateY(20px); transition: opacity .3s, transform .3s;
-  z-index: 1500; display: none;
+  position: fixed; 
+  bottom: 30px; 
+  right: 25px;
+  background: #323232; 
+  color: #fff; 
+  padding: 10px 16px;
+  border-radius: 8px; 
+  font-size: 14px; 
+  opacity: 0;
+  transform: translateY(20px); 
+  transition: opacity .3s, transform .3s;
+  z-index: 1500; 
+  display: none;
 }
-.notif-toast.show { display: block; opacity: 1; transform: translateY(0); }
-.notification-count {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: red;
-  color: white;
-  font-size: 11px;
-  font-weight: bold;
-  border-radius: 50%;
-  min-width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+.notif-toast.show { 
+  display: block; 
+  opacity: 1; 
+  transform: translateY(0); 
 }
 
-/* ===========================
-   Global Toast Notifications
-   =========================== */
+/* Global Toast */
 .toast-container {
   position: fixed;
   top: 20px;
@@ -170,16 +183,7 @@
 .toast-item.info    { background: #2563eb; border-left-color: #1d4ed8; }
 .toast-item.warn    { background: #f97316; border-left-color: #ea580c; }
 
-.toast-item.show { opacity: 1; transform: translateY(0); }
-
-.toast-icon { font-size: 16px; }
-.toast-message { flex: 1; font-weight: 600; color: #fff; }
-.toast-close {
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,0.85);
-  padding: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  opacity: 0.95;
+.toast-item.show { 
+  opacity: 1; 
+  transform: translateY(0); 
 }

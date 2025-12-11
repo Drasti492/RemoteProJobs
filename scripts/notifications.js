@@ -17,11 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!listContainer) return;
 
-  // ==================== Shared Nav Toggle ====================
-  const navToggle = document.querySelector(".nav-toggle");
-  const nav = document.querySelector("nav");
-  navToggle?.addEventListener("click", () => nav.classList.toggle("active"));
-
   // ==================== Pagination ====================
   const PER_PAGE = 6;
   let currentPage = 1;

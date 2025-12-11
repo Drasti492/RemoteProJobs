@@ -1,34 +1,33 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Navigation toggle for all pages
-    const navToggle = document.querySelector(".nav-toggle");
-    const nav = document.querySelector("nav");
+// scripts/nav.js — FINAL & BULLETPROOF
+(() => {
+  // Run only once
+  if (window.navInitialized) return;
+  window.navInitialized = true;
 
-    if (navToggle && nav) {
-        navToggle.addEventListener("click", () => {
-            nav.classList.toggle("active");
-        });
-    }
+  const navToggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector("nav");
 
-    // Contact form submission for contact.html
-    const contactForm = document.getElementById("contact-form");
-    const messageEl = document.getElementById("contact-message");
+  if (navToggle && nav) {
+    navToggle.addEventListener("click", () => {
+      nav.classList.toggle("active");
+      document.body.classList.toggle("menu-open");
+    });
+  }
 
-    if (contactForm && messageEl) {
-        contactForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            messageEl.textContent = "Thank you! Your message has been sent..";
-            messageEl.className = "message success";
-            messageEl.style.display = "block";
-            setTimeout(() => {
-                messageEl.style.display = "none";
-            }, 3000);
-            contactForm.reset();
-        });
-    }
-});
- // Logout button handler
-  logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userEmail');
-    window.location.href = '../index.html';
+  // Close when clicking a link
+  document.querySelectorAll("nav a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("active");
+      document.body.classList.remove("menu-open");
+    });
   });
+
+  // Logout
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "../index.html";
+    });
+  }
+})();
