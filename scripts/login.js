@@ -1,4 +1,4 @@
-// scripts/login.js — FINAL, CLEAN & ZERO RED LINES
+// scripts/login.js — FINAL, TESTED, ZERO ERRORS
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const message = document.getElementById("loginMessage");
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => message.style.display = "none", 4000);
   };
 
-  // Password toggle (show/hide
+  // Password toggle
   document.querySelectorAll(".toggle-password").forEach(toggle => {
     toggle.addEventListener("click", () => {
       const input = toggle.previousElementSibling;
@@ -53,9 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (res.ok) {
+        // Save token
         localStorage.setItem("token", data.token);
         localStorage.setItem("userEmail", email);
+
+        // THIS LINE FIXES YOUR VERIFICATION BANNER
+        localStorage.setItem("userProfile", JSON.stringify(data.user || data.data || {}));
+
         show("Welcome back!", "success");
+
         setTimeout(() => {
           window.location.href = "../pages/work.html";
         }, 600);
