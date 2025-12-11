@@ -41,7 +41,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <!-- CURRENCY SELECTION FIRST (Forced) -->
+  <!-- CURRENCY SELECTION FIRST (Forced every time on load) -->
   <div id="currencyOverlay" class="currency-overlay">
     <div class="currency-box">
       <i class="fas fa-globe"></i>
@@ -70,8 +70,10 @@
 
         <div class="pricing-header">
           <div class="avatar"><i class="fas fa-gem"></i></div>
-          <h2>Buy Connects Token</h2>
-          <p>Get verified & unlock premium job applications instantly</p>
+          <h2 class="if-not-verified">Get Verified</h2>
+          <h2 class="if-verified">Add Connects</h2>
+          <p class="if-not-verified">Get verified & unlock premium job applications instantly</p>
+          <p class="if-verified">Add connects for more options or chances</p>
         </div>
 
         <div class="price-display">
@@ -80,8 +82,8 @@
           <span class="price-label">One-time payment • Lifetime access</span>
         </div>
 
-        <!-- Benefits -->
-        <div class="info-section">
+        <!-- Benefits (Dynamic) -->
+        <div class="info-section if-not-verified" style="display:none;">
           <div class="info-row"><i class="fas fa-check-circle"></i> Instant Account Verification</div>
           <div class="info-row"><i class="fas fa-rocket"></i> Priority Job Applications</div>
           <div class="info-row"><i class="fas fa-users"></i> Access Top USA Clients</div>
@@ -89,7 +91,15 @@
           <div class="info-row"><i class="fas fa-headset"></i> 24/7 Dedicated Support</div>
         </div>
 
-        <!-- Professional Notice (After benefits) -->
+        <div class="info-section if-verified" style="display:none;">
+          <div class="info-row"><i class="fas fa-check-circle"></i> Your Account is Verified</div>
+          <div class="info-row"><i class="fas fa-bolt"></i> Add More Connects</div>
+          <div class="info-row"><i class="fas fa-rocket"></i> Unlock More Job Opportunities</div>
+          <div class="info-row"><i class="fas fa-users"></i> Apply to Premium Listings</div>
+          <div class="info-row"><i class="fas fa-headset"></i> 24/7 Dedicated Support</div>
+        </div>
+
+        <!-- Professional Notice -->
         <div class="system-notice">
           <i class="fas fa-info-circle"></i>
           <div class="notice-text">
@@ -120,9 +130,10 @@
       <p>© 2025 RemoteProJobs. All rights reserved.</p>
     </div>
   </footer>
-
-  <script src="../scripts/nav.js"></script>
-  <script src="../scripts/notifications.js"></script>
+<script src="../scripts/nav.js"></script>
+  <script src="../scripts/userStatus.js"></script>
   <script src="../scripts/pricing.js"></script>
+  <script src="../scripts/notifications.js"></script>
+   <script src="../scripts/notificationBell.js"></script>
 </body>
 </html>

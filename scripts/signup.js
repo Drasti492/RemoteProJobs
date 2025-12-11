@@ -1,77 +1,81 @@
-// scripts/signup.js
+// scripts/signup.js — FINAL & FASTEST VERSION
 document.addEventListener("DOMContentLoaded", () => {
-  const signupForm = document.getElementById("signupForm");
-  const signupMessage = document.getElementById("signupMessage");
-  const togglePassword = document.querySelectorAll(".toggle-password");
-  const backHomeBtn = document.querySelector(".back-home-btn");
+  const form = document.getElementById("signupForm");
+  const message = document.getElementById("signupMessage");
 
-  function showMessage(text, type = "error") {
-    signupMessage.textContent = text;
-    signupMessage.className = `message ${type}`;
-    signupMessage.style.display = "block";
-  }
+  const show = (text, type = "error") => {
+    message.textContent = text;
+    message.className = `message ${type}`;
+    message.style.display = "block";
+    setTimeout(() => message.style.display = "none", 4000);
+  };
 
-  togglePassword.forEach((toggle) => {
+  // Password toggle
+  document.querySelectorAll(".toggle-password").forEach(toggle => {
     toggle.addEventListener("click", () => {
       const input = toggle.previousElementSibling;
-      const isPassword = input.type === "password";
-      input.type = isPassword ? "text" : "password";
-      toggle.querySelector("i").classList.toggle("fa-eye", isPassword);
-      toggle.querySelector("i").classList.toggle("fa-eye-slash", !isPassword);
+      const icon = toggle.querySelector("i");
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+      } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+      }
     });
   });
 
-  if (backHomeBtn) {
-    backHomeBtn.addEventListener("click", () => {
-      window.location.href = "../index.html";
-    });
-  }
+  // Back home
+  document.querySelector(".back-home-btn")?.addEventListener("click", () => {
+    window.location.href = "../index.html";
+  });
 
-  signupForm.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const formData = new FormData(signupForm);
-    const formDataEntries = {};
-    for (const [key, value] of formData.entries()) {
-      formDataEntries[key] = value.trim();
+
+    const name = form.name.value.trim();
+    const phone = form.phone.value.trim();
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    const confirm = form["confirm-password"].value;
+
+    if (!name || !phone || !email || !password) {
+      show("All fields are required");
+      return;
     }
-
-    const { name, phone, email, password, "confirm-password": confirmPassword } = formDataEntries;
-
-    if (!name || !phone || !email || !password || !confirmPassword) {
-      showMessage("Please fill in all fields, including phone number.");
+    if (password !== confirm) {
+      show("Passwords do not match");
       return;
     }
 
-    if (password !== confirmPassword) {
-      showMessage("Passwords do not match.");
-      return;
-    }
-
-    showMessage("Signing up...", "success");
+    const btn = form.querySelector('button[type="submit"]');
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Creating account...";
 
     try {
       const res = await fetch("https://remj82.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, email, password }),
+        body: JSON.stringify({ name, phone, email, password })
       });
 
       const data = await res.json();
-      console.log("Register API response:", data);
 
       if (res.ok) {
-        showMessage(data.message, "success");
+        show("Account created! Redirecting...", "success");
         localStorage.setItem("verifyEmail", email);
-        signupForm.reset();
-        setTimeout(() => {
-          window.location.href = "../pages/verify.html";
-        }, 1500);
+        form.reset();
+        setTimeout(() => window.location.href = "../pages/verify.html", 800);
       } else {
-        showMessage(data.message || "Registration failed. Please try again.");
+        show(data.message || "Signup failed");
+        btn.disabled = false;
+        btn.textContent = original;
       }
     } catch (err) {
-      console.error("Signup error:", err);
-      showMessage("Network error. Please try again.");
+      show("No internet connection");
+      btn.disabled = false;
+      btn.textContent = original;
     }
   });
 });

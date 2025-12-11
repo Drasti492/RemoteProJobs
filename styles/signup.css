@@ -229,3 +229,24 @@ h2 {
         font-size: 13px;
     }
 }
+
+button[type="submit"]:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+button[type="submit"]:disabled::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

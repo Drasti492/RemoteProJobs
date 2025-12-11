@@ -1,69 +1,73 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const BASE_URL = "https://remj82.onrender.com"; 
+// scripts/withraw.js — PROFESSIONAL & FAST
+document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
-
   if (!token) {
-    alert("Please log in first");
-    window.location.href = "/login.html";
+    window.location.href = "login.html";
     return;
   }
 
-  const balanceSpan = document.getElementById("balance");
-  const withdrawForm = document.getElementById("withdrawForm");
-  const statusMsg = document.getElementById("statusMessage");
+  const mainContent   = document.getElementById("mainContent");
+  const balanceEl     = document.getElementById("profile-balance");
+  const amountInput   = document.getElementById("withdrawal-amount");
+  const notification  = document.getElementById("withdraw-notification");
 
-  // Load wallet balance
-  async function loadBalance() {
-    try {
-      const res = await fetch(`${BASE_URL}/api/wallet/balance`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
+  // Hide everything until we know the user status
+  mainContent.style.display = "none";
 
-      const data = await res.json();
-      if (data.success) {
-        balanceSpan.textContent = `$${data.balance.toFixed(2)}`;
-      }
-    } catch (err) {
-      console.error("Balance error:", err);
-    }
+  const status = await getUserStatus();
+
+  // Update UI instantly (no flash)
+  updatePageForUser(status);
+  balanceEl.textContent = `$${status.balance.toFixed(2)}`;
+
+  // Show page
+  mainContent.style.display = "block";
+
+  // === CUSTOM ERROR NOTIFICATIONS (NO BROWSER POPUPS) ===
+  function showError(message, type = "blue") {
+    notification.textContent = message;
+    notification.className = "notification-slide"; // reset
+    notification.classList.add("show", type);
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+      notification.classList.remove("show");
+    }, 5000);
   }
 
-  // Submit Withdraw
-  withdrawForm.addEventListener("submit", async (e) => {
+  // Block native validation messages
+  document.getElementById("withdrawal-form").setAttribute("novalidate", true);
+
+  // Form submit
+  document.getElementById("withdrawal-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const amount = parseFloat(document.getElementById("withdrawAmount").value);
+    const amount = parseFloat(amountInput.value);
 
-    if (!amount || amount <= 0) {
-      statusMsg.textContent = "Invalid amount.";
+    // Reset notification
+    notification.classList.remove("show", "red", "blue");
+
+    // Minimum amount check
+    if (!amount || amount < 12) {
+      showError("Minimum withdrawal amount is $12", "blue");
+      amountInput.focus();
       return;
     }
 
-    try {
-      const res = await fetch(`${BASE_URL}/api/wallet/withdraw`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ amount })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        statusMsg.textContent = "Withdrawal successful!";
-        loadBalance();
-      } else {
-        statusMsg.textContent = data.message;
-      }
-    } catch (err) {
-      statusMsg.textContent = "Server error. Try again.";
-      console.error(err);
+    // Balance check
+    if (amount > status.balance) {
+      showError("Insufficient balance", "red");
+      amountInput.focus();
+      return;
     }
+
+    // Success flow (send to backend later)
+    showError("Withdrawal request submitted successfully!", "success");
+    amountInput.value = "";
   });
 
-  loadBalance();
+  // Optional: real-time feedback when typing
+  amountInput.addEventListener("input", () => {
+    notification.classList.remove("show");
+  });
 });

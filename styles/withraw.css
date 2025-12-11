@@ -192,3 +192,42 @@ body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; li
   .stats-grid { padding: 1.4rem 1rem; }
   .info-row { font-size: 0.9rem; }
 }
+
+
+/* Professional Slide-in Notifications */
+.notification-slide {
+  padding: 14px 20px;
+  margin: 16px 0;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s ease;
+  display: none;
+}
+
+.notification-slide.show {
+  opacity: 1;
+  transform: translateY(0);
+  display: block;
+}
+
+.notification-slide.blue {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.notification-slide.red {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.notification-slide.success {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}

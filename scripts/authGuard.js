@@ -104,3 +104,58 @@ function redirectToLogin() {
       });
     }
   });
+
+
+
+  // scripts/notificationBell.js
+// This file runs on EVERY page: profile.html, pricing.html, withraw.html, work.html, etc.
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const bell = document.getElementById("notificationBell");
+  const countSpan = document.getElementById("notificationCount");
+
+  if (!bell || !count) return;
+
+  async function updateNotificationCount() {
+    try {
+      const res = await fetch("https://remj82.onrender.com/api/notifications", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error();
+
+      const notifications = await res.json();
+      const unreadCount = notifications.filter(n => !n.read).length;
+
+      count.textContent = unreadCount > 9 ? "9+" : unreadCount;
+      count.style.display = unreadCount > 0 ? "flex" : "none";
+
+    } catch (err) {
+      console.warn("Notification count failed to load");
+      count.style.display = "none";
+    }
+  }
+
+  // Click bell → mark all as read + go to notifications
+  bell.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      await fetch("https://remj82.onrender.com/api/notifications/mark-all-read", {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      count.style.display = "none";
+    } catch (err) {
+      console.error("Failed to mark notifications as read");
+    } finally {
+      window.location.href = "./notifications.html";
+    }
+  });
+
+  // Load now + every 15 seconds
+  updateNotificationCount();
+  setInterval(updateNotificationCount, 15000);
+});

@@ -1,33 +1,42 @@
-// scripts/pricing.js — FINAL & ERROR-FREE
+// scripts/pricing.js — FINAL, CLEAN & ZERO ERRORS
 document.addEventListener("DOMContentLoaded", async () => {
   const PRICE_IN_USD = 10.40;
-
-  const priceEl    = document.getElementById("priceAmount");
-  const flagEl     = document.getElementById("currencyFlag");
-  const overlay    = document.getElementById("currencyOverlay");
-  const main       = document.getElementById("mainContent");
-  const select     = document.getElementById("currencySelect");
+  const priceEl = document.getElementById("priceAmount");
+  const flagEl = document.getElementById("currencyFlag");
+  const overlay = document.getElementById("currencyOverlay");
+  const mainContent = document.getElementById("mainContent");
+  const select = document.getElementById("currencySelect");
   const continueBtn = document.getElementById("continueBtn");
-  const changeBtn  = document.getElementById("changeCurrencyBtn");
+  const changeBtn = document.getElementById("changeCurrencyBtn");
   const contactBtn = document.getElementById("contactBtn");
 
   const API_URL = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json";
+
   let rates = {};
 
-  // Default to USD
-  let currentCurrency = "USD";
+  // Force currency prompt every time on page load (no auto-skip)
+  overlay.style.display = "flex";
+  mainContent.style.display = "none";
 
-  // Show overlay if no currency saved
-  if (!localStorage.getItem("userCurrency")) {
-    overlay.style.display = "flex";
-  } else {
-    currentCurrency = localStorage.getItem("userCurrency");
-    main.style.display = "block";
-    await loadAndUpdatePrice(currentCurrency);
+  // Load saved currency as default in select if exists
+  const savedCurrency = localStorage.getItem("userCurrency");
+  if (savedCurrency) {
+    select.value = savedCurrency;
   }
 
-  // Fetch rates and update price
-  async function loadAndUpdatePrice(currency) {
+  // Get user status (no flash - hide all dynamic parts first)
+  document.querySelectorAll(".if-verified, .if-not-verified").forEach(el => el.style.display = "none");
+
+  const status = await getUserStatus();
+
+  if (status.verified) {
+    document.querySelectorAll(".if-verified").forEach(el => el.style.display = "block");
+  } else {
+    document.querySelectorAll(".if-not-verified").forEach(el => el.style.display = "block");
+  }
+
+  // Load exchange rates
+  async function loadRatesAndUpdate(currency) {
     try {
       const res = await fetch(API_URL);
       const data = await res.json();
@@ -37,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const amount = (PRICE_IN_USD * rate).toFixed(2);
 
       priceEl.textContent = formatCurrency(amount, currency);
-      flagEl.textContent = getFlag(currency);
+      flagEl.textContent  = getFlag(currency);
     } catch (err) {
       priceEl.textContent = "$10.40";
       flagEl.textContent = "USD";
@@ -46,11 +55,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Continue button
   continueBtn.addEventListener("click", () => {
-    currentCurrency = select.value;
-    localStorage.setItem("userCurrency", currentCurrency);
+    const currency = select.value;
+    localStorage.setItem("userCurrency", currency);
     overlay.style.display = "none";
-    main.style.display = "block";
-    loadAndUpdatePrice(currentCurrency);
+    mainContent.style.display = "block";
+    loadRatesAndUpdate(currency);
   });
 
   // Change currency button
@@ -58,12 +67,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     overlay.style.display = "flex";
   });
 
-  // Contact button
+  // Contact button → Dynamic message based on verification
   contactBtn.addEventListener("click", () => {
-    window.location.href = "tel:+19155032586";
+    const phone = "19155032586"; // Your number without +
+    const currency = select.value || "USD";
+    const amount = priceEl.textContent.trim() || "$10.40";
+
+    let message;
+    if (status.verified) {
+      message = encodeURIComponent(
+        `Hello Remote ProJobs support team, I need to add more connects for ${amount} (${currency}).`
+      );
+    } else {
+      message = encodeURIComponent(
+        "Hello Remote ProJobs Support! I need to purchase Connects Token / Get Verified. Please help me activate my account instantly."
+      );
+    }
+
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
   });
 
-  // Helpers
   function getFlag(code) {
     const flags = { USD:"USD", NGN:"NGN", GHS:"GHS", KES:"KES", ZAR:"ZAR", INR:"INR", EUR:"EUR", GBP:"GBP", CAD:"CAD", AUD:"AUD" };
     return flags[code] || "USD";

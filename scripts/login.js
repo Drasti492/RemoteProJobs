@@ -1,102 +1,73 @@
-// scripts/login.js
+// scripts/login.js — FINAL, CLEAN & ZERO RED LINES
 document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.getElementById("loginForm");
-  const loginMessage = document.getElementById("loginMessage");
-  const togglePassword = document.querySelector(".toggle-password");
-  const backHomeBtn = document.querySelector(".back-home-btn");
+  const form = document.getElementById("loginForm");
+  const message = document.getElementById("loginMessage");
 
-  // Helper for showing messages
-  const showMessage = (text, type = "error") => {
-    loginMessage.textContent = text;
-    loginMessage.className = `message ${type}`;
-    loginMessage.style.display = "block";
+  if (!form || !message) return;
+
+  const show = (text, type = "error") => {
+    message.textContent = text;
+    message.className = `message ${type}`;
+    message.style.display = "block";
+    setTimeout(() => message.style.display = "none", 4000);
   };
 
-  // Toggle password visibility
-  if (togglePassword) {
-    togglePassword.addEventListener("click", () => {
-      const input = togglePassword.previousElementSibling;
-      const isPassword = input.type === "password";
-      input.type = isPassword ? "text" : "password";
-      togglePassword.querySelector("i").classList.toggle("fa-eye", isPassword);
-      togglePassword.querySelector("i").classList.toggle("fa-eye-slash", !isPassword);
+  // Password toggle (show/hide
+  document.querySelectorAll(".toggle-password").forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const input = toggle.previousElementSibling;
+      const icon = toggle.querySelector("i");
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+      } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+      }
     });
-  }
+  });
 
-  // Back home button
-  if (backHomeBtn) {
-    backHomeBtn.addEventListener("click", () => {
-      window.location.href = "../index.html";
-    });
-  }
-
-  // Login form submission
-  loginForm.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(loginForm);
-    const email = formData.get("email").trim();
-    const password = formData.get("password").trim();
+    const email = form.email.value.trim();
+    const password = form.password.value;
 
     if (!email || !password) {
-      showMessage("Please fill in both email and password.");
+      show("Email and password are required");
       return;
     }
 
-    showMessage("Logging in...", "success");
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Logging in...";
 
     try {
-      // Login API call
       const res = await fetch("https://remj82.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password })
       });
 
       const data = await res.json();
-      console.log("Login API response:", data);
 
-      if (!res.ok || !data.token) {
-        showMessage(data.message || "Login failed. Please check your credentials.");
-        return;
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userEmail", email);
+        show("Welcome back!", "success");
+        setTimeout(() => {
+          window.location.href = "../pages/work.html";
+        }, 600);
+      } else {
+        show(data.message || "Invalid email or password");
+        btn.disabled = false;
+        btn.textContent = originalText;
       }
-
-      // Save token & email
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userEmail", email);
-
-      // Fetch user profile
-      try {
-        const profileRes = await fetch("https://remj82.onrender.com/api/auth/user", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${data.token}`,
-            "Content-Type": "application/json"
-          }
-        });
-
-        const profileData = await profileRes.json();
-        console.log("Fetched profile:", profileData);
-
-        if (profileData.success && profileData.user) {
-          localStorage.setItem("userProfile", JSON.stringify(profileData.user));
-        } else {
-          console.warn("Profile not found or invalid response");
-        }
-      } catch (profileErr) {
-        console.error("Error fetching profile:", profileErr);
-      }
-
-      // Redirect to main work page
-      showMessage("Login successful! please wait...", "success");
-      loginForm.reset();
-      setTimeout(() => {
-        window.location.href = "work.html";
-      }, 1500);
-
     } catch (err) {
-      console.error("Login error:", err);
-      showMessage("Network error. Please try again.");
+      show("No internet connection");
+      btn.disabled = false;
+      btn.textContent = originalText;
     }
   });
 });
