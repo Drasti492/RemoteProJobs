@@ -48,6 +48,24 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+if (!strongPasswordRegex.test(password)) {
+  show(
+    "Password must be at least 8 characters and include uppercase, lowercase, and a number (e.g. A258100b)"
+  );
+  return;
+}
+
+const phoneRegex = /^\+?[0-9]{8,15}$/;
+
+if (!phoneRegex.test(phone)) {
+  show("Enter a valid phone number (numbers only, 8–15 digits)");
+  return;
+}
+
+
+
     const btn = form.querySelector('button[type="submit"]');
     const originalText = btn.textContent;
     btn.disabled = true;
