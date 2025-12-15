@@ -18,7 +18,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Update UI instantly (no flash)
   updatePageForUser(status);
+  if (status.verified) {
   balanceEl.textContent = `$${status.balance.toFixed(2)}`;
+} else {
+  balanceEl.textContent = "$0.00";
+}
+
 
   // Show page
   mainContent.style.display = "block";

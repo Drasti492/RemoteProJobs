@@ -22,25 +22,42 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
   let allNotifications = [];
 
+
   // ==================== Time Ago Helper ====================
-  function timeAgo(dateString) {
-    const now = new Date();
-    const past = new Date(dateString);
-    const seconds = Math.floor((now - past) / 1000);
-    const intervals = [
-      { label: "year", sec: 31536000 },
-      { label: "month", sec: 2592000 },
-      { label: "day", sec: 86400 },
-      { label: "hour", sec: 3600 },
-      { label: "minute", sec: 60 },
-      { label: "second", sec: 1 }
-    ];
-    for (const { label, sec } of intervals) {
-      const count = Math.floor(seconds / sec);
-      if (count >= 1) return count === 1 ? `1 ${label} ago` : `${count} ${label}s ago`;
-    }
+
+function formatNotificationTime(notification) {
+  const rawDate = notification.createdAt || notification.date;
+  const date = new Date(rawDate);
+
+  // Safety check
+  if (!rawDate || isNaN(date.getTime())) {
+    return "—";
+  }
+
+  const now = new Date();
+  const diffMs = now - date;
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours   = Math.floor(diffMinutes / 60);
+  const diffDays    = Math.floor(diffHours / 24);
+
+  // ⏱ Same day → relative time
+  if (diffDays === 0) {
+    if (diffHours > 0) return `${diffHours}h ago`;
+    if (diffMinutes > 0) return `${diffMinutes}m ago`;
     return "Just now";
   }
+
+  // 📅 Older → exact timestamp (professional style)
+  return date.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
 
   // ==================== Render Notifications ====================
   function render() {
@@ -63,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="notif-content">
           <div class="notif-title">${notif.title || "Notification"}</div>
           <div class="notif-message">${notif.message}</div>
-          <div class="notif-meta">${timeAgo(notif.createdAt)}</div>
+          <div class="notif-meta">${formatNotificationTime(notif)}</div>
         </div>
         <div class="notif-actions">
           ${!notif.read ? `<button class="btn-mark-read" data-id="${notif._id}">Mark Read</button>` : ""}
@@ -158,7 +175,12 @@ function attachItemListeners() {
       const res = await fetch("https://remj82.onrender.com/api/notifications", { headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) throw new Error("Failed to fetch notifications");
       const data = await res.json();
-      allNotifications = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+     allNotifications = data.sort((a, b) => {
+          const dateA = new Date(a.createdAt || a.date);
+          const dateB = new Date(b.createdAt || b.date);
+          return dateB - dateA;
+       });
+
 
       const unreadCount = allNotifications.filter(n => !n.read).length;
       if (notificationCount) {
