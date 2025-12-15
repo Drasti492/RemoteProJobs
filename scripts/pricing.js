@@ -101,3 +101,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     return `${symbol}${parseFloat(amount).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
   }
 });
+document.getElementById("payBtn").onclick = async () => {
+  await fetch("https://remj82.onrender.com/api/payments/stk-push", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    },
+    body: JSON.stringify({ phone: "07XXXXXXXX" })
+  });
+};
