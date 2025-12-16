@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  // DISPLAY ONLY (KES 1340 is charged in backend)
   const PRICE_IN_USD = 10.4;
 
   const priceEl = document.getElementById("priceAmount");
@@ -13,15 +14,83 @@ document.addEventListener("DOMContentLoaded", async () => {
   const API_URL =
     "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json";
 
-  // Force currency selection
+  // ===============================
+  // UI HELPERS
+  // ===============================
+  function showToast(message, success = true) {
+    let toast = document.getElementById("paymentToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "paymentToast";
+      toast.style.position = "fixed";
+      toast.style.bottom = "30px";
+      toast.style.right = "30px";
+      toast.style.padding = "16px 22px";
+      toast.style.borderRadius = "12px";
+      toast.style.fontSize = "14px";
+      toast.style.color = "#fff";
+      toast.style.zIndex = "9999";
+      toast.style.boxShadow = "0 10px 30px rgba(0,0,0,.25)";
+      document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+    toast.style.background = success ? "#16a34a" : "#dc2626";
+    toast.style.display = "block";
+
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 5000);
+  }
+
+  function showPhoneModal(onSubmit) {
+    const modal = document.createElement("div");
+    modal.style.position = "fixed";
+    modal.style.inset = "0";
+    modal.style.background = "rgba(0,0,0,.5)";
+    modal.style.display = "flex";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+    modal.style.zIndex = "10000";
+
+    modal.innerHTML = `
+      <div style="background:#fff;padding:24px;border-radius:14px;width:320px">
+        <h3 style="margin-bottom:10px">M-Pesa Payment</h3>
+        <p style="font-size:13px;margin-bottom:12px">
+          Enter your M-Pesa phone number to receive the STK prompt.
+        </p>
+        <input
+          id="mpesaPhoneInput"
+          type="tel"
+          placeholder="07XXXXXXXX"
+          style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd"
+        />
+        <button id="confirmPayBtn"
+          style="margin-top:14px;width:100%;padding:10px;border-radius:8px;background:#16a34a;color:#fff;border:none">
+          Send STK Prompt
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById("confirmPayBtn").onclick = () => {
+      const phone = document.getElementById("mpesaPhoneInput").value.trim();
+      if (!phone) return;
+      document.body.removeChild(modal);
+      onSubmit(phone);
+    };
+  }
+
+  // ===============================
+  // INITIAL STATE
+  // ===============================
   overlay.style.display = "flex";
   mainContent.style.display = "none";
 
-  // Load saved currency
   const savedCurrency = localStorage.getItem("userCurrency");
   if (savedCurrency) select.value = savedCurrency;
 
-  // Hide dynamic blocks first
   document
     .querySelectorAll(".if-verified, .if-not-verified")
     .forEach(el => (el.style.display = "none"));
@@ -34,7 +103,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll(".if-not-verified").forEach(el => (el.style.display = "block"));
   }
 
-  // Load currency rates
+  // ===============================
+  // CURRENCY CONVERSION (DISPLAY)
+  // ===============================
   async function loadRates(currency) {
     try {
       const res = await fetch(API_URL);
@@ -62,46 +133,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     overlay.style.display = "flex";
   };
 
-  // 🔥 STK PUSH BUTTON (REAL PAYMENT)
-  payBtn.onclick = async () => {
+  // ===============================
+  // STK PUSH PAYMENT
+  // ===============================
+  payBtn.onclick = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Please login first.");
+      showToast("Please login first", false);
       return;
     }
 
-    const phone = prompt("Enter your M-Pesa phone number (07XXXXXXXX)");
-    if (!phone) return;
+    showPhoneModal(async phone => {
+      payBtn.disabled = true;
+      payBtn.textContent = "Sending STK Prompt...";
 
-    payBtn.disabled = true;
-    payBtn.textContent = "Sending STK Prompt...";
+      try {
+        const res = await fetch(
+          "https://remj82.onrender.com/api/payments/stk-push",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ phone })
+          }
+        );
 
-    try {
-      const res = await fetch(
-        "https://remj82.onrender.com/api/payments/stk-push",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({ phone })
+        const data = await res.json();
+
+        if (!res.ok) {
+          showToast(data.message || "Payment failed", false);
+        } else {
+          showToast("📲 STK prompt sent. Complete payment on your phone.");
         }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "Payment failed");
-      } else {
-        alert("📲 STK prompt sent. Complete payment on your phone.");
+      } catch {
+        showToast("Network error. Try again.", false);
+      } finally {
+        payBtn.disabled = false;
+        payBtn.textContent = "Proceed to Pay";
       }
-    } catch (err) {
-      alert("Network error. Try again.");
-    } finally {
-      payBtn.disabled = false;
-      payBtn.textContent = "Pay & Get Verified";
-    }
+    });
   };
 
   function formatCurrency(amount, currency) {
