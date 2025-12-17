@@ -15,22 +15,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json";
 
   // ===============================
-  // UI HELPERS
+  // TOAST
   // ===============================
   function showToast(message, success = true) {
     let toast = document.getElementById("paymentToast");
     if (!toast) {
       toast = document.createElement("div");
       toast.id = "paymentToast";
-      toast.style.position = "fixed";
-      toast.style.bottom = "30px";
-      toast.style.right = "30px";
-      toast.style.padding = "16px 22px";
-      toast.style.borderRadius = "12px";
-      toast.style.fontSize = "14px";
-      toast.style.color = "#fff";
-      toast.style.zIndex = "9999";
-      toast.style.boxShadow = "0 10px 30px rgba(0,0,0,.25)";
+      toast.style.cssText = `
+        position:fixed;
+        bottom:30px;
+        right:30px;
+        padding:16px 22px;
+        border-radius:14px;
+        font-size:14px;
+        color:#fff;
+        z-index:9999;
+        box-shadow:0 10px 30px rgba(0,0,0,.25);
+      `;
       document.body.appendChild(toast);
     }
 
@@ -43,42 +45,85 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 5000);
   }
 
+  // ===============================
+  // PAYMENT MODAL
+  // ===============================
   function showPhoneModal(onSubmit) {
     const modal = document.createElement("div");
-    modal.style.position = "fixed";
-    modal.style.inset = "0";
-    modal.style.background = "rgba(0,0,0,.5)";
-    modal.style.display = "flex";
-    modal.style.alignItems = "center";
-    modal.style.justifyContent = "center";
-    modal.style.zIndex = "10000";
+    modal.style.cssText = `
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:10000;
+    `;
 
     modal.innerHTML = `
-      <div style="background:#fff;padding:24px;border-radius:14px;width:320px">
-        <h3 style="margin-bottom:10px">M-Pesa Payment</h3>
-        <p style="font-size:13px;margin-bottom:12px">
-          Enter your M-Pesa phone number to receive the STK prompt.
+      <div style="
+        background:#fff;
+        padding:26px;
+        border-radius:18px;
+        width:340px;
+        box-shadow:0 20px 40px rgba(0,0,0,.25);
+        font-family:system-ui;
+        text-align:center;
+      ">
+        <h3 style="margin-bottom:8px">M-Pesa Payment</h3>
+        <p style="font-size:13px;color:#555;margin-bottom:14px">
+          Enter your M-Pesa number to receive the payment prompt.
         </p>
-        <input
-          id="mpesaPhoneInput"
-          type="tel"
+
+        <input id="mpesaPhoneInput"
           placeholder="07XXXXXXXX"
-          style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd"
+          style="
+            width:100%;
+            padding:12px;
+            border-radius:10px;
+            border:1px solid #ddd;
+            font-size:14px;
+          "
         />
+
         <button id="confirmPayBtn"
-          style="margin-top:14px;width:100%;padding:10px;border-radius:8px;background:#16a34a;color:#fff;border:none">
+          style="
+            margin-top:16px;
+            width:100%;
+            padding:12px;
+            border-radius:12px;
+            background:#16a34a;
+            color:#fff;
+            border:none;
+            font-weight:600;
+            cursor:pointer;
+          ">
           Send STK Prompt
         </button>
+
+        <div id="payStatus"
+          style="margin-top:14px;font-size:13px;color:#555;display:none">
+        </div>
       </div>
     `;
 
     document.body.appendChild(modal);
 
-    document.getElementById("confirmPayBtn").onclick = () => {
-      const phone = document.getElementById("mpesaPhoneInput").value.trim();
+    const btn = modal.querySelector("#confirmPayBtn");
+    const status = modal.querySelector("#payStatus");
+
+    btn.onclick = async () => {
+      const phone = modal.querySelector("#mpesaPhoneInput").value.trim();
       if (!phone) return;
-      document.body.removeChild(modal);
-      onSubmit(phone);
+
+      btn.disabled = true;
+      btn.textContent = "Processing...";
+      status.style.display = "block";
+      status.textContent = "📲 Sending STK prompt…";
+
+      await onSubmit(phone, status, () => {
+        document.body.removeChild(modal);
+      });
     };
   }
 
@@ -91,20 +136,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const savedCurrency = localStorage.getItem("userCurrency");
   if (savedCurrency) select.value = savedCurrency;
 
-  document
-    .querySelectorAll(".if-verified, .if-not-verified")
-    .forEach(el => (el.style.display = "none"));
-
-  const status = await getUserStatus();
-
-  if (status.verified) {
-    document.querySelectorAll(".if-verified").forEach(el => (el.style.display = "block"));
-  } else {
-    document.querySelectorAll(".if-not-verified").forEach(el => (el.style.display = "block"));
-  }
-
   // ===============================
-  // CURRENCY CONVERSION (DISPLAY)
+  // CURRENCY DISPLAY ONLY
   // ===============================
   async function loadRates(currency) {
     try {
@@ -134,7 +167,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   // ===============================
-  // STK PUSH PAYMENT
+  // STK PUSH
   // ===============================
   payBtn.onclick = () => {
     const token = localStorage.getItem("token");
@@ -143,10 +176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    showPhoneModal(async phone => {
-      payBtn.disabled = true;
-      payBtn.textContent = "Sending STK Prompt...";
-
+    showPhoneModal(async (phone, status, close) => {
       try {
         const res = await fetch(
           "https://remj82.onrender.com/api/payments/stk-push",
@@ -163,15 +193,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         const data = await res.json();
 
         if (!res.ok) {
-          showToast(data.message || "Payment failed", false);
-        } else {
-          showToast("📲 STK prompt sent. Complete payment on your phone.");
+          status.textContent =
+            data?.message ||
+            "Payment could not be initiated. Try again later.";
+          return;
         }
+
+        status.innerHTML =
+          "⏳ Waiting for confirmation…<br/>Check your phone.";
+
+        setTimeout(() => {
+          showToast("STK prompt sent. Complete payment on your phone.");
+          close();
+        }, 4000);
       } catch {
-        showToast("Network error. Try again.", false);
-      } finally {
-        payBtn.disabled = false;
-        payBtn.textContent = "Proceed to Pay";
+        status.textContent = "Network error. Please try again.";
       }
     });
   };
