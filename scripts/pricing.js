@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  // DISPLAY ONLY (KES 1340 is charged in backend)
   const PRICE_IN_USD = 10.4;
 
   const priceEl = document.getElementById("priceAmount");
@@ -22,17 +21,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!toast) {
       toast = document.createElement("div");
       toast.id = "paymentToast";
-      toast.style.cssText = `
-        position:fixed;
-        bottom:30px;
-        right:30px;
-        padding:16px 22px;
-        border-radius:14px;
-        font-size:14px;
-        color:#fff;
-        z-index:9999;
-        box-shadow:0 10px 30px rgba(0,0,0,.25);
-      `;
+      toast.style.position = "fixed";
+      toast.style.bottom = "24px";
+      toast.style.right = "24px";
+      toast.style.padding = "14px 20px";
+      toast.style.borderRadius = "12px";
+      toast.style.fontSize = "14px";
+      toast.style.color = "#fff";
+      toast.style.zIndex = "9999";
+      toast.style.boxShadow = "0 10px 30px rgba(0,0,0,.25)";
       document.body.appendChild(toast);
     }
 
@@ -40,90 +37,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     toast.style.background = success ? "#16a34a" : "#dc2626";
     toast.style.display = "block";
 
-    setTimeout(() => {
-      toast.style.display = "none";
-    }, 5000);
+    setTimeout(() => (toast.style.display = "none"), 5000);
   }
 
   // ===============================
-  // PAYMENT MODAL
+  // PHONE MODAL
   // ===============================
   function showPhoneModal(onSubmit) {
     const modal = document.createElement("div");
-    modal.style.cssText = `
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.55);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:10000;
-    `;
+    modal.style.position = "fixed";
+    modal.style.inset = "0";
+    modal.style.background = "rgba(0,0,0,.55)";
+    modal.style.display = "flex";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+    modal.style.zIndex = "10000";
 
     modal.innerHTML = `
-      <div style="
-        background:#fff;
-        padding:26px;
-        border-radius:18px;
-        width:340px;
-        box-shadow:0 20px 40px rgba(0,0,0,.25);
-        font-family:system-ui;
-        text-align:center;
-      ">
+      <div style="background:#fff;padding:24px;border-radius:16px;width:340px">
         <h3 style="margin-bottom:8px">M-Pesa Payment</h3>
-        <p style="font-size:13px;color:#555;margin-bottom:14px">
-          Enter your M-Pesa number to receive the payment prompt.
+        <p style="font-size:13px;margin-bottom:14px;color:#555">
+          Enter your phone number to receive the payment prompt.
         </p>
-
-        <input id="mpesaPhoneInput"
-          placeholder="07XXXXXXXX"
-          style="
-            width:100%;
-            padding:12px;
-            border-radius:10px;
-            border:1px solid #ddd;
-            font-size:14px;
-          "
-        />
-
+        <input id="mpesaPhoneInput" type="tel" placeholder="07XXXXXXXX"
+          style="width:100%;padding:12px;border-radius:10px;border:1px solid #ddd" />
         <button id="confirmPayBtn"
-          style="
-            margin-top:16px;
-            width:100%;
-            padding:12px;
-            border-radius:12px;
-            background:#16a34a;
-            color:#fff;
-            border:none;
-            font-weight:600;
-            cursor:pointer;
-          ">
+          style="margin-top:14px;width:100%;padding:12px;border-radius:10px;background:#16a34a;color:#fff;border:none;font-weight:600">
           Send STK Prompt
         </button>
-
-        <div id="payStatus"
-          style="margin-top:14px;font-size:13px;color:#555;display:none">
-        </div>
       </div>
     `;
 
     document.body.appendChild(modal);
 
-    const btn = modal.querySelector("#confirmPayBtn");
-    const status = modal.querySelector("#payStatus");
-
-    btn.onclick = async () => {
-      const phone = modal.querySelector("#mpesaPhoneInput").value.trim();
+    document.getElementById("confirmPayBtn").onclick = () => {
+      const phone = document.getElementById("mpesaPhoneInput").value.trim();
       if (!phone) return;
-
-      btn.disabled = true;
-      btn.textContent = "Processing...";
-      status.style.display = "block";
-      status.textContent = "📲 Sending STK prompt…";
-
-      await onSubmit(phone, status, () => {
-        document.body.removeChild(modal);
-      });
+      document.body.removeChild(modal);
+      onSubmit(phone);
     };
   }
 
@@ -136,9 +87,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const savedCurrency = localStorage.getItem("userCurrency");
   if (savedCurrency) select.value = savedCurrency;
 
-  // ===============================
-  // CURRENCY DISPLAY ONLY
-  // ===============================
+  continueBtn.onclick = () => {
+    const currency = select.value;
+    localStorage.setItem("userCurrency", currency);
+    overlay.style.display = "none";
+    mainContent.style.display = "block";
+    loadRates(currency);
+  };
+
+  changeBtn.onclick = () => {
+    overlay.style.display = "flex";
+  };
+
   async function loadRates(currency) {
     try {
       const res = await fetch(API_URL);
@@ -154,29 +114,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  continueBtn.onclick = () => {
-    const currency = select.value;
-    localStorage.setItem("userCurrency", currency);
-    overlay.style.display = "none";
-    mainContent.style.display = "block";
-    loadRates(currency);
-  };
-
-  changeBtn.onclick = () => {
-    overlay.style.display = "flex";
-  };
-
   // ===============================
-  // STK PUSH
+  // PAYMENT
   // ===============================
   payBtn.onclick = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      showToast("Please login first", false);
+      showToast("Please login to continue", false);
       return;
     }
 
-    showPhoneModal(async (phone, status, close) => {
+    showPhoneModal(async phone => {
+      payBtn.disabled = true;
+      payBtn.textContent = "Sending STK Prompt...";
+
       try {
         const res = await fetch(
           "https://remj82.onrender.com/api/payments/stk-push",
@@ -193,37 +144,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         const data = await res.json();
 
         if (!res.ok) {
-          status.textContent =
-            data?.message ||
-            "Payment could not be initiated. Try again later.";
-          return;
+          showToast(data.message || "Payment failed", false);
+        } else {
+          showToast("📲 STK sent. Approve payment on your phone.");
         }
-
-        status.innerHTML =
-          "⏳ Waiting for confirmation…<br/>Check your phone.";
-
-        setTimeout(() => {
-          showToast("STK prompt sent. Complete payment on your phone.");
-          close();
-        }, 4000);
       } catch {
-        status.textContent = "Network error. Please try again.";
+        showToast("Network error. Please try again.", false);
+      } finally {
+        payBtn.disabled = false;
+        payBtn.textContent = "Proceed to Pay";
       }
     });
   };
 
   function formatCurrency(amount, currency) {
     const symbols = {
-      USD: "$",
-      EUR: "€",
-      GBP: "£",
-      NGN: "₦",
-      INR: "₹",
-      GHS: "GH₵",
-      KES: "KSh",
-      ZAR: "R",
-      CAD: "$",
-      AUD: "A$"
+      USD: "$", EUR: "€", GBP: "£", NGN: "₦",
+      INR: "₹", GHS: "GH₵", KES: "KSh"
     };
     return `${symbols[currency] || "$"}${Number(amount).toLocaleString()}`;
   }
